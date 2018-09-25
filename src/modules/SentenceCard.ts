@@ -1,10 +1,11 @@
 import { PropositionCard } from "./PropositionCard";
+import { serializable, list, primitive } from "serializr";
 
 export class SentenceCard {
 
-    public sentences: string[]
+    @serializable(list(primitive())) public sentences: (string | null)[]
 
-    constructor(sentences: string[]){
+    constructor(sentences: (string | null)[]){
         this.sentences = sentences
     }
 

@@ -1,12 +1,19 @@
-import {observable} from 'mobx'
+import { serializable, list, object, deserialize } from 'serializr';
+import { PropositionCard } from './PropositionCard';
+import { SentenceCard } from './SentenceCard';
 
-export class Deck {
+export abstract class Deck<T> {
 
-    @observable public cards: any[];
+    public cards: T[];
 
-	constructor(cards: any[], shuffle = !cards) {
+	constructor(cards: T[], shuffle = !cards) {
         this.cards = cards
+        if(cards.length === 0){
+            this.load()
+        }
     }
+
+    abstract load(json?: any[]): void
 
     pick(nb = 1){
         let cards = this.cards.slice()
@@ -23,4 +30,33 @@ export class Deck {
         return this.cards.length
     }
 
+}
+
+export class PropositionDeck extends Deck<PropositionCard> {
+
+    @serializable(list(object(PropositionCard))) public cards: PropositionCard[] = this.cards
+
+    constructor(cards: PropositionCard[] = []){
+        super(cards)
+    }
+
+    load(json: any[] = require('../../../datas/propositions/limitelimite.json')){
+        let cards = deserialize(PropositionCard, json)
+        this.cards = cards
+    }
+
+}
+
+export class SentenceDeck extends Deck<SentenceCard> {
+
+    @serializable(list(object(SentenceCard))) public cards: SentenceCard[] = this.cards
+
+    constructor(cards: SentenceCard[] = []){
+        super(cards)
+    }
+
+    load(json: any[] = require('../../../datas/sentences/limitelimite.json')){
+        let cards = deserialize(SentenceCard, json)
+        this.cards = cards
+    }
 }

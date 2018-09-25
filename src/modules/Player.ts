@@ -1,11 +1,12 @@
 import { PropositionCard } from "./PropositionCard";
 import { Hand } from "./Hand";
 import { SocketPlayer } from "./SocketPlayer";
+import { serializable, object } from "../../node_modules/serializr";
 
 export class Player extends SocketPlayer {
 
-    public hand: Hand
-    public score: number
+    @serializable(object(Hand)) public hand: Hand
+    @serializable public score: number
 
     constructor(surname: string, socketid: string, hand: Hand, score = 0){
         super(surname, socketid)

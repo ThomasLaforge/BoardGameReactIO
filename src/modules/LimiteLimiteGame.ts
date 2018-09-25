@@ -1,19 +1,21 @@
 import { Player } from "./Player";
-import { Deck } from "./Deck";
+import { PropositionDeck, SentenceDeck } from "./Deck";
 
 export class LimiteLimiteGame {
 
     public players: Player[]
-    public deck: Deck;
+    public propsDeck: PropositionDeck;
+    public sentencesDeck: SentenceDeck;
 
-    constructor(players: Player[], deck: Deck){
+    constructor(players: Player[] = [], propsDeck = new PropositionDeck(), sentencesDeck = new SentenceDeck()){
         this.players = players
-        this.deck = deck
+        this.propsDeck = propsDeck
+        this.sentencesDeck = sentencesDeck
     }
 
     nextTurn(){
         this.players.forEach(p => {
-            let card = this.deck.pick(1)
+            let card = this.propsDeck.pick(1)
             p.addCard(card)
         })
     }

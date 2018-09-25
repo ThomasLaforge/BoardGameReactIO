@@ -1,7 +1,9 @@
+import { serializable } from "../../node_modules/serializr";
+
 export class SocketPlayer {
 
-    public surname: string
-    public socketid: string
+    @serializable public surname: string
+    @serializable public socketid: string
 
     constructor(surname: string, socketid: string){
         this.surname = surname
