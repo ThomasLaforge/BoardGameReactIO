@@ -1,42 +1,56 @@
+import { socketConnect, SocketProvider } from 'socket.io-react';
+
 import * as React from 'react';
-import './App.css';
-
-import { SocketProvider, socketConnect } from 'socket.io-react';
 import * as io from 'socket.io-client';
+import RouterComponent from './Router/RouterComponent';
+import { Provider, observer } from 'mobx-react';
+import { Store } from './Stores/Store';
+import { DefaultProps } from './mobxInjector';
+import DebugBox from './components/DebugBox';
 
-const uri = 'http://localhost:3000';
+import './App.scss';
+
+const uri = 'http://localhost:3027';
 const options = { transports: ['websocket'] };
 // let socket = io.connect(uri, options)
-let socket = io.connect(uri, options)
+const socket = io.connect(uri, options)
 
-class App extends React.Component {
+interface AppProps extends DefaultProps {}
 
-	componentDidMount(){
-		this.forceUpdate()
+@observer
+export default class App extends React.Component<AppProps, { store: Store, drawerOpened: boolean} > {
+
+	constructor(props: any){
+		super(props);
+		this.state = {
+			store: new Store(),
+			drawerOpened: false
+		}
 	}
 
-	public render() {
+	toggleDrawer = () => {
+		this.setState({ drawerOpened: ! this.state.drawerOpened })
+	}
+
+	render() {
 		return (
 			<SocketProvider socket={socket}> 
-				<SocketTester />
-			</SocketProvider >
+			<Provider store={this.state.store} >
+				<AppContent />
+			</Provider>
+			</SocketProvider>
 		);
 	}
 }
 
-interface SocketTesterProps {
-	socket?: any
-}
-
-interface SocketTesterState {
-}
-
+@observer
 @socketConnect
-class SocketTester extends React.PureComponent<SocketTesterProps, SocketTesterState> {
+class AppContent extends React.Component<DefaultProps> {
 
 	constructor(props: any){
-        super(props)
-        this.state = {}
+		super(props);
+		this.state = {
+		}
 	}
 
 	componentDidMount(){
@@ -44,14 +58,10 @@ class SocketTester extends React.PureComponent<SocketTesterProps, SocketTesterSt
 	}
 
 	render(){
-		// if(this.props.socket){
-			console.log('props', this.props.socket.connected,  this.props.socket)
-			this.props.socket.connected && this.props.socket.emit('message', 'hello')
-		// }
+		console.log('props', this.props)
 		return <div className="App">
-			Hello world ! Your ID is {this.props.socket ? this.props.socket.id : 'nothing'}
+			<RouterComponent />
+			<DebugBox />
 		</div>
 	}
 }
-
-export default App;

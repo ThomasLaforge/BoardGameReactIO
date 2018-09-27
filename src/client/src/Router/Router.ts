@@ -1,8 +1,8 @@
-import { Route, IRoute } from "./Route";
+import { Route, IRoute, RouteEnum } from "./Route";
 import { observable } from "mobx";
 
 import Home from '../Pages/Home'
-import { RouteEnum } from "../../../../common/LimiteLimite";
+import GameLobby from '../Pages/GameLobby'
 import { isString } from "util";
 
 export type RouteDescriptor = RouteEnum | string
@@ -18,6 +18,11 @@ export class Router {
                 path: '/',
                 component: Home,
                 type: RouteEnum.Home
+            },
+            {
+                path: '/limitelimite_lobby',
+                component: GameLobby,
+                type: RouteEnum.GameLobby
             }
         ]
         this.routes = routeDefs.map(iRoute => new Route(iRoute))

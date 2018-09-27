@@ -1,5 +1,10 @@
 import * as React from 'react'
-import { RouteEnum } from '../../../../common/LimiteLimite';
+
+export enum RouteEnum {
+    Connexion,
+    Home,
+    GameLobby
+}
 
 export interface IRoute {
     path: string

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {observer, inject} from 'mobx-react';
-import { DefaultProps, injector } from '../../mobxInjector'
+import { DefaultProps, injector } from '../mobxInjector'
 
 interface RouterProps extends DefaultProps {
 }

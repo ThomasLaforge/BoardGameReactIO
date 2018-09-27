@@ -26,3 +26,11 @@
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
+
+.chat{
+  border: 1px solid black;
+
+  .chat-messages {
+    color: red;
+  }
+}

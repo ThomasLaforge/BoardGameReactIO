@@ -1,6 +1,7 @@
 import * as React from 'react';
+import {socketConnect} from 'socket.io-react'
 import {observer, inject} from 'mobx-react';
-import { DefaultProps, injector } from '../../mobxInjector'
+import { DefaultProps, injector } from '../mobxInjector'
 
 interface HomeProps extends DefaultProps {
 }
@@ -9,21 +10,24 @@ interface HomeState {
 
 @inject(injector)
 @observer
+@socketConnect
 class Home extends React.Component <HomeProps, HomeState> {
 
     constructor(props: HomeProps){
         super(props)
-        this.state = {}
+        this.state = {
+        }
     }
 
-    defaultOnClick = () => {
-        console.log('click on menu item')
+    componentDidMount(){
+        if(this.props.socket){
+            // this.props.socket.on('login_accepted', (username) => {})
+        }
     }
 
     render() {
         return (
-            <div className="home">
-                Home
+            <div className="">
             </div>
         );
     }
