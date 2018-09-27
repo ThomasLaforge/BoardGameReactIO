@@ -8,7 +8,7 @@ import { Store } from "./Stores/Store";
 // import {History} from '../modules/History'
 
 export interface InjectedStores {
-    store?: Store,
+    store: Store,
 }
 
 export interface DefaultProps  {

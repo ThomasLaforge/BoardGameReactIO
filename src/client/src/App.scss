@@ -1,36 +1,71 @@
-.App {
-  text-align: center;
+* {
+  box-sizing: border-box !important;
+  margin: 0;
 }
 
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 80px;
+html, body {
+  // background-color: rgba(black, 0.42) !important;
+  height: 100%;
+  width: 100%;
+  // background-color: black;
+  // color: white;
+  // overflow: hidden;
 }
 
-.App-header {
-  background-color: #222;
-  height: 150px;
-  padding: 20px;
-  color: white;
+#root, .App {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
-.App-title {
-  font-size: 1.5em;
-}
+.router {
+  flex: 1;
+  display: flex;
 
-.App-intro {
-  font-size: large;
-}
+  .home {
+    margin: auto;  
+  }
 
-@keyframes App-logo-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  .game-lobby {
+    width:100%;
+  }
 }
 
 .chat{
   border: 1px solid black;
+  display: flex;
+  flex-direction: column;
+  width: 80%;
 
   .chat-messages {
-    color: red;
+    display: flex;
+    flex-direction: column;
+    
+    .chat-message {
+      display: flex;
+      flex-direction: row;
+      width: 100%;
+
+      .chat-message-sender {
+        width: 20%;
+        font-weight: bold;
+      }
+
+      .chat-message-content {
+        width: 80%;  
+      }
+    }
+  }
+
+  .chat-input-zone {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+
+    .input-message {
+      width: 90%
+    }
   }
 }

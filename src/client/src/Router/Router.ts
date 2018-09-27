@@ -3,6 +3,7 @@ import { observable } from "mobx";
 
 import Home from '../Pages/Home'
 import GameLobby from '../Pages/GameLobby'
+import GameBeforeStart from '../Pages/GameBeforeStart'
 import { isString } from "util";
 
 export type RouteDescriptor = RouteEnum | string
@@ -23,6 +24,11 @@ export class Router {
                 path: '/limitelimite_lobby',
                 component: GameLobby,
                 type: RouteEnum.GameLobby
+            },
+            {
+                path: '/game',
+                component: GameBeforeStart,
+                type: RouteEnum.GameBeforeStart
             }
         ]
         this.routes = routeDefs.map(iRoute => new Route(iRoute))
@@ -42,17 +48,8 @@ export class Router {
     }
 
     getAllParams(){
-        let match,
-            pl     = /\+/g,  // Regex for replacing addition symbol with a space
-            search = /([^&=]+)=?([^&]*)/g,
-            decode = function (s) { return decodeURIComponent(s.replace(pl, " ")); },
-            query  = window.location.search.substring(1);
-
-        let urlParams = {};
-        while (match = search.exec(query)){
-            urlParams[decode(match[1])] = decode(match[2]);
-        }
-        return urlParams
+        let path = window.location.pathname
+        return path.split('/')
     }
 
 }

@@ -4,6 +4,7 @@ import {observer, inject} from 'mobx-react';
 import { DefaultProps, injector } from '../mobxInjector'
 import { Button, TextField } from '@material-ui/core';
 import {ChatMessage} from 'limitelimite-common/Server'
+import TextFieldHandleEnter from './TextFieldHandleEnter';
 
 interface ChatProps extends DefaultProps {
 }
@@ -34,12 +35,17 @@ class Chat extends React.Component <ChatProps, ChatState> {
         }
     }
 
+    sendMessage = () => { 
+        this.props.socket.emit('chat-sendMessage', this.state.message); 
+        this.setState({message: ''})
+    }
+
     render() {
         return (
             <div className="chat">
                 <div className="chat-messages">
-                    {this.state.messages.map(m => 
-                        <div className="chat-messages">
+                    {this.state.messages.map( (m, k) => 
+                        <div className="chat-message" key={k}>
                             <div className='chat-message-sender'>{m.username}</div>
                             <div className='chat-message-content'>{m.msg}</div>
                         </div>
@@ -47,14 +53,16 @@ class Chat extends React.Component <ChatProps, ChatState> {
                 </div>
                 <div className="chat-input-zone">
                     <div className="input-message">
-                        <TextField 
+                        <TextFieldHandleEnter
+                            fullWidth
                             placeholder='Write your message...'
                             value={this.state.message}
                             onChange={(e) => this.setState({message: e.target.value})}
+                            eventOnEnter={this.sendMessage}
                         />
                     </div>
                     <div className="input-submit">
-                        <Button onClick={() => { this.props.socket.emit('chat-sendMessage', this.state.message); this.setState({message: ''})}}>Send</Button>
+                        <Button onClick={this.sendMessage}>Send</Button>
                     </div>
                 </div>
             </div>

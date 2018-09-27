@@ -5,6 +5,8 @@ import { DefaultProps, injector } from '../mobxInjector'
 
 import {GameLobbyList} from 'limitelimite-common'
 import Chat from '../components/Chat';
+import { Button } from '@material-ui/core';
+import { RouteEnum } from '../Router/Route';
 
 interface GameLobbyProps extends DefaultProps {
 }
@@ -26,7 +28,9 @@ class GameLobby extends React.Component <GameLobbyProps, GameLobbyState> {
 
     componentDidMount(){
         if(this.props.socket){
-            // this.props.socket.on('login_accepted', (username) => {})
+            this.props.socket.on('enterInGameTable', (tableId) => {
+                this.props.ui.router.switchRoute(RouteEnum.GameBeforeStart)
+            })
         }
     }
 
@@ -63,6 +67,19 @@ class GameLobby extends React.Component <GameLobbyProps, GameLobbyState> {
                         <div className='lobby-category-description'></div>
                         <div className='lobby-category-content'>
                             {this.renderGamesTable()}
+                        </div>
+                    </div>
+                    <div className='game-lobby-category'>
+                        <div className='lobby-category-title'>Create new game</div>
+                        <div className='lobby-category-description'></div>
+                        <div className='lobby-category-content'>
+                        </div>
+                    </div>
+                    <div className='game-lobby-category'>
+                        <div className='lobby-category-title'>Auto</div>
+                        <div className='lobby-category-description'></div>
+                        <div className='lobby-category-content'>
+                            <Button onClick={() => this.props.socket.emit('lobby-autoFindGame')}>Find a game</Button>
                         </div>
                     </div>
                 </div>

@@ -6,11 +6,12 @@ export abstract class Deck<T> {
 
     public cards: T[];
 
-	constructor(cards: T[], shuffle = !cards) {
+	constructor(cards: T[], shuffle = true) {
         this.cards = cards
         if(cards.length === 0){
             this.load()
         }
+        shuffle && this.shuffle()
     }
 
     abstract load(json?: any[]): void
@@ -28,6 +29,10 @@ export abstract class Deck<T> {
 
     length(){
         return this.cards.length
+    }
+
+    get firstCard(){
+        return this.cards[0]
     }
 
 }

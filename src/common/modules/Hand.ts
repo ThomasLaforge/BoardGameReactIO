@@ -4,7 +4,7 @@ export class Hand {
 
     public cards: PropositionCard[]
 
-    constructor(cards: PropositionCard[]){
+    constructor(cards: PropositionCard[] = []){
         this.cards = cards
     }
 

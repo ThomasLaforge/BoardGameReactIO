@@ -3,7 +3,8 @@ import * as React from 'react'
 export enum RouteEnum {
     Connexion,
     Home,
-    GameLobby
+    GameLobby,
+    GameBeforeStart
 }
 
 export interface IRoute {

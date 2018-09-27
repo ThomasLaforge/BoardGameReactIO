@@ -5,11 +5,13 @@ import { DefaultProps, injector } from '../mobxInjector'
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import { RouteEnum } from '../Router/Route';
+import TextFieldHandleEnter from '../components/TextFieldHandleEnter';
 
 interface HomeProps extends DefaultProps {
 }
 interface HomeState {
-    usernameInput: string
+    usernameInput: string,
+    showAlreadyExists: boolean
 }
 
 @inject(injector)
@@ -20,16 +22,21 @@ class Home extends React.Component <HomeProps, HomeState> {
     constructor(props: HomeProps){
         super(props)
         this.state = {
-            usernameInput: ''
+            usernameInput: '',
+            showAlreadyExists: false
         }
     }
 
     componentDidMount(){
         if(this.props.socket){
-            console.log('socket')
-            this.props.socket.on('login_accepted', (username, testValue) => {
-                console.log('connected with username', username, testValue)
+            this.props.socket.on('login_accepted', (username) => {
+                console.log('connected with username', username)
                 this.props.ui.router.switchRoute(RouteEnum.GameLobby)             // })
+            })
+
+            this.props.socket.on('login_usernameAlreadyExists', (username) => {
+                console.log('login already exists', username)
+                this.setState({ showAlreadyExists: true })
             })
         }
     }
@@ -42,10 +49,12 @@ class Home extends React.Component <HomeProps, HomeState> {
         return (
             <div className="home">
                 {/* Home - {this.props.socket && this.props.socket.id} {this.state.socket_string} */}
-                <TextField 
-                    label='username'
+                <TextFieldHandleEnter 
+                    label={this.state.showAlreadyExists ? 'username already used' : 'username'}
                     value={this.state.usernameInput} 
-                    onChange={(e)=> this.setState({usernameInput: e.target.value})} 
+                    onChange={(e)=> this.setState({usernameInput: e.target.value})}
+                    eventOnEnter={this.tryToLogin}
+                    error={this.state.showAlreadyExists}
                 />
                 <Button onClick={this.tryToLogin}>Login</Button>
             </div>
