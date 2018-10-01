@@ -34,7 +34,6 @@ export class SuperSocket {
         let room = this.baseSocket.server.to(game.id) as ExtendedNamespace
         room.game = game
         this.emit('lobby:player.enter_in_game_table')
-        room.emit('game:players.new_player', this.username, game.playersNames)
     }
 
     createNewGame(isPrivate = DEFAULT_IS_PRIVATE_GAME){

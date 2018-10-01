@@ -61,7 +61,7 @@ class AppContent extends React.Component<DefaultProps> {
 		console.log('props', this.props)
 		return <div className="App">
 			<RouterComponent />
-			<DebugBox />
+			{/* <DebugBox /> */}
 		</div>
 	}
 }

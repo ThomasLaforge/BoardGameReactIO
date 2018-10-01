@@ -3,9 +3,14 @@ import {socketConnect} from 'socket.io-react'
 import {observer, inject} from 'mobx-react';
 import { DefaultProps, injector } from '../mobxInjector'
 import Button from '@material-ui/core/Button';
-import { GameStatus, DEFAULT_IS_PRIVATE_GAME } from 'limitelimite-common/LimiteLimite';
+import { GameStatus, DEFAULT_IS_PRIVATE_GAME } from 'limitelimite-common';
+import {PlayerListUI, PlayerListUIElt} from 'limitelimite-common/LimiteLimiteUI'
 import Chat from '../components/Chat';
 import GameBeforeStart from '../components/GameParts/GameBeforeStart';
+import { ChatMessage } from '../../node_modules/limitelimite-common/Server';
+import GameMainPlayer from '../components/GameParts/GameMainPlayer';
+import GamePropositionPlayer from '../components/GameParts/GamePropositionPlayer';
+import GameResult from '../components/GameParts/GameResult';
 
 console.log('GameStatus', GameStatus, DEFAULT_IS_PRIVATE_GAME)
 
@@ -16,7 +21,12 @@ interface GameState {
     isCreator: boolean
     isFirstPlayer: boolean
     gameStatus: GameStatus
-    playersNames: string[]
+    players: PlayerListUI
+
+    sentence?: any
+    propositions?: any
+    chosenProposition?: any
+    hand?: any
 }
 
 @inject(injector)
@@ -31,7 +41,7 @@ class Game extends React.Component <GameProps, GameState> {
             isCreator: false,
             isFirstPlayer: false,
             gameStatus: GameStatus.Preparing,
-            playersNames: []
+            players: []
         }
     }
 
@@ -40,19 +50,44 @@ class Game extends React.Component <GameProps, GameState> {
             const socket = this.props.socket
             socket.emit('game:ask_initial_infos')
 
-            socket.on('game:player.ask_initial_infos', (gameId: string, isCreator: boolean) => {
-                this.setState({gameId, isCreator})
+            socket.on('game:player.ask_initial_infos', (gameId: string, players: PlayerListUI, isCreator: boolean, initialChat: ChatMessage[]) => {
+                console.log('players1', gameId, players, isCreator, initialChat)
+                this.setState({gameId, isCreator, players })
             })
-            socket.on('game:start_turn', (gameId: string, isFirstPlayer: boolean) => {
-                this.setState({isFirstPlayer, gameId})
+            socket.on('game:players.new_player', (players: PlayerListUI) => {
+                console.log('players2', players)
+                this.setState({ players })
             })
+
+            socket.on('game:players.start', () => {
+                this.setState({ gameStatus: GameStatus.InGame })
+            })
+            game:mp.start', sentence)
+            game:op.start, sentence, hand
+
+            socket.on('game:players.turn_to_resolve', () => {
+                this.setState({ gameStatus: GameStatus.Result })
+            })
+
+            game:player.player_has_played
+            game:mp.new_turn', sentence
+            'game:op.new_start', sentence, hand)
         }
     }
 
     renderPlayers(){
-        return this.state.playersNames.map(pName => 
-            <div className="player-name">{pName}</div>    
+        console.log('show players', this.state.players)
+        return this.state.players.map( (p: PlayerListUIElt, k) => 
+            <div className="player" key={k}>
+                <div className="player-name">{p.name}</div>   
+                <div className="player-score">{p.score}</div>
+                <div className="player-first-player">{p.isFirstPlayer ? 'boss' : ''}</div>
+            </div>
         )
+    }
+
+    startGame = () => {
+        this.props.socket.emit('game:start')
     }
 
     render() {
@@ -69,12 +104,35 @@ class Game extends React.Component <GameProps, GameState> {
                 <div className="game-content">
                     {this.state.gameStatus === GameStatus.Preparing &&
                         <GameBeforeStart
-                            isFirstPlayer={this.state.isFirstPlayer}
                             isCreator={this.state.isCreator}
-                            nbPlayers={this.state.playersNames.length}
+                            nbPlayers={this.state.players.length}
                             gameId={this.state.gameId}
+                            startGame={this.startGame}
                         />
-                    }                
+                    }
+
+                    {this.state.gameStatus === GameStatus.Preparing && this.state.isFirstPlayer &&
+                        <GameMainPlayer
+                            sentence={this.state.sentence}
+                            propositions={this.state.propositions}
+                        />
+                    }                 
+                    
+                    {this.state.gameStatus === GameStatus.Preparing && !this.state.isFirstPlayer &&
+                        <GamePropositionPlayer
+                            sentence={this.state.sentence}
+                            hand={this.state.hand}
+                        />
+                    }
+
+                    
+                    {/* {this.state.gameStatus === GameStatus.Result &&
+                        <GameResult
+                            sentence={this.state.sentence}
+                            propositions={this.state.propositions}
+                            chosenProposition={this.state.chosenProposition}
+                        />
+                    }                  */}
                 </div>
             </div>
         );

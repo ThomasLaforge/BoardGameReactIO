@@ -3,17 +3,19 @@ import {socketConnect} from 'socket.io-react'
 import {observer, inject} from 'mobx-react';
 import { DefaultProps, injector } from '../../mobxInjector'
 
-interface HomeProps extends DefaultProps {
+interface GameMainPlayerProps extends DefaultProps {
+    sentence: any
+    propositions: any
 }
-interface HomeState {
+interface GameMainPlayerState {
 }
 
 @inject(injector)
 @observer
 @socketConnect
-class Home extends React.Component <HomeProps, HomeState> {
+class GameMainPlayer extends React.Component <GameMainPlayerProps, GameMainPlayerState> {
 
-    constructor(props: HomeProps){
+    constructor(props: GameMainPlayerProps){
         super(props)
         this.state = {
         }
@@ -33,4 +35,4 @@ class Home extends React.Component <HomeProps, HomeState> {
     }
 }
 
-export default Home;
+export default GameMainPlayer;
