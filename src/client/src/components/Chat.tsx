@@ -2,11 +2,12 @@ import * as React from 'react';
 import {socketConnect} from 'socket.io-react'
 import {observer, inject} from 'mobx-react';
 import { DefaultProps, injector } from '../mobxInjector'
-import { Button, TextField } from '@material-ui/core';
+import { Button } from '@material-ui/core';
 import {ChatMessage} from 'limitelimite-common/Server'
 import TextFieldHandleEnter from './TextFieldHandleEnter';
 
 interface ChatProps extends DefaultProps {
+    channel?: string
 }
 interface ChatState {
     message: string,
@@ -28,15 +29,15 @@ class Chat extends React.Component <ChatProps, ChatState> {
 
     componentDidMount(){
         if(this.props.socket){
-            this.props.socket.on('newMessage', (message: ChatMessage) => {
-                console.log('new message', message)
+            this.props.socket.on('chat:new_message', (message: ChatMessage) => {
+                // console.log('new message', message)
                 this.setState({messages: this.state.messages.concat(message)})
             })
         }
     }
 
     sendMessage = () => { 
-        this.props.socket.emit('chat-sendMessage', this.state.message); 
+        this.props.socket.emit('chat:send_message', this.state.message, this.props.channel); 
         this.setState({message: ''})
     }
 

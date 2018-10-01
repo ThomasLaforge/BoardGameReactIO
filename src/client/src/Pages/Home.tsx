@@ -22,19 +22,19 @@ class Home extends React.Component <HomeProps, HomeState> {
     constructor(props: HomeProps){
         super(props)
         this.state = {
-            usernameInput: '',
+            usernameInput: 'Tom-' + Date.now(),
             showAlreadyExists: false
         }
     }
 
     componentDidMount(){
         if(this.props.socket){
-            this.props.socket.on('login_accepted', (username) => {
+            this.props.socket.on('login:player.login_accepted', (username) => {
                 console.log('connected with username', username)
                 this.props.ui.router.switchRoute(RouteEnum.GameLobby)             // })
             })
 
-            this.props.socket.on('login_usernameAlreadyExists', (username) => {
+            this.props.socket.on('login:player.username_already_exists', (username) => {
                 console.log('login already exists', username)
                 this.setState({ showAlreadyExists: true })
             })
@@ -42,7 +42,7 @@ class Home extends React.Component <HomeProps, HomeState> {
     }
 
     tryToLogin = () => {
-        this.props.socket && this.props.socket.emit('login', this.state.usernameInput)
+        this.props.socket && this.props.socket.emit('login:new_user', this.state.usernameInput)
     }
 
     render() {

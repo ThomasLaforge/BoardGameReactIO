@@ -1,3 +1,5 @@
+export const DEFAULT_IS_PRIVATE_GAME = false
+
 export const NB_CARD_IN_HAND = 6
 
 export enum GameStatus {
@@ -9,7 +11,7 @@ export enum GameStatus {
 export interface GameLobbyListElt {
     people: string[]
     gameId: string
-    state: GameStatus
+    isFull: boolean
 }
 
 export type GameLobbyList = GameLobbyListElt[]

@@ -1,4 +1,4 @@
-import { serializable } from "../../node_modules/serializr";
+import { serializable } from 'serializr';
 
 export class SocketPlayer {
 

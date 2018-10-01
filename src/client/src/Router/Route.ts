@@ -4,7 +4,7 @@ export enum RouteEnum {
     Connexion,
     Home,
     GameLobby,
-    GameBeforeStart
+    Game
 }
 
 export interface IRoute {

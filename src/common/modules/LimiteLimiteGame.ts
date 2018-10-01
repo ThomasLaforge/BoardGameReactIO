@@ -1,6 +1,7 @@
 import { Player } from "./Player";
 import { PropositionDeck, SentenceDeck } from "./Deck";
-import { NB_CARD_IN_HAND } from "../LimiteLimite";
+import { NB_CARD_IN_HAND, DEFAULT_IS_PRIVATE_GAME } from "../LimiteLimite";
+import { SentenceCard } from "./SentenceCard";
 
 export class LimiteLimiteGame {
 
@@ -9,15 +10,17 @@ export class LimiteLimiteGame {
     public propsDeck: PropositionDeck;
     public sentencesDeck: SentenceDeck;
     public id: string
-    public complete: boolean
+    public isFull: boolean
+    public isPrivate: boolean
 
-    constructor(player: Player, propsDeck = new PropositionDeck(), sentencesDeck = new SentenceDeck()){
-        this.complete = false
+    constructor(player: Player, isPrivate = DEFAULT_IS_PRIVATE_GAME, propsDeck = new PropositionDeck(), sentencesDeck = new SentenceDeck()){
+        this.isFull = false
         this.id = Date.now().toString()
         this.players = [player]
         this.propsDeck = propsDeck
         this.sentencesDeck = sentencesDeck
         this.firstPlayerIndex = 0
+        this.isPrivate = isPrivate
     }
 
     nextTurn(){
@@ -29,7 +32,7 @@ export class LimiteLimiteGame {
     }
 
     startGame(){
-        this.complete = true
+        this.isFull = true
         // TODO: fix random
         this.firstPlayerIndex = Math.floor(Math.random() * this.players.length)
         // give cards
@@ -43,8 +46,23 @@ export class LimiteLimiteGame {
         this.players.push(p)
     }
 
-    get currentSentenceCard() {
+    removePlayer(socketId: string){
+        this.players = this.players.filter(p => p.socketid !== socketId)
+    }
+
+    isFirstPlayer(socketId: string){
+        return this.players && this.players[0] && this.players[0].socketid === socketId
+    }
+
+    get currentSentenceCard(): SentenceCard {
         return this.sentencesDeck.firstCard
+    }
+
+    get nbPlayers(){
+        return this.players.length
+    }
+    get playersNames(){
+        return this.players.map(p => p.surname)
     }
 
 }

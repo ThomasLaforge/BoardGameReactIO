@@ -3,7 +3,7 @@ import {socketConnect} from 'socket.io-react'
 import {observer, inject} from 'mobx-react';
 import { DefaultProps, injector } from '../mobxInjector'
 
-import {GameLobbyList} from 'limitelimite-common'
+import {GameLobbyList, GameStatus} from 'limitelimite-common'
 import Chat from '../components/Chat';
 import { Button } from '@material-ui/core';
 import { RouteEnum } from '../Router/Route';
@@ -28,8 +28,8 @@ class GameLobby extends React.Component <GameLobbyProps, GameLobbyState> {
 
     componentDidMount(){
         if(this.props.socket){
-            this.props.socket.on('enterInGameTable', (tableId) => {
-                this.props.ui.router.switchRoute(RouteEnum.GameBeforeStart)
+            this.props.socket.on('lobby:player.enter_in_game_table', () => {
+                this.props.ui.router.switchRoute(RouteEnum.Game)
             })
         }
     }
@@ -49,7 +49,7 @@ class GameLobby extends React.Component <GameLobbyProps, GameLobbyState> {
                         <tr>
                             <td>{gInfo.gameId}</td>
                             <td>{gInfo.people}</td>
-                            <td>{gInfo.state}</td>
+                            <td>{gInfo.isFull ? 'full' : 'free'}</td>
                         </tr>
                     ))}
                 </tbody>
@@ -79,7 +79,7 @@ class GameLobby extends React.Component <GameLobbyProps, GameLobbyState> {
                         <div className='lobby-category-title'>Auto</div>
                         <div className='lobby-category-description'></div>
                         <div className='lobby-category-content'>
-                            <Button onClick={() => this.props.socket.emit('lobby-autoFindGame')}>Find a game</Button>
+                            <Button onClick={() => this.props.socket.emit('lobby:auto')}>Find a game</Button>
                         </div>
                     </div>
                 </div>

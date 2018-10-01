@@ -1,4 +1,4 @@
-import { ExtendedSocket } from "./SuperSocket";
+import { ExtendedSocket } from "./LimiteLimiteServer";
 
 export class SocketIoDescriptor {
 

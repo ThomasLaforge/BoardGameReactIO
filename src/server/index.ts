@@ -1,74 +1,171 @@
 import * as express from 'express';
 import * as nodeHttp from 'http'
 import * as socketIo from 'socket.io';
-import { SuperSocket, ExtendedSocket } from './SuperSocket';
+// import { serialize, deserialize } from 'serializr';
 import { ChatMessage } from '../common/Server';
 import { Player } from '../common/modules/Player';
-import { LimiteLimiteGame } from '../common/modules/LimiteLimiteGame';
-import { SocketIoDescriptor } from './SocketIoDescriptor';
-// import { serialize, deserialize } from 'serializr';
-// import { SentenceCard } from '../modules/SentenceCard';
-// import { PropositionDeck } from '../modules/Deck';
-// import { LimiteLimiteGame } from '../modules/LimiteLimiteGame';
 
-interface ExtendedNamespace extends SocketIO.Namespace {
-  game: LimiteLimiteGame
-}
+import { SuperSocket } from './SuperSocket';
+import { ExtendedSocket } from './LimiteLimiteServer';
+import { SocketIoDescriptor } from './SocketIoDescriptor';
+
+import { LimiteLimiteGame } from '../common/modules/LimiteLimiteGame';
+import { SocketPlayer } from '../common/modules/SocketPlayer';
+import { GameCollection } from '../common/modules/GameCollection';
+
+// import { SentenceCard } from '../modules/SentenceCard';
+// import { PropositionDeck } from '../common/modules/Deck';
+// import { LimiteLimiteGame } from '../modules/LimiteLimiteGame';
 
 const app = express()
 const http = new nodeHttp.Server(app);
 const io = socketIo(http);
 const server = new SocketIoDescriptor(io)
+
+let hasLoggedAllSocketEvents = false
 // app.get('/', function(req, res){
 //   res.sendFile(__dirname + '/index.html');
 // });
 
-io.on('connection', (classicSocket: ExtendedSocket) => {
-  let socket = new SuperSocket(classicSocket)
-  console.log('a user connected', socket.id);
+let GC = new GameCollection()
 
+// INFO: naming of "on" events and emit: Category:portée.main_mission/sub_mision_or_state
+// ex: on Lobby:create_game/succes
+// ex: emit Lobby:player.create_game/succes
+
+io.on('connection', (baseSocket: ExtendedSocket) => {  
+  let socket = new SuperSocket(baseSocket)
+  console.log('a user connected', socket.id);
+  
+  socket.on('disconnect', () => {
+    let game = GC.getGameWithUser(socket.id)
+    if(game){
+      let gameHasStarted = game.isFull
+      if(gameHasStarted){
+        // delete the game
+        GC.removeGame(game.id)
+      }
+      else {
+        // remove player
+        game.removePlayer(socket.id)
+      }
+      socket.baseSocket.to(game.id).emit('game:user_disconnect', socket.username, gameHasStarted)
+    }
+  })
   // Connexion
-  socket.on('login', (username: string) => {
+  socket.on('login:new_user', (username: string) => {
+    username = username && username.trim()
     console.log('try to login', username)
     // care of trim + case insensitive
-    if(server.allUsernames.map(u => u && u.toUpperCase()).includes(username.trim().toUpperCase())){
-      socket.emit('login_usernameAlreadyExists', username)
+    if(username && server.allUsernames.map(u => u && u.toUpperCase()).includes(username.toUpperCase())){
+      socket.emit('login:player.username_already_exists', username)
     }
     else {
-      socket.emit('login_accepted', username)
       socket.username = username.trim()
+      socket.join('lobby');
+      let p = new SocketPlayer(socket.username, socket.id);
+      socket.socketPlayer = p;
+      socket.emit('login:player.login_accepted', socket.username)
+      socket.baseSocket.broadcast.to('lobby').emit('login:lobby.new_player_connected', socket.username);
     }
   })
 
+
   // Lobby
-  socket.on('lobby-autoFindGame', () => {
-    socket.emit('enterInGameTable', Date.now().toString())
-    let player = new Player(socket.username, socket.id)
-    let game = new LimiteLimiteGame(player)
-    classicSocket.join(game.id)
-    let room = io.to('some room') as ExtendedNamespace
-    room.game = game
-    // io.to(game.id).emit('')
+  // socket.on('lobby:auto_find_game', () => {
+  //   let player = new Player(socket.username, socket.id)
+  //   let game = new LimiteLimiteGame(player)
+  //   socket.join(game.id)
+  //   let room = io.to(game.id) as ExtendedNamespace
+  //   room.game = game
+  //   socket.emit('lobby:player.enter_in_game_table', game.id)
+  // })
+
+    // connect on game room by matchmaking
+  socket.on('lobby:auto', () => {
+    let game: LimiteLimiteGame;
+    // get game room id by auto matchmaking
+    let gameRoomId = GC.getRandomAndNotFullGameRoomId();
+    console.log('getRandomAndNotFullGameRoomId : ' + gameRoomId)
+    if(!gameRoomId) {
+      game = socket.createNewGame()
+      GC.addGame(game)
+      gameRoomId = game.id
+    }
+    else {
+      game = GC.getGame(gameRoomId) as LimiteLimiteGame
+      game.addPlayer(socket.getOrCreatePlayer())
+    }
+
+    console.log('lobby-auto : ' + gameRoomId + ', ' + socket.username)
+    socket.playerEnterGameRoom(game)
+  })
+
+  // connect on game room selecting a game
+  socket.on('lobby:join', (gameRoomId: string) => {
+      console.log('lobby-join : ' + gameRoomId + ', ' + socket.player.surname)
+      let game = GC.getGame(gameRoomId) 
+      if( game ) {
+          if( !game.isFull ){
+              socket.playerEnterGameRoom(game)
+          }
+          else{
+              socket.emit('lobby:player.join_game/is_already_full', gameRoomId)
+          }
+      }
+      else{
+          socket.emit('lobby:player.join_game/undefined_gameroom', gameRoomId)
+      }
+      
+  })
+
+  // connect on game room creating a game
+  socket.on('lobby:create', () => {
+    let game = socket.createNewGame()
+    console.log('lobby-create : ' + game.id + ', ' + socket.player.surname)
+    GC.addGame(game);
+    socket.playerEnterGameRoom(game)
+  })
+
+  // Game
+  socket.on('game:ask_initial_infos', () => {
+    let game = GC.getGameWithUser(socket.id)
+    if(game){
+      io.sockets.emit('game:player.ask_initial_infos', game.id, game.isFirstPlayer(socket.id))
+    }
+  })
+  
+  socket.on('game:start', () => {
+    let game = GC.getGameWithUser(socket.id)
+    if(game){
+      socket.emit('game:player.start')
+      socket.baseSocket.to(game.id).emit('game:op.start')
+    }
   })
 
   // Chats
-  socket.on('chat-sendMessage', (message: string) => {
-    let chatMsg: ChatMessage = {username: socket.username || 'unknown', msg: message}
-    console.log('new message to send', chatMsg)
-    io.sockets.emit('newMessage', chatMsg)
+  socket.on('chat:send_message', (message: string, channel?: string) => {
+    channel = channel || 'lobby'
+    if(message && message.trim().length > 0){
+      let chatMsg: ChatMessage = {username: socket.username || 'unknown', msg: message.trim()}
+      socket.server.in(channel).emit('chat:new_message', chatMsg)
+    }
   })
 
   // Debugs
-  socket.on('debug-getAllSockets', () => {
+  socket.on('debug:get_all_sockets', () => {
     console.log('ask getAllSockets', server.allUsernames)
     io.clients( (err: any, clients: any[]) => {
-      socket.emit('getAllSockets', clients)
+      socket.emit('debug:get_all_sockets', clients)
     })
   })
 
+  // logging events
+  if(!hasLoggedAllSocketEvents){
+    console.log('allEvents', baseSocket.eventNames())
+    hasLoggedAllSocketEvents = true
+  }
 });
-
-
 
 
 http.listen(3027, function(){
@@ -79,7 +176,8 @@ http.listen(3027, function(){
 // let prop = new PropositionCard('banane')
 // console.log(serialize(prop), deserialize(PropositionCard, { content: 'test' }))
 
-// let propDeck = new PropositionDeck([prop])
+// let propDeck = new PropositionDeck()
+// console.log('prop deck', propDeck)
 // console.log(serialize(propDeck), deserialize(PropositionDeck, {cards: [{ content: 'test' }]} ))
 
 // let sentence = new SentenceCard(['mon premier est', null])

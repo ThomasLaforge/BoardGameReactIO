@@ -1,9 +1,14 @@
 import * as React from 'react';
 import {socketConnect} from 'socket.io-react'
 import {observer, inject} from 'mobx-react';
-import { DefaultProps, injector } from '../mobxInjector'
+import { DefaultProps, injector } from '../../mobxInjector'
+import { Button } from '@material-ui/core';
 
 interface GameBeforeStartProps extends DefaultProps {
+    isFirstPlayer: boolean
+    isCreator: boolean
+    gameId: string
+    nbPlayers: number
 }
 interface GameBeforeStartState {
 }
@@ -20,15 +25,17 @@ class GameBeforeStart extends React.Component <GameBeforeStartProps, GameBeforeS
     }
 
     componentDidMount(){
-        console.log('uri params' , this.props.ui.router.getAllParams())
         if(this.props.socket){
-            // this.props.socket.on('login_accepted', (username) => {})
+
         }
     }
 
     render() {
+        const canStartGame = this.props.isCreator && this.props.nbPlayers > 1
         return (
             <div className="game-before-start">
+                <h1>Before game start</h1>
+                {canStartGame && <Button onClick={() => {}}>Start the game</Button>}
             </div>
         );
     }

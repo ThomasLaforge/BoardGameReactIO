@@ -1,10 +1,10 @@
 import { Route, IRoute, RouteEnum } from "./Route";
 import { observable } from "mobx";
+import { isString } from "util";
 
 import Home from '../Pages/Home'
 import GameLobby from '../Pages/GameLobby'
-import GameBeforeStart from '../Pages/GameBeforeStart'
-import { isString } from "util";
+import Game from "../Pages/Game";
 
 export type RouteDescriptor = RouteEnum | string
 
@@ -27,8 +27,8 @@ export class Router {
             },
             {
                 path: '/game',
-                component: GameBeforeStart,
-                type: RouteEnum.GameBeforeStart
+                component: Game,
+                type: RouteEnum.Game
             }
         ]
         this.routes = routeDefs.map(iRoute => new Route(iRoute))

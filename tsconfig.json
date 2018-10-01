@@ -7,7 +7,7 @@
   },
   "include": [
     "src/*.ts",
-    "src/modules/*.ts",
+    "src/common/**/*.ts",
     "src/server/*.ts",
   ]
 }
