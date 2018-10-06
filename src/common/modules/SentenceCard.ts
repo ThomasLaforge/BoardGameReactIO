@@ -18,7 +18,8 @@ export class SentenceCard {
             content += s || blankContent + ' '
         })
 
-        return content.trim()
+        content = content.trim()
+        return content.charAt(0).toUpperCase() + content.slice(1);
     }
 
     getNbBlank(){
