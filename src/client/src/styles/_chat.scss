@@ -1,0 +1,69 @@
+@import './styles/_colors.scss';
+
+.chat {
+  border: 4px solid $blue;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-height: 100%;
+  height: 100%;
+
+  .chat-title {
+    color: $blue;
+    border-bottom: 4px solid $blue;
+    text-align: center;
+    font-weight: bold;
+    font-size: 25px;
+    padding: 3px 0;
+  }
+
+  .chat-messages {
+    flex-grow: 1;
+    overflow: auto;
+
+    display: flex;
+    flex-direction: column;
+    max-height: 100%;
+
+    .chat-message {
+      display: flex;
+      flex-direction: row;
+      width: 100%;
+      border-bottom: 1px solid rgb(190, 190, 190);
+      padding: 10px 10px;
+
+      .chat-message-sender {
+        width: 90px;
+        font-weight: bold;
+        overflow:hidden; 
+        white-space:nowrap; 
+        text-overflow: ellipsis;
+      }
+
+      .chat-message-content {
+        flex: 1;  
+        padding: 0 0 0 5px;
+      }
+    }
+  }
+
+  .chat-input-zone {
+    padding: 5px 15px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+    border-top: 1px solid $blue;
+
+
+    .input-message {
+      width: 70%
+    }
+
+    .chat-send-button{
+      background-color: $red;
+      color: $white;
+    }
+  }
+}

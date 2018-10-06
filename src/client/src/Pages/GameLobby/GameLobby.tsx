@@ -1,12 +1,14 @@
 import * as React from 'react';
 import {socketConnect} from 'socket.io-react'
 import {observer, inject} from 'mobx-react';
-import { DefaultProps, injector } from '../mobxInjector'
+import { DefaultProps, injector } from '../../mobxInjector'
 
 import {GameLobbyList, GameStatus} from 'limitelimite-common'
-import Chat from '../components/Chat';
+import Chat from '../../components/Chat';
 import { Button } from '@material-ui/core';
-import { RouteEnum } from '../Router/Route';
+import { RouteEnum } from '../../Router/Route';
+
+import './game_lobby.scss'
 
 interface GameLobbyProps extends DefaultProps {
 }

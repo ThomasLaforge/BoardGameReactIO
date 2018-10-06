@@ -1,9 +1,9 @@
 import * as React from 'react';
 import {socketConnect} from 'socket.io-react'
 import {observer, inject} from 'mobx-react';
-import { DefaultProps, injector } from '../../mobxInjector'
-import SentenceCard from '../Cards/SentenceCard';
-import PropositionCard from '../Cards/PropositionCard';
+import { DefaultProps, injector } from '../../../mobxInjector'
+import SentenceCard from '../../../components/Cards/SentenceCard';
+import PropositionCard from '../../../components/Cards/PropositionCard';
 import { SentenceCard as SentenceCardModel, PropositionCard as PropositionCardmodel, Hand } from 'limitelimite-common';
 import { serialize } from 'serializr';
 

@@ -1,18 +1,20 @@
 import * as React from 'react';
 import {socketConnect} from 'socket.io-react'
 import {observer, inject} from 'mobx-react';
-import { DefaultProps, injector } from '../mobxInjector'
+import { DefaultProps, injector } from '../../mobxInjector'
 import {deserialize, serialize} from 'serializr'
 
 import { GameStatus, DEFAULT_IS_PRIVATE_GAME, SentenceCard, Hand, PropositionCard } from 'limitelimite-common';
 import {PlayerListUI, PlayerListUIElt} from 'limitelimite-common/LimiteLimiteUI'
 import { ChatMessage } from 'limitelimite-common/Server';
 
-import GamePropositionPlayer from '../components/GameParts/GamePropositionPlayer';
-import GameBeforeStart from '../components/GameParts/GameBeforeStart';
-import GameMainPlayer from '../components/GameParts/GameMainPlayer';
-import GameResult from '../components/GameParts/GameResult';
-import Chat from '../components/Chat';
+import GamePropositionPlayer from './GameParts/GamePropositionPlayer';
+import GameBeforeStart from './GameParts/GameBeforeStart';
+import GameMainPlayer from './GameParts/GameMainPlayer';
+import GameResult from './GameParts/GameResult';
+import Chat from '../../components/Chat';
+
+import './game.scss'
 
 interface GameProps extends DefaultProps {
 }

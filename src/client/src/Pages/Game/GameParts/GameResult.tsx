@@ -1,11 +1,11 @@
 import * as React from 'react';
 import {socketConnect} from 'socket.io-react'
 import {observer, inject} from 'mobx-react';
-import { DefaultProps, injector } from '../../mobxInjector'
+import { DefaultProps, injector } from '../../../mobxInjector'
 import { SentenceCard as SentenceCardModel, PropositionCard as PropositionCardModel } from 'limitelimite-common';
 
-import SentenceCard from '../Cards/SentenceCard'
-import PropositionCard from '../Cards/PropositionCard'
+import SentenceCard from '../../../components/Cards/SentenceCard'
+import PropositionCard from '../../../components/Cards/PropositionCard'
 
 interface GameResultProps extends DefaultProps {
     sentence: SentenceCardModel

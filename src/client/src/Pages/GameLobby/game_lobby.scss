@@ -1,0 +1,16 @@
+.game-lobby {
+    width:100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+
+    .game-lobby-choices {
+      display: flex;
+      flex-direction: row;
+      height: 50%;
+
+        .game-lobby-category {
+            width: 100/3 * 1%;
+        }
+    }
+}

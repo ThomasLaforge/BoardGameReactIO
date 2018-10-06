@@ -2,9 +2,9 @@ import { Route, IRoute, RouteEnum } from "./Route";
 import { observable } from "mobx";
 import { isString } from "util";
 
-import Home from '../Pages/Home'
-import GameLobby from '../Pages/GameLobby'
-import Game from "../Pages/Game";
+import Home from '../Pages/Home/Home'
+import GameLobby from '../Pages/GameLobby/GameLobby'
+import Game from "../Pages/Game/Game";
 
 export type RouteDescriptor = RouteEnum | string
 

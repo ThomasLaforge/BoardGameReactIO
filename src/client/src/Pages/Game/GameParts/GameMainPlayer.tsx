@@ -1,8 +1,8 @@
 import * as React from 'react';
 import {socketConnect} from 'socket.io-react'
 import {observer, inject} from 'mobx-react';
-import { DefaultProps, injector } from '../../mobxInjector'
-import SentenceCard from '../Cards/SentenceCard';
+import { DefaultProps, injector } from '../../../mobxInjector'
+import SentenceCard from '../../../components/Cards/SentenceCard';
 
 interface GameMainPlayerProps extends DefaultProps {
     sentence: any
@@ -36,7 +36,7 @@ class GameMainPlayer extends React.Component <GameMainPlayerProps, GameMainPlaye
                     <SentenceCard sentenceCard={this.props.sentence} />
                 </div>
                 <div className="game-main-player-infos">
-                    {!!this.props.propositions ? 'Chose a proposition' : 'Waiting other players chose a proposition'}
+                    {this.props.propositions && this.props.propositions.length > 0 ? 'Chose a proposition' : 'Waiting other players chose a proposition'}
                 </div>
             </div>
         );

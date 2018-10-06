@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {socketConnect} from 'socket.io-react'
 import {observer, inject} from 'mobx-react';
-import { DefaultProps, injector } from '../../mobxInjector'
+import { DefaultProps, injector } from '../../../mobxInjector'
 import { Button } from '@material-ui/core';
 
 interface GameBeforeStartProps extends DefaultProps {

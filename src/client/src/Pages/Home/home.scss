@@ -1,0 +1,48 @@
+@import '../../styles/colors';
+@import '../../styles/mixins';
+
+.home {
+    @include fullFlex();
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    
+    .home-content {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-content: center;
+      width: 450px;
+      height: 500px;
+
+      .home-logo {
+        background-image:url('/img/logo.png');
+        background-size: cover;
+        background-repeat: no-repeat;
+        width: 80%;
+        height: 255px;
+        margin: 0 auto;
+        margin-bottom: 55px;
+      }
+
+
+      .home-login {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+
+        border: 3px solid $blue;
+        border-radius: 15px;
+        padding: 15px;
+
+        .home-login-input {
+          margin-bottom: 15px;
+        }
+  
+        .home-login-btn {
+          color: $white;
+          background-color: $red;
+        }
+      }
+    }
+}
