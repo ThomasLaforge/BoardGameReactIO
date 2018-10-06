@@ -6,7 +6,7 @@ import { PropositionCard } from "./PropositionCard";
 
 export interface PropSent {
     playerIndex: number,
-    prop: PropositionCard
+    prop: PropositionCard[]
 }
 
 export class LimiteLimiteGame {
@@ -46,11 +46,11 @@ export class LimiteLimiteGame {
             let propSent = this.getPropSentBy(p)
             console.log('next turn', this.propsSent, propSent)
             if(propSent){
-                let cardPlayedLastTurn = propSent.prop
-                console.log('before hand play', p.hand.cards.length, cardPlayedLastTurn.content);
-                p.hand.play(cardPlayedLastTurn)
-                console.log('after hand play', p.hand.cards.length);
-                let card = this.propsDeck.pick(1)
+                let cardsPlayedLastTurn = propSent.prop
+                // console.log('before hand play', p.hand.cards.length, cardsPlayedLastTurn.content);
+                p.hand.play(cardsPlayedLastTurn)
+                // console.log('after hand play', p.hand.cards.length);
+                let card = this.propsDeck.pick(cardsPlayedLastTurn.length)
                 p.addCard(card)
             }
             else {
@@ -68,7 +68,7 @@ export class LimiteLimiteGame {
         })
     }
 
-    sendProp(prop: PropositionCard, player: Player){
+    sendProp(prop: PropositionCard[], player: Player){
         this.propsSent.push({
             prop,
             playerIndex: this.getPlayerIndex(player)

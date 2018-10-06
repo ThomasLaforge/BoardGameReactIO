@@ -153,13 +153,13 @@ io.on('connection', (baseSocket: ExtendedSocket) => {
     }
   })
 
-  socket.on('game:send_prop', (propositionCardJSON: any) => {
+  socket.on('game:send_prop', (propositionCardJSON: any[]) => {
     let game = GC.getGameWithUser(socket.id)
     if(game){
       // game
       let propositionCard = deserialize(PropositionCard, [propositionCardJSON])
       console.log('after send prop', propositionCardJSON, propositionCard, game.propsSent, game.canResolveTurn());
-      game.sendProp(propositionCard[0], socket.getOrCreatePlayer())
+      game.sendProp(propositionCard, socket.getOrCreatePlayer())
       
       if(game.canResolveTurn()){
         socket.server.in(game.id).emit('game:players.turn_to_resolve', game.propsSent.map(p => p.prop))

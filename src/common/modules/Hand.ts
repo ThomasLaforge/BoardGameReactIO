@@ -12,13 +12,15 @@ export class Hand {
         this.cards = this.cards.concat(cards)
     }
 
-    play(card: PropositionCard){
-        let pos = this.cards.findIndex(c => c.content === card.content)
-        if(pos !== -1){
-            let cards = this.cards.slice()
-            cards.splice(pos, 1)
-            this.cards = cards
-        }
+    play(cards: PropositionCard[]){
+        cards.forEach(card => {
+            let pos = this.cards.findIndex(c => c.content === card.content)
+            if(pos !== -1){
+                let newCards = this.cards.slice()
+                newCards.splice(pos, 1)
+                this.cards = newCards
+            }
+        })
     }
 
 }
