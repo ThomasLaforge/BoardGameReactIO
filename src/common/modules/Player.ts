@@ -28,6 +28,6 @@ export class Player extends SocketPlayer {
     }
 
     owned(card: PropositionCard){
-        return this.hand.cards.indexOf(card) !== -1
+        return this.hand.cards.findIndex(c => c.content === card.content) !== -1
     }
 }

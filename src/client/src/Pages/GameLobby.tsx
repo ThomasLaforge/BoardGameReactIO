@@ -62,7 +62,7 @@ class GameLobby extends React.Component <GameLobbyProps, GameLobbyState> {
             <div className="game-lobby">
                 {/* <PlayerMiniInfo /> */}
                 <div className='game-lobby-choices'>
-                    <div className='game-lobby-category'>
+                    {/* <div className='game-lobby-category'>
                         <div className='lobby-category-title'>Chose a game</div>
                         <div className='lobby-category-description'></div>
                         <div className='lobby-category-content'>
@@ -74,7 +74,7 @@ class GameLobby extends React.Component <GameLobbyProps, GameLobbyState> {
                         <div className='lobby-category-description'></div>
                         <div className='lobby-category-content'>
                         </div>
-                    </div>
+                    </div> */}
                     <div className='game-lobby-category'>
                         <div className='lobby-category-title'>Auto</div>
                         <div className='lobby-category-description'></div>
@@ -84,7 +84,7 @@ class GameLobby extends React.Component <GameLobbyProps, GameLobbyState> {
                     </div>
                 </div>
                 <div className="game-lobby-chat">
-                    <Chat />
+                    <Chat channel='lobby' />
                 </div>
             </div>
         );

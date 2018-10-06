@@ -1,8 +1,8 @@
 import { PropositionCard } from "./PropositionCard";
+import { serializable, object, list } from "serializr";
 
 export class Hand {
-
-    public cards: PropositionCard[]
+    @serializable(list(object(PropositionCard))) public cards: PropositionCard[]
 
     constructor(cards: PropositionCard[] = []){
         this.cards = cards
@@ -13,7 +13,7 @@ export class Hand {
     }
 
     play(card: PropositionCard){
-        let pos = this.cards.indexOf(card)
+        let pos = this.cards.findIndex(c => c.content === card.content)
         if(pos !== -1){
             let cards = this.cards.slice()
             cards.splice(pos, 1)

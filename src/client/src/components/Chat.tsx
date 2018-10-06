@@ -8,6 +8,7 @@ import TextFieldHandleEnter from './TextFieldHandleEnter';
 
 interface ChatProps extends DefaultProps {
     channel?: string
+    title?: string
 }
 interface ChatState {
     message: string,
@@ -36,14 +37,19 @@ class Chat extends React.Component <ChatProps, ChatState> {
         }
     }
 
-    sendMessage = () => { 
-        this.props.socket.emit('chat:send_message', this.state.message, this.props.channel); 
-        this.setState({message: ''})
+    sendMessage = () => {
+        if(this.state.message.trim() !== ''){
+            this.props.socket.emit('chat:send_message', this.state.message, this.props.channel); 
+            this.setState({message: ''})
+        }
     }
 
     render() {
         return (
             <div className="chat">
+                <div className="chat-title">
+                    {this.props.title || 'Chat'}
+                </div>
                 <div className="chat-messages">
                     {this.state.messages.map( (m, k) => 
                         <div className="chat-message" key={k}>
@@ -63,7 +69,14 @@ class Chat extends React.Component <ChatProps, ChatState> {
                         />
                     </div>
                     <div className="input-submit">
-                        <Button onClick={this.sendMessage}>Send</Button>
+                        <Button 
+                            className='chat-send-button' 
+                            onClick={this.sendMessage}
+                            variant='contained'
+                            disabled={this.state.message.trim() === ''}
+                        >
+                            Send
+                        </Button>
                     </div>
                 </div>
             </div>

@@ -3,6 +3,7 @@ import { SocketPlayer } from "../common/modules/SocketPlayer";
 import { Player } from "../common/modules/Player";
 import { LimiteLimiteGame } from "../common/modules/LimiteLimiteGame";
 import { DEFAULT_IS_PRIVATE_GAME } from '../common/LimiteLimite'
+import { PlayerListUI, PlayerListUIElt } from "../common";
 
 export class SuperSocket {
 
@@ -29,11 +30,30 @@ export class SuperSocket {
         this.baseSocket.join(roomName)
     }
 
+    leave(roomName: string){
+        console.log(this.username || this.baseSocket.id ,' leave : ', roomName)
+        this.baseSocket.leave(roomName)
+    }
+
     playerEnterGameRoom(game: LimiteLimiteGame){
         this.join(game.id)
+        this.leave('lobby');
         let room = this.baseSocket.server.to(game.id) as ExtendedNamespace
         room.game = game
         this.emit('lobby:player.enter_in_game_table')
+    }
+
+    sendGameInfos(game: LimiteLimiteGame){
+        const uiPlayers: PlayerListUI = game.players.map(p => {
+            return {
+                name: p.surname,
+                score: p.score,
+                isFirstPlayer: (game as LimiteLimiteGame).isFirstPlayer(p.socketid)
+            } as PlayerListUIElt
+        })
+        // console.log('game:player.ask_initial_infos', game.id, uiPlayers, game.isFirstPlayer(socket.id), initialChat)
+        this.emit('game:player.ask_initial_infos', game.id, uiPlayers, game.isFirstPlayer(this.id))
+        this.baseSocket.to(game.id).broadcast.emit('game:players.new_player', uiPlayers)
     }
 
     createNewGame(isPrivate = DEFAULT_IS_PRIVATE_GAME){

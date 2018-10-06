@@ -2,10 +2,14 @@ import * as React from 'react';
 import {socketConnect} from 'socket.io-react'
 import {observer, inject} from 'mobx-react';
 import { DefaultProps, injector } from '../../mobxInjector'
+import SentenceCard from '../Cards/SentenceCard';
+import PropositionCard from '../Cards/PropositionCard';
+import { SentenceCard as SentenceCardModel, PropositionCard as PropositionCardmodel, Hand } from 'limitelimite-common';
+import { serialize } from 'serializr';
 
 interface GamePropositionPlayerProps extends DefaultProps {
-    sentence: any
-    hand: any
+    sentence: SentenceCardModel
+    hand: Hand
 }
 interface GamePropositionPlayerState {
 }
@@ -27,9 +31,32 @@ class GamePropositionPlayer extends React.Component <GamePropositionPlayerProps,
         }
     }
 
+    sendProposition = (propCard: PropositionCard) => {
+        this.props.socket.emit('game:send_prop', serialize(propCard))
+    }
+
+    renderHand(){
+        return this.props.hand.cards.map( (propCard:PropositionCardmodel, k) => 
+            <PropositionCard 
+                key={k}
+                propositionCard={propCard} 
+                onClick={this.sendProposition}
+            />
+        )
+    }
+
     render() {
         return (
-            <div className="">
+            <div className="game-prop-player">
+                <h2>Other player</h2>
+                <div className="sentence">
+                    <SentenceCard 
+                        sentenceCard={this.props.sentence}
+                    />
+                </div>
+                <div className="hand">
+                    {this.renderHand()}
+                </div>
             </div>
         );
     }

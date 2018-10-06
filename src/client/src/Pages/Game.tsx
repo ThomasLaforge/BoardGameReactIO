@@ -2,17 +2,17 @@ import * as React from 'react';
 import {socketConnect} from 'socket.io-react'
 import {observer, inject} from 'mobx-react';
 import { DefaultProps, injector } from '../mobxInjector'
-import Button from '@material-ui/core/Button';
-import { GameStatus, DEFAULT_IS_PRIVATE_GAME } from 'limitelimite-common';
-import {PlayerListUI, PlayerListUIElt} from 'limitelimite-common/LimiteLimiteUI'
-import Chat from '../components/Chat';
-import GameBeforeStart from '../components/GameParts/GameBeforeStart';
-import { ChatMessage } from '../../node_modules/limitelimite-common/Server';
-import GameMainPlayer from '../components/GameParts/GameMainPlayer';
-import GamePropositionPlayer from '../components/GameParts/GamePropositionPlayer';
-import GameResult from '../components/GameParts/GameResult';
+import {deserialize, serialize} from 'serializr'
 
-console.log('GameStatus', GameStatus, DEFAULT_IS_PRIVATE_GAME)
+import { GameStatus, DEFAULT_IS_PRIVATE_GAME, SentenceCard, Hand, PropositionCard } from 'limitelimite-common';
+import {PlayerListUI, PlayerListUIElt} from 'limitelimite-common/LimiteLimiteUI'
+import { ChatMessage } from 'limitelimite-common/Server';
+
+import GamePropositionPlayer from '../components/GameParts/GamePropositionPlayer';
+import GameBeforeStart from '../components/GameParts/GameBeforeStart';
+import GameMainPlayer from '../components/GameParts/GameMainPlayer';
+import GameResult from '../components/GameParts/GameResult';
+import Chat from '../components/Chat';
 
 interface GameProps extends DefaultProps {
 }
@@ -23,9 +23,9 @@ interface GameState {
     gameStatus: GameStatus
     players: PlayerListUI
 
-    sentence?: any
+    sentence?: SentenceCard
     propositions?: any
-    chosenProposition?: any
+    chosenProposition?: number
     hand?: any
 }
 
@@ -59,20 +59,60 @@ class Game extends React.Component <GameProps, GameState> {
                 this.setState({ players })
             })
 
-            socket.on('game:players.start', () => {
-                this.setState({ gameStatus: GameStatus.InGame })
+            socket.on('game:mp.start', (sentenceJSON) => {
+                console.log('game:mp.start', sentenceJSON)
+                this.setState({
+                    gameStatus: GameStatus.InGame,
+                    isFirstPlayer: true,
+                    sentence: deserialize(SentenceCard, sentenceJSON),
+                })
             })
-            game:mp.start', sentence)
-            game:op.start, sentence, hand
-
-            socket.on('game:players.turn_to_resolve', () => {
-                this.setState({ gameStatus: GameStatus.Result })
+            
+            socket.on('game:op.start', (sentenceJSON, handJSON) => {
+                console.log('game:op.start', sentenceJSON, handJSON)
+                this.setState({
+                    gameStatus: GameStatus.InGame,
+                    isFirstPlayer: false,
+                    sentence: deserialize(SentenceCard, sentenceJSON),
+                    hand: deserialize(Hand, handJSON)
+                })
             })
 
-            game:player.player_has_played
-            game:mp.new_turn', sentence
-            'game:op.new_start', sentence, hand)
+            socket.on('game:players.turn_to_resolve', (propositions) => {
+                console.log('game:players.turn_to_resolve')
+                this.setState({ 
+                    gameStatus: GameStatus.Result,
+                    propositions: propositions.map(pJSON => deserialize(PropositionCard, pJSON))
+                })
+            })
+
+            socket.on('game:player.player_has_played', () => {
+                console.log('game:player.player_has_played')
+
+            })
+            socket.on('game:mp.new_turn', (sentenceJSON) => {
+                console.log('game:mp.new_turn', sentenceJSON)
+                this.setState({
+                    gameStatus: GameStatus.InGame,
+                    isFirstPlayer: true,
+                    sentence: deserialize(SentenceCard, sentenceJSON),
+                })
+
+            })
+            socket.on('game:op.new_turn', (sentenceJSON, handJSON) => {
+                console.log('game:op.new_turn', sentenceJSON, handJSON)
+                this.setState({
+                    gameStatus: GameStatus.InGame,
+                    isFirstPlayer: false,
+                    sentence: deserialize(SentenceCard, sentenceJSON),
+                    hand: deserialize(Hand, handJSON)
+                })
+            })
         }
+    }
+
+    startGame = () => {
+        this.props.socket.emit('game:start')
     }
 
     renderPlayers(){
@@ -84,10 +124,6 @@ class Game extends React.Component <GameProps, GameState> {
                 <div className="player-first-player">{p.isFirstPlayer ? 'boss' : ''}</div>
             </div>
         )
-    }
-
-    startGame = () => {
-        this.props.socket.emit('game:start')
     }
 
     render() {
@@ -111,14 +147,14 @@ class Game extends React.Component <GameProps, GameState> {
                         />
                     }
 
-                    {this.state.gameStatus === GameStatus.Preparing && this.state.isFirstPlayer &&
+                    {this.state.gameStatus === GameStatus.InGame && this.state.isFirstPlayer &&
                         <GameMainPlayer
                             sentence={this.state.sentence}
                             propositions={this.state.propositions}
                         />
                     }                 
                     
-                    {this.state.gameStatus === GameStatus.Preparing && !this.state.isFirstPlayer &&
+                    {this.state.gameStatus === GameStatus.InGame && !this.state.isFirstPlayer &&
                         <GamePropositionPlayer
                             sentence={this.state.sentence}
                             hand={this.state.hand}
@@ -126,13 +162,14 @@ class Game extends React.Component <GameProps, GameState> {
                     }
 
                     
-                    {/* {this.state.gameStatus === GameStatus.Result &&
+                    {this.state.gameStatus === GameStatus.Result &&
                         <GameResult
                             sentence={this.state.sentence}
                             propositions={this.state.propositions}
-                            chosenProposition={this.state.chosenProposition}
+                            chosenPropositionIndex={this.state.chosenProposition}
+                            isFirstPlayer={this.state.isFirstPlayer}
                         />
-                    }                  */}
+                    }
                 </div>
             </div>
         );

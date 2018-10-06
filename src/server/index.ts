@@ -1,7 +1,7 @@
 import * as express from 'express';
 import * as nodeHttp from 'http'
 import * as socketIo from 'socket.io';
-// import { serialize, deserialize } from 'serializr';
+import { serialize, deserialize } from 'serializr';
 import { ChatMessage } from '../common/Server';
 import { PlayerListUI, PlayerListUIElt } from '../common/LimiteLimiteUI'
 import { Player } from '../common/modules/Player';
@@ -13,6 +13,7 @@ import { SocketIoDescriptor } from './SocketIoDescriptor';
 import { LimiteLimiteGame } from '../common/modules/LimiteLimiteGame';
 import { SocketPlayer } from '../common/modules/SocketPlayer';
 import { GameCollection } from '../common/modules/GameCollection';
+import { PropositionCard } from '../common';
 
 // import { SentenceCard } from '../modules/SentenceCard';
 // import { PropositionDeck } from '../common/modules/Deck';
@@ -132,17 +133,8 @@ io.on('connection', (baseSocket: ExtendedSocket) => {
   socket.on('game:ask_initial_infos', () => {
     let game = GC.getGameWithUser(socket.id)
     if(game){
-      let initialChat: ChatMessage[] = []
-      const uiPlayers: PlayerListUI = game.players.map(p => {
-        return {
-          name: p.surname,
-          score: p.score,
-          isFirstPlayer: (game as LimiteLimiteGame).isFirstPlayer(p.socketid)
-        } as PlayerListUIElt
-      })
-      // console.log('game:player.ask_initial_infos', game.id, uiPlayers, game.isFirstPlayer(socket.id), initialChat)
-      socket.emit('game:player.ask_initial_infos', game.id, uiPlayers, game.isFirstPlayer(socket.id), initialChat)
-      socket.baseSocket.to(game.id).broadcast.emit('game:players.new_player', uiPlayers)
+      // let initialChat: ChatMessage[] = []
+      socket.sendGameInfos(game)
     }
   })
   
@@ -150,53 +142,61 @@ io.on('connection', (baseSocket: ExtendedSocket) => {
     let game = GC.getGameWithUser(socket.id)
     if(game){
       game.startGame()
-      const sentence = game.currentSentenceCard
-      const p = game.getPlayer(socket.id)
-      const hand = p && p.hand.cards
+      const sentence = serialize(game.currentSentenceCard)
       
-      socket.emit('game:mp.start', sentence)
-      socket.baseSocket.to(game.id).broadcast.emit('game:op.start', sentence, hand)
+      io.to(`${game.getMainPlayerSocketId()}`).emit('game:mp.start', sentence)
+      game.getPropsPlayersSocketIds().forEach(socketId => {
+        const p = (game as LimiteLimiteGame).getPlayer(socketId)
+        const hand = p && serialize(p.hand)
+        io.to(`${socketId}`).emit('game:op.start', sentence, hand)
+      })
     }
   })
 
-  socket.on('game:send_prop', (propositionCard: any) => {
+  socket.on('game:send_prop', (propositionCardJSON: any) => {
     let game = GC.getGameWithUser(socket.id)
     if(game){
-      game.sendProp(propositionCard)
+      // game
+      let propositionCard = deserialize(PropositionCard, [propositionCardJSON])
+      console.log('after send prop', propositionCardJSON, propositionCard, game.propsSent, game.canResolveTurn());
+      game.sendProp(propositionCard[0], socket.getOrCreatePlayer())
+      
       if(game.canResolveTurn()){
-        socket.baseSocket.to(game.id).emit('game:players.turn_to_resolve')
+        socket.server.in(game.id).emit('game:players.turn_to_resolve', game.propsSent.map(p => p.prop))
       }
       else {
-        socket.baseSocket.to(game.id).emit('game:player.player_has_played')
+        socket.emit('game:player.player_has_played')
       }
     }
   })
 
-  socket.on('game:end_turn', (propositionCard: any) => {
+  socket.on('game:end_turn', (propositionCardIndex: number) => {
     let game = GC.getGameWithUser(socket.id)
+    console.log('socket end turn:', !!game, propositionCardIndex)
     if(game){
-      game.endTurn(propositionCard)
-      const sentence = game.currentSentenceCard
-      const p = game.getPlayer(socket.id)
-      const hand = p && p.hand.cards
-
-      io.to(`${game.getMainPlayerSocketId}`).emit('game:mp.new_turn', sentence)
+      game.endTurn(propositionCardIndex)
+      const sentence = serialize(game.currentSentenceCard)
+      
+      console.log(game.getMainPlayerSocketId(), game.getPropsPlayersSocketIds());
+      io.to(`${game.getMainPlayerSocketId()}`).emit('game:mp.new_turn', sentence)
       game.getPropsPlayersSocketIds().forEach(socketId => {
-        io.to(`${socketId}`).emit('game:op.new_start', sentence, hand)
+        const p = (game as LimiteLimiteGame).getPlayer(socketId)
+        const hand = p && serialize(p.hand)
+        io.to(`${socketId}`).emit('game:op.new_turn', sentence, hand)
       })
+
+      socket.sendGameInfos(game)
     }
   })  
 
   // Chats
   socket.on('chat:send_message', (message: string, channel?: string) => {
-    if(!channel || channel === 'lobby'){
+      console.log('channel', channel);
       channel = channel || 'lobby'
+      
       let chatMsg: ChatMessage = {username: socket.username || 'unknown', msg: message.trim()}
-      socket.server.in(channel).emit('chat:new_message', chatMsg)
-    }
-    else {
-
-    }
+      socket.baseSocket.to(channel).emit('chat:new_message', chatMsg)
+      socket.emit('chat:new_message', chatMsg)
   })
 
   // Debugs

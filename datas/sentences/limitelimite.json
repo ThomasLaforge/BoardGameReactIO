@@ -1,3 +1,9 @@
 [
-    { "sentences": ["la mienne est plus grosse que", null]}
+    { "sentences": ["la mienne est plus grosse que 1", null]},
+    { "sentences": ["la mienne est plus grosse que 2", null]},
+    { "sentences": ["la mienne est plus grosse que 3", null]},
+    { "sentences": ["la mienne est plus grosse que 4", null]},
+    { "sentences": ["la mienne est plus grosse que 5", null]},
+    { "sentences": ["la mienne est plus grosse que 6", null]},
+    { "sentences": ["la mienne est plus grosse que 7", null]}
 ]

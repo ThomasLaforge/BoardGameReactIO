@@ -5,7 +5,8 @@ export const NB_CARD_IN_HAND = 6
 export enum GameStatus {
     Preparing,
     InGame,
-    Finished
+    Finished,
+    Result
 }
 
 export interface GameLobbyListElt {

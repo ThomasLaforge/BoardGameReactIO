@@ -23,9 +23,9 @@ export class GameCollection {
     }
 
     getGameWithUser(socketId: string){
-        console.log('getGameWithUser', socketId)
+        // console.log('getGameWithUser', socketId)
         return this.games.find(g => {
-            console.log('game players', g.players)
+            // console.log('game players', g.players)
             return g.players.filter(p => p.socketid === socketId).length === 1
         })
     }

@@ -10,7 +10,7 @@ export class SentenceCard {
     }
 
     get content(){
-        const blankContent = '____________'
+        const blankContent = ' ____________ '
         let content = ''
 
         // add sentences

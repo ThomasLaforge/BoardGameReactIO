@@ -48,15 +48,26 @@ class Home extends React.Component <HomeProps, HomeState> {
     render() {
         return (
             <div className="home">
-                {/* Home - {this.props.socket && this.props.socket.id} {this.state.socket_string} */}
-                <TextFieldHandleEnter 
-                    label={this.state.showAlreadyExists ? 'username already used' : 'username'}
-                    value={this.state.usernameInput} 
-                    onChange={(e)=> this.setState({usernameInput: e.target.value})}
-                    eventOnEnter={this.tryToLogin}
-                    error={this.state.showAlreadyExists}
-                />
-                <Button onClick={this.tryToLogin}>Login</Button>
+                <div className="home-content">
+                    <div className="home-logo" />
+                    <div className="home-login">
+                        <TextFieldHandleEnter
+                            className='home-login-input'
+                            label={this.state.showAlreadyExists ? 'Username already used, change it!' : 'Chose your username'}
+                            value={this.state.usernameInput} 
+                            onChange={(e)=> this.setState({usernameInput: e.target.value})}
+                            eventOnEnter={this.tryToLogin}
+                            error={this.state.showAlreadyExists}
+                        />
+                        <Button
+                            className='home-login-btn' 
+                            onClick={this.tryToLogin} 
+                            variant='contained'
+                        >
+                            Login
+                        </Button>
+                    </div>
+                </div>
             </div>
         );
     }

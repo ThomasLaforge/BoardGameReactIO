@@ -27,7 +27,8 @@
     "posttest": "npm run check",
     "common": "tsc -w",
     "server": "node build/src/server/index.js",
-    "client": "cd src/client && npm start"
+    "client": "cd src/client && npm start",
+    "link": "npm run compile && cd build/src/common && npm link && cd ../../../src/client && npm link limitelimite-common"
   },
   "repository": {
     "type": "git",

@@ -2,6 +2,7 @@ import * as React from 'react';
 import {socketConnect} from 'socket.io-react'
 import {observer, inject} from 'mobx-react';
 import { DefaultProps, injector } from '../../mobxInjector'
+import SentenceCard from '../Cards/SentenceCard';
 
 interface GameMainPlayerProps extends DefaultProps {
     sentence: any
@@ -29,7 +30,14 @@ class GameMainPlayer extends React.Component <GameMainPlayerProps, GameMainPlaye
 
     render() {
         return (
-            <div className="">
+            <div className="game-main-player">
+                <h2 className='game-main-player-title'>Main player</h2>
+                <div className="game-main-player-sentence">
+                    <SentenceCard sentenceCard={this.props.sentence} />
+                </div>
+                <div className="game-main-player-infos">
+                    {!!this.props.propositions ? 'Chose a proposition' : 'Waiting other players chose a proposition'}
+                </div>
             </div>
         );
     }
