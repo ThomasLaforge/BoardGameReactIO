@@ -27,15 +27,19 @@ class GameResult extends React.Component <GameResultProps, GameResultState> {
         }
     }
 
-    componentDidMount(){
-        if(this.props.socket){
-            // this.props.socket.on('login_accepted', (username) => {})
-        }
-    }
+    // componentDidMount(){
+    //     if(this.props.socket){            
+    //     }
+    // }
 
     renderPropositions(){
         return this.props.propositions.map( (p, k) => 
-            <PropositionCard key={k} propositionCard={p} onClick={() => this.props.isFirstPlayer && this.props.socket.emit('game:end_turn', k) } />
+            <PropositionCard 
+                key={k}
+                className={this.props.chosenPropositionIndex === k ? 'chosen-prop' : ''} 
+                propositionCard={p} 
+                onClick={() => this.props.isFirstPlayer && this.props.socket.emit('game:end_turn', k) } 
+            />
         )
     }
 

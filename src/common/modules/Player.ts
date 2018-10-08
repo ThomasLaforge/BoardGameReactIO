@@ -23,7 +23,7 @@ export class Player extends SocketPlayer {
         this.hand.add(cards)
     }
 
-    play(card: PropositionCard){
+    play(card: PropositionCard[]){
         this.hand.play(card)
     }
 

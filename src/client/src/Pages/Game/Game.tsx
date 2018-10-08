@@ -27,7 +27,7 @@ interface GameState {
 
     sentence?: SentenceCard
     propositions?: any
-    chosenProposition?: number
+    chosenPropositionIndex?: number
     hand?: any
 }
 
@@ -110,6 +110,10 @@ class Game extends React.Component <GameProps, GameState> {
                     hand: deserialize(Hand, handJSON)
                 })
             })
+
+            socket.on('turn_is_complete', (chosenPropositionIndex) => {
+                this.setState({ chosenPropositionIndex })
+            })
         }
     }
 
@@ -168,7 +172,7 @@ class Game extends React.Component <GameProps, GameState> {
                         <GameResult
                             sentence={this.state.sentence}
                             propositions={this.state.propositions}
-                            chosenPropositionIndex={this.state.chosenProposition}
+                            chosenPropositionIndex={this.state.chosenPropositionIndex}
                             isFirstPlayer={this.state.isFirstPlayer}
                         />
                     }

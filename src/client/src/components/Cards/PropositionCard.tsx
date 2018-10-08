@@ -3,6 +3,7 @@ import Card from './Card'
 import {PropositionCard as PropositionCardModel} from 'limitelimite-common'
 
 interface PropositionCardProps {
+    className?: string
     propositionCard: PropositionCardModel
     onClick?: Function
 }
@@ -20,7 +21,7 @@ class PropositionCard extends React.Component <PropositionCardProps, Proposition
     render() {
         return (
             <Card 
-                componentClassName='propositon-card'
+                componentClassName={this.props.className || '' + ' propositon-card'}
                 content={this.props.propositionCard.content}
                 onClick={() => this.props.onClick && this.props.onClick(this.props.propositionCard)}
             />
