@@ -1,4 +1,5 @@
 @import '../../styles/colors';
+@import '../../styles/mixins';
 
 .game {
     flex: 1;
@@ -49,7 +50,32 @@
       }
   
       .game-prop-player {
-  
+        @include fullFlex();
+        flex-direction: column;
+        justify-content: space-around;
+        
+        .sentence {
+          margin: auto;          
+        }
+        .hand {
+          display: flex;
+          flex-direction: row;
+          flex-wrap: wrap;
+          justify-content: center;
+
+          .card {
+            margin: 5px 25px;
+          }
+
+          .selected-proposition {
+            border: 1px lightgreen solid;
+            border-radius: 15px;
+          }
+
+        }
+        .send-button {
+
+        }
       }
   
       .game-prop-player {

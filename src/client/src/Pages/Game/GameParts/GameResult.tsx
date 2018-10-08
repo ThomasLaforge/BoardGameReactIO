@@ -3,13 +3,17 @@ import {socketConnect} from 'socket.io-react'
 import {observer, inject} from 'mobx-react';
 import { DefaultProps, injector } from '../../../mobxInjector'
 import { SentenceCard as SentenceCardModel, PropositionCard as PropositionCardModel } from 'limitelimite-common';
+import { NB_SECONDS_BEFORE_NEXT_TURN } from 'limitelimite-common/LimiteLimiteUI';
+
+console.log('timer init', NB_SECONDS_BEFORE_NEXT_TURN)
 
 import SentenceCard from '../../../components/Cards/SentenceCard'
 import PropositionCard from '../../../components/Cards/PropositionCard'
+import Timer from '../../../components/Timer';
 
 interface GameResultProps extends DefaultProps {
     sentence: SentenceCardModel
-    propositions: PropositionCardModel[]
+    propositions: PropositionCardModel[][]
     chosenPropositionIndex: number
     isFirstPlayer: boolean
 }
@@ -27,19 +31,21 @@ class GameResult extends React.Component <GameResultProps, GameResultState> {
         }
     }
 
-    // componentDidMount(){
-    //     if(this.props.socket){            
-    //     }
-    // }
-
     renderPropositions(){
-        return this.props.propositions.map( (p, k) => 
-            <PropositionCard 
+        console.log('props', this.props.propositions)
+        return this.props.propositions.map( (props, k) => 
+            <div 
                 key={k}
-                className={this.props.chosenPropositionIndex === k ? 'chosen-prop' : ''} 
-                propositionCard={p} 
+                className="player-propositions" 
                 onClick={() => this.props.isFirstPlayer && this.props.socket.emit('game:end_turn', k) } 
-            />
+            >
+                {props.map( (p, k2) => <PropositionCard 
+                    key={k2}
+                    className={this.props.chosenPropositionIndex === k ? 'chosen-prop' : ''} 
+                    propositionCard={p}
+                />
+                )}
+            </div>
         )
     }
 
@@ -56,6 +62,10 @@ class GameResult extends React.Component <GameResultProps, GameResultState> {
                 <div className="game-result-indication">
                     {this.props.isFirstPlayer ? 'Chose your favorite proposition' : 'Waiting boss to chose a card'}
                 </div>
+
+                { (!!this.props.chosenPropositionIndex || this.props.chosenPropositionIndex === 0) && 
+                    <Timer duration={NB_SECONDS_BEFORE_NEXT_TURN}/>
+                }
             </div>
         );
     }

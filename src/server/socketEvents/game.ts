@@ -5,9 +5,8 @@ import {SocketIoDescriptor} from '../SocketIoDescriptor'
 import { 
     GameCollection, 
     LimiteLimiteGame, 
-    SocketPlayer, 
     PropositionCard,
-    ChatMessage
+    NB_SECONDS_BEFORE_NEXT_TURN
 } from '../../common';
 
 export const addGameEvents = (socket: SuperSocket, GC: GameCollection) => {
@@ -69,7 +68,7 @@ export const addGameEvents = (socket: SuperSocket, GC: GameCollection) => {
                     socket.server.to(`${socketId}`).emit('game:op.new_turn', sentence, hand)
                 })
                 socket.sendGameInfos(game)
-            }, 10  * 1000)
+            }, NB_SECONDS_BEFORE_NEXT_TURN  * 1000)
         }
     })
 }

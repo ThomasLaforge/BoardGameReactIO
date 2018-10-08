@@ -4,6 +4,7 @@ import {SentenceCard as SentenceCardModel} from 'limitelimite-common'
 
 interface SentenceCardProps {
     sentenceCard: SentenceCardModel
+    className?: string
 }
 interface SentenceCardState {
 }
@@ -19,7 +20,7 @@ class SentenceCard extends React.Component <SentenceCardProps, SentenceCardState
     render() {
         return (
             <Card 
-                componentClassName='sentence-card'
+                componentClassName={(this.props.className || '') + 'sentence-card'}
                 content={this.props.sentenceCard.content}
             />
         );
