@@ -37,9 +37,9 @@ export const addGameEvents = (socket: SuperSocket, GC: GameCollection) => {
         let game = GC.getGameWithUser(socket.id)
         if(game){
             // game
-            let propositionCard = deserialize(PropositionCard, [propositionCardJSON])
-            console.log('after send prop', propositionCardJSON, propositionCard, game.propsSent, game.canResolveTurn());
-            game.sendProp(propositionCard, socket.getOrCreatePlayer())
+            let propositionCards = deserialize(PropositionCard, propositionCardJSON)
+            console.log('after send prop', propositionCardJSON, propositionCards, game.propsSent, game.canResolveTurn());
+            game.sendProp(propositionCards, socket.getOrCreatePlayer())
             
             if(game.canResolveTurn()){
                 socket.server.in(game.id).emit('game:players.turn_to_resolve', game.propsSent.map(p => p.prop))

@@ -13,7 +13,7 @@ interface GamePropositionPlayerProps extends DefaultProps {
     hand: Hand
 }
 interface GamePropositionPlayerState {
-    selectedProps: number[]
+    selectedPropIndexes: number[]
 }
 
 @inject(injector)
@@ -24,7 +24,7 @@ class GamePropositionPlayer extends React.Component <GamePropositionPlayerProps,
     constructor(props: GamePropositionPlayerProps){
         super(props)
         this.state = {
-            selectedProps: []
+            selectedPropIndexes: []
         }
     }
 
@@ -34,19 +34,26 @@ class GamePropositionPlayer extends React.Component <GamePropositionPlayerProps,
         }
     }
 
+    get nbCardToChose(){
+        return this.props.sentence.getNbBlank()
+    }
+
     sendProposition = (propCard: PropositionCard) => {
         this.props.socket.emit('game:send_prop', serialize(propCard))
     }
 
     selectProp = (propIndex: number) => {
-        let selectedProps = this.state.selectedProps.includes(propIndex) 
-                            ? this.state.selectedProps.filter(v => v !== propIndex)
-                            : this.state.selectedProps.concat(propIndex)   
-        this.setState({ selectedProps })
+        let selectedPropIndexes = this.state.selectedPropIndexes.includes(propIndex) 
+                            ? this.state.selectedPropIndexes.filter(v => v !== propIndex)
+                            : this.state.selectedPropIndexes.concat(propIndex)   
+        if(selectedPropIndexes.length > this.nbCardToChose){
+            selectedPropIndexes.shift()
+        }
+        this.setState({ selectedPropIndexes })
     }
 
     handleSendProps = () => {
-        let propCards = []
+        let propCards = this.state.selectedPropIndexes.map(index => this.props.hand.cards[index])
         this.props.socket.emit('game:send_prop', serialize(propCards))
     }
 
@@ -54,7 +61,7 @@ class GamePropositionPlayer extends React.Component <GamePropositionPlayerProps,
         return this.props.hand.cards.map( (propCard:PropositionCardmodel, k) => 
             <PropositionCard 
                 key={k}
-                className={this.state.selectedProps.includes(k) ? 'selected-proposition' : 'not-selected-proposition' }
+                className={this.state.selectedPropIndexes.includes(k) ? 'selected-proposition' : 'not-selected-proposition' }
                 propositionCard={propCard} 
                 onClick={() => this.selectProp(k)}
             />
@@ -76,6 +83,7 @@ class GamePropositionPlayer extends React.Component <GamePropositionPlayerProps,
                 <Button 
                     className='send-button'
                     onClick={this.handleSendProps}
+                    disabled={this.state.selectedPropIndexes.length !== this.nbCardToChose}
                 >
                     Validate
                 </Button>
