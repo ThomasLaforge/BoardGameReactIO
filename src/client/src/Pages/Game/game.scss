@@ -18,15 +18,57 @@
       display: flex;
       flex-direction: column;
 
+      .player > * {
+        padding: 5px 0;
+      }
       .player {
         display: flex;
         flex-direction: row;
-        justify-content: space-between;
 
-        padding: 5px;
         border:3px solid $blue;
         border-radius: 5px;
         margin: 8px 0;
+
+        font-weight: bold;
+        color: $blue;
+        font-size: 18px;
+
+        .player-score {
+          width: 15%;
+          border-right: 3px solid $blue;
+          text-align: center;
+          font-weight: bold;
+          font-size: 18px;
+        }
+        .player-name {
+          width: 70%;
+          border-right: 3px solid $blue; 
+          text-align: left;
+          padding-left: 10px;
+        }
+        .player-status {
+          width: 15%;
+
+          .player-status-is-boss {
+
+          }
+          .waiting-player {
+
+          }
+        }
+      }
+
+      .first-player {
+        border-color: $red;
+        color: $red;
+
+        .player-score {
+          border-right-color: $red;
+        }
+        .player-name {
+          width: 70%;
+          border-right-color: $red;
+        }
       }
     }
   
@@ -67,8 +109,7 @@
 
       .game-main-player-infos {
         @include infoBox();
-        margin: 40px;
-        
+        margin: 40px auto;
       }
     }
 
@@ -91,9 +132,20 @@
           margin: 20px 25px;
         }
 
+        .proposition-index {
+          width: 100%;
+          text-align: center;
+          color: $blue;
+          font-weight: bold;
+          font-size: 20px;
+          height: 35px;
+        }
+
         .selected-proposition{
           position: relative;
+          
         }
+
         .selected-proposition:after {
           content: '';
           position: absolute;
@@ -104,6 +156,7 @@
           border: 5px lightgreen solid;
           border-radius: 15px;
         }
+
       }
 
       .send-button {
@@ -132,6 +185,24 @@
     }
     .game-result-propositions {
       margin: auto;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-around;
+      width: 100%;
+      flex-wrap: wrap;
+
+      .player-propositions {
+        @include fullFlex();
+        width: fit-content;
+        padding: 25px;
+        margin: 20px;
+        border: 3px solid $blue;
+        border-radius: 10px;
+      }
+
+      .chosen-prop {
+        border-color: $red;
+      }
     }
     .game-result-indication {
       @include infoBox();

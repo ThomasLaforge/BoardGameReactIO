@@ -1,4 +1,5 @@
 @import '../../styles/colors';
+@import '../../styles/mixins';
 
 .game-lobby {
     width:100%;
@@ -9,11 +10,15 @@
     .game-lobby-choices {
       display: flex;
       flex-direction: row;
+      justify-content: space-around;
       height: 50%;
 
         .game-lobby-category {
             width: 100/3 * 1%;
-            border: 1px solid $blue;
+            // border: 1px solid $blue;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
             
             .lobby-category-title {
                 color: $red;
@@ -21,6 +26,17 @@
                 font-size: 20px;
                 text-align: center;
             }
+
+            .lobby-category-content {
+                margin: auto;
+
+                .lobby-btn {
+                    @include limitelimiteBtn();
+                    margin: auto;
+                    width: 300px;
+                }
+            }
+
         }
     }
 

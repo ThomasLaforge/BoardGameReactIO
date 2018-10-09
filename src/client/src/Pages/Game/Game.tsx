@@ -139,13 +139,21 @@ class Game extends React.Component <GameProps, GameState> {
     renderPlayers(){
         console.log('show players', this.state.players)
         return this.state.players.map( (p: PlayerListUIElt, k) => 
-            <div className="player" key={k}>
+            <div 
+                key={k}
+                className={'player' 
+                    + (this.state.gameStatus !== GameStatus.Preparing && p.isFirstPlayer ? ' first-player' : '')
+                }  
+            >
                 <div className="player-score">{p.score}</div>
                 <div className="player-name">{p.name}</div>
                 <div className="player-status">
                     { this.state.gameStatus === GameStatus.Preparing && p.isFirstPlayer && 
-                        <div className="player-status-is-boss">Boss</div>
+                        <div className="player-status-is-creator">Boss</div>
                     }
+                    {/* { this.state.gameStatus !== GameStatus.Preparing && this.state.isFirstPlayer && 
+                        <div className="player-status-is-boss">Boss</div>
+                    } */}
                     { this.state.gameStatus === GameStatus.Preparing && !p.isFirstPlayer && 
                         <div className="waiting-player">...</div>
                     }

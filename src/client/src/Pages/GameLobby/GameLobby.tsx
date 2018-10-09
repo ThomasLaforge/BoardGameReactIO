@@ -70,7 +70,7 @@ class GameLobby extends React.Component <GameLobbyProps, GameLobbyState> {
             <div className="game-lobby">
                 {/* <PlayerMiniInfo /> */}
                 <div className='game-lobby-choices'>
-                    <div className='game-lobby-category game-lobby-category-chose'>
+                    {/* <div className='game-lobby-category game-lobby-category-chose'>
                         <div className='lobby-category-title'>Chose a game</div>
                         <div className='lobby-category-description'></div>
                         <div className='lobby-category-content'>
@@ -94,14 +94,20 @@ class GameLobby extends React.Component <GameLobbyProps, GameLobbyState> {
                             />
                             <Button onClick={() => this.props.socket.emit('lobby:create')}>Create a game</Button>
                         </div>
-                    </div>
+                    </div> */}
                     <div className='game-lobby-category game-lobby-category-auto'>
-                        <div className='lobby-category-title'>Auto</div>
+                        {/* <div className='lobby-category-title'>Auto</div>
                         <div className='lobby-category-description'>
                             Find a public game or create one
-                        </div>
+                        </div> */}
                         <div className='lobby-category-content'>
-                            <Button onClick={() => this.props.socket.emit('lobby:auto')}>Find a game</Button>
+                            <Button 
+                                className='lobby-btn'
+                                variant='raised'
+                                onClick={() => this.props.socket.emit('lobby:auto')}
+                            >
+                                Find a game
+                            </Button>
                         </div>
                     </div>
                 </div>

@@ -48,7 +48,8 @@ export class SuperSocket {
             return {
                 name: p.surname,
                 score: p.score,
-                isFirstPlayer: (game as LimiteLimiteGame).isFirstPlayer(p.socketid)
+                isFirstPlayer: (game as LimiteLimiteGame).isFirstPlayer(p.socketid),
+                meIndex: game.getPlayerIndex(game.getPlayer(this.id))
             } as PlayerListUIElt
         })
         // console.log('game:player.ask_initial_infos', game.id, uiPlayers, game.isFirstPlayer(socket.id), initialChat)

@@ -7,6 +7,7 @@ import PropositionCard from '../../../components/Cards/PropositionCard';
 import { SentenceCard as SentenceCardModel, PropositionCard as PropositionCardmodel, Hand } from 'limitelimite-common';
 import { serialize } from 'serializr';
 import { Button } from '@material-ui/core';
+import { Fragment } from 'react';
 
 interface GamePropositionPlayerProps extends DefaultProps {
     sentence: SentenceCardModel
@@ -14,6 +15,7 @@ interface GamePropositionPlayerProps extends DefaultProps {
 }
 interface GamePropositionPlayerState {
     selectedPropIndexes: number[]
+    sent: boolean
 }
 
 @inject(injector)
@@ -24,7 +26,8 @@ class GamePropositionPlayer extends React.Component <GamePropositionPlayerProps,
     constructor(props: GamePropositionPlayerProps){
         super(props)
         this.state = {
-            selectedPropIndexes: []
+            selectedPropIndexes: [],
+            sent: false
         }
     }
 
@@ -59,16 +62,24 @@ class GamePropositionPlayer extends React.Component <GamePropositionPlayerProps,
     handleSendProps = () => {
         let propCards = this.state.selectedPropIndexes.map(index => this.props.hand.cards[index])
         this.props.socket.emit('game:send_prop', serialize(propCards))
+        this.setState({ sent: true })
     }
 
     renderHand(){
         return this.props.hand.cards.map( (propCard:PropositionCardmodel, k) => 
-            <PropositionCard 
-                key={k}
-                className={this.state.selectedPropIndexes.includes(k) ? 'selected-proposition' : 'not-selected-proposition' }
-                propositionCard={propCard} 
-                onClick={() => this.selectProp(k)}
-            />
+            <div className="hand-proposition">
+                <PropositionCard 
+                    key={k}
+                    className={this.state.selectedPropIndexes.includes(k) ? 'selected-proposition' : 'not-selected-proposition' }
+                    propositionCard={propCard} 
+                    onClick={() => !this.state.sent && this.selectProp(k)}
+                />
+                <div className="proposition-index">
+                    {this.state.selectedPropIndexes.includes(k) && this.nbCardToChose > 1 && 
+                        (this.state.selectedPropIndexes.indexOf(k) + 1)
+                    }
+                </div>
+            </div>
         )
     }
 
@@ -89,18 +100,27 @@ class GamePropositionPlayer extends React.Component <GamePropositionPlayerProps,
                     {this.renderHand()}
                 </div>
 
-                <Button 
-                    className={'send-button ' + (this.state.selectedPropIndexes.length !== this.nbCardToChose ? 'send-button-disabled' : '')}
-                    variant='raised'
-                    onClick={this.handleSendProps}
-                    disabled={this.state.selectedPropIndexes.length !== this.nbCardToChose}
-                >
-                    Validate
-                </Button>
+                {!this.state.sent && 
+                    <Button 
+                        className={'send-button ' + (this.state.selectedPropIndexes.length !== this.nbCardToChose ? 'send-button-disabled' : '')}
+                        variant='raised'
+                        onClick={this.handleSendProps}
+                        disabled={this.state.selectedPropIndexes.length !== this.nbCardToChose}
+                    >
+                        Validate
+                    </Button>
+                }
                 
                 <div className="game-infos-zone">
-                    You have to select {this.nbCardToChose} cards. You selected {this.state.selectedPropIndexes.length} cards.
-                    {this.state.selectedPropIndexes.length === this.nbCardToChose && [<br/>, 'You can send your proposition']}
+                    {!this.state.sent 
+                      ? <React.Fragment>
+                            {this.state.selectedPropIndexes.length === this.nbCardToChose
+                                ? 'You can send your proposition'
+                                : 'You selected ' + this.state.selectedPropIndexes.length + ' cards. You have to select ' + this.nbCardToChose + ' cards.'
+                            }
+                        </React.Fragment>
+                      : 'Your choice has been sent. Please wait your friends ...'
+                    }
                 </div>
             </div>
         );

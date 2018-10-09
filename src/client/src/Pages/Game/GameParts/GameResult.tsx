@@ -36,12 +36,11 @@ class GameResult extends React.Component <GameResultProps, GameResultState> {
         return this.props.propositions.map( (props, k) => 
             <div 
                 key={k}
-                className="player-propositions" 
+                className={'player-propositions ' + (this.props.chosenPropositionIndex === k ? 'chosen-prop' : '')}
                 onClick={() => this.props.isFirstPlayer && this.props.socket.emit('game:end_turn', k) } 
             >
                 {props.map( (p, k2) => <PropositionCard 
-                    key={k2}
-                    className={this.props.chosenPropositionIndex === k ? 'chosen-prop' : ''} 
+                    key={k2} 
                     propositionCard={p}
                 />
                 )}
@@ -65,7 +64,8 @@ class GameResult extends React.Component <GameResultProps, GameResultState> {
                             ? 'Chose your favorite proposition' 
                             : 'Waiting for boss to chose a card'
                         :
-                            [ this.props.winnerPlayerName + ' won this turn.',
+                            [ 
+                                this.props.winnerPlayerName + ' won this turn.',
                                 <Timer duration={NB_SECONDS_BEFORE_NEXT_TURN}/>
                             ]
                     }
