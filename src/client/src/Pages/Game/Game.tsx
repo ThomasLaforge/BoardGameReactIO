@@ -142,7 +142,8 @@ class Game extends React.Component <GameProps, GameState> {
             <div 
                 key={k}
                 className={'player' 
-                    + (this.state.gameStatus !== GameStatus.Preparing && p.isFirstPlayer ? ' first-player' : '')
+                    // red color for first player  
+                    // + (this.state.gameStatus !== GameStatus.Preparing && p.isFirstPlayer ? ' first-player' : '')
                 }  
             >
                 <div className="player-score">{p.score}</div>
