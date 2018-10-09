@@ -36,12 +36,29 @@ class GameBeforeStart extends React.Component <GameBeforeStartProps, GameBeforeS
         const canStartGame = this.props.isCreator && this.props.nbPlayers > 1
         return (
             <div className="game-before-start">
-                <h1>Before game start</h1>
-                <div className="game-before-start-info">
-                    {this.props.isCreator && this.props.nbPlayers === 1 && 'Waiting for more players'}
-                    {!this.props.isCreator && 'Game creator will start the game when every player have joined. Wait a moment please.'}
+                <div className="game-before-start-infos">
+                    {!this.props.isCreator 
+                        ? [
+                            'Game creator will start the game when every player have joined.',
+                            <br />,
+                            'Please, Wait a moment...'
+                        ]
+                        : this.props.nbPlayers === 1 
+                            ? 'Waiting for more players'
+                            : [ 
+                                'You are ' + this.props.nbPlayers + ' players in the game.',
+                                <br />,
+                                'You can now start to play, or wait for new players.',
+                                <Button 
+                                    variant='raised'
+                                    className='start-game-btn'
+                                    onClick={() => {this.props.startGame()}}
+                                >
+                                    Start
+                                </Button>
+                            ]
+                    }
                 </div>
-                {canStartGame && <Button onClick={() => {this.props.startGame()}}>Start the game</Button>}
             </div>
         );
     }

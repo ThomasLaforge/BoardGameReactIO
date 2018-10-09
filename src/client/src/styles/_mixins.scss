@@ -1,5 +1,25 @@
+@import 'colors';
+
 @mixin fullFlex() {
     display: flex;
     width: 100%;
     height: 100%;
+}
+
+@mixin limitelimiteBtn() {
+    background-color: $red;
+    color: $white;
+}
+
+@mixin infoBox(){
+    width: 80%;
+    margin: auto;
+
+    padding: 40px;
+    border: 5px solid $blue;
+    border-radius: 20px;
+
+    font-size: 18px;
+    text-align: center;
+    line-height: 30px;
 }

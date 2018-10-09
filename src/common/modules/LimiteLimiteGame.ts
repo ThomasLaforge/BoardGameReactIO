@@ -113,7 +113,7 @@ export class LimiteLimiteGame {
     }
 
     getPlayer(socketId: string){
-        return this.players.find(p => p.socketid === socketId)
+        return this.players.find(p => p.socketid === socketId) as Player
     }
 
     isFirstPlayer(socketId: string){

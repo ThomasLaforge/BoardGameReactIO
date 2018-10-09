@@ -47,7 +47,11 @@ class GamePropositionPlayer extends React.Component <GamePropositionPlayerProps,
                             ? this.state.selectedPropIndexes.filter(v => v !== propIndex)
                             : this.state.selectedPropIndexes.concat(propIndex)   
         if(selectedPropIndexes.length > this.nbCardToChose){
-            selectedPropIndexes.shift()
+            // remove oldest selected card index
+            // selectedPropIndexes.shift()
+
+            // remove latest selected card before this one
+            selectedPropIndexes.splice(selectedPropIndexes.length - 1 - 1, 1)            
         }
         this.setState({ selectedPropIndexes })
     }
@@ -76,17 +80,28 @@ class GamePropositionPlayer extends React.Component <GamePropositionPlayerProps,
                         sentenceCard={this.props.sentence}
                     />
                 </div>
+
+                <div className='chosen-props'>
+                
+                </div>
+
                 <div className="hand">
                     {this.renderHand()}
                 </div>
 
                 <Button 
-                    className='send-button'
+                    className={'send-button ' + (this.state.selectedPropIndexes.length !== this.nbCardToChose ? 'send-button-disabled' : '')}
+                    variant='raised'
                     onClick={this.handleSendProps}
                     disabled={this.state.selectedPropIndexes.length !== this.nbCardToChose}
                 >
                     Validate
                 </Button>
+                
+                <div className="game-infos-zone">
+                    You have to select {this.nbCardToChose} cards. You selected {this.state.selectedPropIndexes.length} cards.
+                    {this.state.selectedPropIndexes.length === this.nbCardToChose && [<br/>, 'You can send your proposition']}
+                </div>
             </div>
         );
     }

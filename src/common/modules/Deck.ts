@@ -17,12 +17,9 @@ export abstract class Deck<T> {
     abstract load(json?: any[]): void
 
     pick(nb = 1){
-        
-        console.log('before pick', this.cards.length);
         let cards = this.cards.slice()
         let cardsPicked = cards.splice(0, nb)
         this.cards = cards
-        console.log('after pick', this.cards.length, cardsPicked);
 
         return cardsPicked
     }

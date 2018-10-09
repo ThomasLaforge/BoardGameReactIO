@@ -15,6 +15,7 @@ interface GameResultProps extends DefaultProps {
     propositions: PropositionCardModel[][]
     chosenPropositionIndex: number
     isFirstPlayer: boolean
+    winnerPlayerName: string
 }
 interface GameResultState {
 }
@@ -51,7 +52,6 @@ class GameResult extends React.Component <GameResultProps, GameResultState> {
     render() {
         return (
             <div className="game-result">
-                <h2>Game result</h2>
                 <div className="game-result-sentence">
                     <SentenceCard sentenceCard={this.props.sentence} />
                 </div>
@@ -59,11 +59,17 @@ class GameResult extends React.Component <GameResultProps, GameResultState> {
                     {this.renderPropositions()}
                 </div>
 
-                { (!!this.props.chosenPropositionIndex || this.props.chosenPropositionIndex === 0) && 
-                    <Timer duration={NB_SECONDS_BEFORE_NEXT_TURN}/>
-                }
                 <div className="game-result-indication">
-                    {this.props.isFirstPlayer ? 'Chose your favorite proposition' : 'Waiting boss to chose a card'}
+                    { (!this.props.chosenPropositionIndex && this.props.chosenPropositionIndex !== 0)
+                        ? this.props.isFirstPlayer 
+                            ? 'Chose your favorite proposition' 
+                            : 'Waiting for boss to chose a card'
+                        :
+                            [ this.props.winnerPlayerName + ' won this turn. Next run start in ',
+                                <Timer duration={NB_SECONDS_BEFORE_NEXT_TURN}/>,
+                                ' seconds'
+                            ]
+                    }
                 </div>
             </div>
         );

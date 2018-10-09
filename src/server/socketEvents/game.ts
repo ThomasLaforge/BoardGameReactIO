@@ -55,7 +55,9 @@ export const addGameEvents = (socket: SuperSocket, GC: GameCollection) => {
         console.log('socket end turn:', !!game, propositionCardIndex)
         if(game){
             game.endTurn(propositionCardIndex)            
-            socket.server.in(game.id).emit('game:players.turn_is_complete', propositionCardIndex)
+            let winnerPlayerSocketId = game.getMainPlayerSocketId()
+            let winnerPlayerName = game.getPlayer(winnerPlayerSocketId).surname 
+            socket.server.in(game.id).emit('game:players.turn_is_complete', propositionCardIndex, winnerPlayerName)
 
             setTimeout( () => {
                 game = game as LimiteLimiteGame

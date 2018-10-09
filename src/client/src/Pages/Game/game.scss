@@ -2,92 +2,145 @@
 @import '../../styles/mixins';
 
 .game {
-    flex: 1;
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+
+  .game-infos {
     display: flex;
-    flex-direction: row;
-  
-    .game-infos {
+    flex-direction: column;
+    width: 350px;
+    
+    .game-players {
+      padding: 30px;
+
       display: flex;
       flex-direction: column;
-      width: 350px;
-      
-      .game-players {
-        padding: 30px;
-  
+
+      .player {
         display: flex;
-        flex-direction: column;
-  
-        .player {
-          display: flex;
-          flex-direction: row;
-          justify-content: space-between;
-  
-          padding: 5px;
-          border:3px solid $blue;
-          border-radius: 5px;
-          margin: 8px 0;
-        }
-      }
-    
-      .game-chat {
-        flex: 1;
-        flex-grow: 1;
-  
-        // border: 1px solid blue;  
+        flex-direction: row;
+        justify-content: space-between;
+
+        padding: 5px;
+        border:3px solid $blue;
+        border-radius: 5px;
+        margin: 8px 0;
       }
     }
   
-    .game-content {
+    .game-chat {
       flex: 1;
-      border: 1px solid red;  
-  
-      .game-before-start {
-  
-      }
-  
-      .game-main-player {
-        
-      }
-  
-      .game-prop-player {
-        @include fullFlex();
-        flex-direction: column;
-        justify-content: space-around;
-        
-        .sentence {
-          margin: auto;          
-        }
+      flex-grow: 1;
 
-        .hand {
-          display: flex;
-          flex-direction: row;
-          flex-wrap: wrap;
-          justify-content: center;
-
-          .card {
-            margin: 5px 25px;
-          }
-
-          .selected-proposition{
-            position: relative;
-          }
-          .selected-proposition:after {
-            content: '';
-            position: absolute;
-            top: -5px;
-            left: -5px;
-            bottom: -5px;
-            right: -5px;
-            border: 5px lightgreen solid;
-            border-radius: 15px;
-          }
-        }
-
-        .send-button {
-          width: 200px;
-          margin: auto;
-        }
-      }
-
+      // border: 1px solid blue;  
     }
+  }
+
+  .game-content {
+    flex: 1;
+    border: 1px solid red;  
+
+    .game-before-start {
+      @include fullFlex();
+      flex-direction: column;
+      justify-content: center;
+
+      .game-before-start-infos {
+        @include infoBox();
+      }
+
+      .start-game-btn {
+        @include limitelimiteBtn();
+        display: block;
+        margin: 15px auto 0 auto;
+      }
+    }
+
+    .game-main-player {
+      @include fullFlex();
+      flex-direction: column;
+      justify-content: space-between;
+
+      .game-main-player-sentence {
+        margin: auto;
+      }
+
+      .game-main-player-infos {
+        @include infoBox();
+        margin: 40px;
+        
+      }
+    }
+
+    .game-prop-player {
+      @include fullFlex();
+      flex-direction: column;
+      justify-content: space-around;
+      
+      .sentence {
+        margin: auto;          
+      }
+
+      .hand {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+
+        .card {
+          margin: 20px 25px;
+        }
+
+        .selected-proposition{
+          position: relative;
+        }
+        .selected-proposition:after {
+          content: '';
+          position: absolute;
+          top: -5px;
+          left: -5px;
+          bottom: -5px;
+          right: -5px;
+          border: 5px lightgreen solid;
+          border-radius: 15px;
+        }
+      }
+
+      .send-button {
+        @include limitelimiteBtn();
+        width: 200px;
+        margin: auto;
+      }
+      .send-button-disabled {
+        background-color: lighten($color: $red, $amount: 15)
+      }
+
+      .game-infos-zone {
+        @include infoBox();
+      }
+    }
+
+  }
+
+  .game-result {
+    @include fullFlex();
+    flex-direction: column;
+    justify-content: space-around;
+    
+    .game-result-sentence {
+      margin: auto;
+    }
+    .game-result-propositions {
+      margin: auto;
+    }
+    .game-result-indication {
+      @include infoBox();
+      
+      
+      .timer {
+       display: inline; 
+      }
+    }
+  }
 }

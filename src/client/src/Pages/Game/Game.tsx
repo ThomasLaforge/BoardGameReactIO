@@ -29,6 +29,7 @@ interface GameState {
     propositions?: any
     chosenPropositionIndex?: number
     hand?: any
+    winnerPlayerName?: string
 }
 
 @inject(injector)
@@ -43,7 +44,8 @@ class Game extends React.Component <GameProps, GameState> {
             isCreator: false,
             isFirstPlayer: false,
             gameStatus: GameStatus.Preparing,
-            players: []
+            players: [],
+            winnerPlayerName: ''
         }
     }
 
@@ -92,12 +94,23 @@ class Game extends React.Component <GameProps, GameState> {
                 console.log('game:player.player_has_played')
 
             })
+
+            socket.on('game:players.turn_is_complete', (chosenPropositionIndex, winnerPlayerName) => {
+                this.setState({ chosenPropositionIndex, winnerPlayerName })
+            })
+            
             socket.on('game:mp.new_turn', (sentenceJSON) => {
                 console.log('game:mp.new_turn', sentenceJSON)
                 this.setState({
                     gameStatus: GameStatus.InGame,
                     isFirstPlayer: true,
                     sentence: deserialize(SentenceCard, sentenceJSON),
+                    
+                    // resets
+                    hand: null,
+                    propositions: [],
+                    chosenPropositionIndex: null,
+                    winnerPlayerName: ''
                 })
 
             })
@@ -107,13 +120,15 @@ class Game extends React.Component <GameProps, GameState> {
                     gameStatus: GameStatus.InGame,
                     isFirstPlayer: false,
                     sentence: deserialize(SentenceCard, sentenceJSON),
-                    hand: deserialize(Hand, handJSON)
+                    hand: deserialize(Hand, handJSON),
+                    
+                    // resets
+                    propositions: [],
+                    chosenPropositionIndex: null,
+                    winnerPlayerName: ''
                 })
             })
 
-            socket.on('game:players.turn_is_complete', (chosenPropositionIndex) => {
-                this.setState({ chosenPropositionIndex })
-            })
         }
     }
 
@@ -174,6 +189,7 @@ class Game extends React.Component <GameProps, GameState> {
                             propositions={this.state.propositions}
                             chosenPropositionIndex={this.state.chosenPropositionIndex}
                             isFirstPlayer={this.state.isFirstPlayer}
+                            winnerPlayerName={this.state.winnerPlayerName}
                         />
                     }
                 </div>
