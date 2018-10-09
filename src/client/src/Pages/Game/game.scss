@@ -9,7 +9,8 @@
   .game-infos {
     display: flex;
     flex-direction: column;
-    width: 350px;
+    width: 400px;
+    padding: 10px;
     
     .game-players {
       padding: 30px;
@@ -37,7 +38,6 @@
 
   .game-content {
     flex: 1;
-    border: 1px solid red;  
 
     .game-before-start {
       @include fullFlex();
@@ -52,6 +52,7 @@
         @include limitelimiteBtn();
         display: block;
         margin: 15px auto 0 auto;
+        padding: 2px 40px;
       }
     }
 
@@ -107,7 +108,7 @@
 
       .send-button {
         @include limitelimiteBtn();
-        width: 200px;
+        width: 125px;
         margin: auto;
       }
       .send-button-disabled {

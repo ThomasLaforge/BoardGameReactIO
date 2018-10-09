@@ -41,10 +41,10 @@ class GameBeforeStart extends React.Component <GameBeforeStartProps, GameBeforeS
                         ? [
                             'Game creator will start the game when every player have joined.',
                             <br />,
-                            'Please, Wait a moment...'
+                            'Please, Wait a moment ...'
                         ]
                         : this.props.nbPlayers === 1 
-                            ? 'Waiting for more players'
+                            ? 'Waiting for more players ...'
                             : [ 
                                 'You are ' + this.props.nbPlayers + ' players in the game.',
                                 <br />,

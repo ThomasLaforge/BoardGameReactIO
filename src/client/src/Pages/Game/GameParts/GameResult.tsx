@@ -65,9 +65,8 @@ class GameResult extends React.Component <GameResultProps, GameResultState> {
                             ? 'Chose your favorite proposition' 
                             : 'Waiting for boss to chose a card'
                         :
-                            [ this.props.winnerPlayerName + ' won this turn. Next run start in ',
-                                <Timer duration={NB_SECONDS_BEFORE_NEXT_TURN}/>,
-                                ' seconds'
+                            [ this.props.winnerPlayerName + ' won this turn.',
+                                <Timer duration={NB_SECONDS_BEFORE_NEXT_TURN}/>
                             ]
                     }
                 </div>

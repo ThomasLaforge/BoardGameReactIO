@@ -34,7 +34,7 @@ class Timer extends React.Component <TimerProps, TimerState> {
         return (
             <div className="timer">
                 <div className="timer-value">
-                    {this.state.remainingTime >= 0 ? this.state.remainingTime : 0}
+                    Next run starts in {this.state.remainingTime} seconds
                 </div>
             </div>
         );
