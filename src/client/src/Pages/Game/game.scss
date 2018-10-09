@@ -31,9 +31,7 @@
   
     .game-chat {
       flex: 1;
-      flex-grow: 1;
-
-      // border: 1px solid blue;  
+      height: 0px;
     }
   }
 
@@ -136,7 +134,7 @@
     }
     .game-result-indication {
       @include infoBox();
-      
+
       
       .timer {
        display: inline; 

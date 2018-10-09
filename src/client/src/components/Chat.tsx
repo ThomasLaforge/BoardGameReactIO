@@ -37,6 +37,11 @@ class Chat extends React.Component <ChatProps, ChatState> {
         }
     }
 
+    componentDidUpdate(){
+        var chatContent = document.getElementById("chat-content");
+        chatContent.scrollTop = chatContent.scrollHeight;
+    }
+
     sendMessage = () => {
         if(this.state.message.trim() !== ''){
             this.props.socket.emit('chat:send_message', this.state.message, this.props.channel); 
@@ -50,7 +55,7 @@ class Chat extends React.Component <ChatProps, ChatState> {
                 <div className="chat-title">
                     {this.props.title || 'Chat'}
                 </div>
-                <div className="chat-messages">
+                <div className="chat-messages" id='chat-content'>
                     {this.state.messages.map( (m, k) => 
                         <div className="chat-message" key={k}>
                             <div className='chat-message-sender'>{m.username}</div>
