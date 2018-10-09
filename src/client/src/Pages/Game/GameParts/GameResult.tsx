@@ -59,13 +59,13 @@ class GameResult extends React.Component <GameResultProps, GameResultState> {
                 <div className="game-result-propositions">
                     {this.renderPropositions()}
                 </div>
-                <div className="game-result-indication">
-                    {this.props.isFirstPlayer ? 'Chose your favorite proposition' : 'Waiting boss to chose a card'}
-                </div>
 
                 { (!!this.props.chosenPropositionIndex || this.props.chosenPropositionIndex === 0) && 
                     <Timer duration={NB_SECONDS_BEFORE_NEXT_TURN}/>
                 }
+                <div className="game-result-indication">
+                    {this.props.isFirstPlayer ? 'Chose your favorite proposition' : 'Waiting boss to chose a card'}
+                </div>
             </div>
         );
     }

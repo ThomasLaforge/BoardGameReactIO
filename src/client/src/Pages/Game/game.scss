@@ -46,7 +46,7 @@
       }
   
       .game-main-player {
-  
+        
       }
   
       .game-prop-player {
@@ -57,6 +57,7 @@
         .sentence {
           margin: auto;          
         }
+
         .hand {
           display: flex;
           flex-direction: row;
@@ -71,16 +72,13 @@
             border: 1px lightgreen solid;
             border-radius: 15px;
           }
-
         }
+
         .send-button {
-
+          width: 200px;
+          margin: auto;
         }
       }
-  
-      .game-prop-player {
-  
-      }
-  
+
     }
 }
