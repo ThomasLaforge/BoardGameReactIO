@@ -68,8 +68,17 @@
             margin: 5px 25px;
           }
 
-          .selected-proposition {
-            border: 1px lightgreen solid;
+          .selected-proposition{
+            position: relative;
+          }
+          .selected-proposition:after {
+            content: '';
+            position: absolute;
+            top: -5px;
+            left: -5px;
+            bottom: -5px;
+            right: -5px;
+            border: 5px lightgreen solid;
             border-radius: 15px;
           }
         }

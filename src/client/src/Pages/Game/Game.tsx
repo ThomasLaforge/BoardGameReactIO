@@ -111,7 +111,7 @@ class Game extends React.Component <GameProps, GameState> {
                 })
             })
 
-            socket.on('turn_is_complete', (chosenPropositionIndex) => {
+            socket.on('game:players.turn_is_complete', (chosenPropositionIndex) => {
                 this.setState({ chosenPropositionIndex })
             })
         }
