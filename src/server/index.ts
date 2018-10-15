@@ -14,8 +14,6 @@ import { addGameEvents } from './socketEvents/game'
 import { addChatEvents } from './socketEvents/chat'
 
 import { GameCollection } from '../common/modules/GameCollection';
-import { deserialize } from 'serializr';
-import { PropositionCard } from '../common';
 
 const app = express()
 const http = new nodeHttp.Server(app);
@@ -51,7 +49,7 @@ io.on('connection', (baseSocket: ExtendedSocket) => {
       let gameHasStarted = game.isFull
       if(gameHasStarted){
         // delete the game
-        GC.removeGame(game.id)
+        // GC.removeGame(game.id)
       }
       else {
         // remove player
