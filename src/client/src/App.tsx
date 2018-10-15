@@ -10,7 +10,7 @@ import DebugBox from './components/DebugBox';
 
 import './App.scss';
 
-const uri = 'http://localhost:3027';
+const uri = location.origin + ':3027';
 const options = { transports: ['websocket'] };
 // let socket = io.connect(uri, options)
 const socket = io.connect(uri, options)

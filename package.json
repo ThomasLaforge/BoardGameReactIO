@@ -14,20 +14,19 @@
     "@types/node": "^10.10.3",
     "@types/socket.io": "^1.4.38",
     "gts": "^0.8.0",
+    "shx": "^0.3.2",
     "typescript": "~2.8.0"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "check": "gts check",
-    "clean": "gts clean",
+    "clean": "shx rm -r build",
     "compile": "tsc -p .",
-    "fix": "gts fix",
-    "prepare": "npm run compile",
-    "pretest": "npm run compile",
-    "posttest": "npm run check",
     "common": "tsc -w",
-    "server": "node build/src/server/index.js",
-    "client": "cd src/client && npm start",
+    "build": "npm run compile && cd src/client && npm run build && shx cp build ../../build/client",
+    "publish": "scp -r /build nastomju@192.168.1.23:/var/services/web/www/testScp",
+    "build:server": "npm run compile",
+    "build:client": "cd src/client && npm start",
+    "run:server": "node build/src/server/index.js",
+    "run:client": "cd src/client && npm start",
     "link": "npm run compile && cd build/src/common && npm link && cd ../../../src/client && npm link limitelimite-common"
   },
   "repository": {
