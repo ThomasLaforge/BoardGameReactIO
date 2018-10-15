@@ -20,13 +20,15 @@
   "scripts": {
     "clean": "shx rm -r build",
     "compile": "tsc -p .",
-    "common": "tsc -w",
-    "build": "npm run compile && cd src/client && npm run build && shx cp build ../../build/client",
-    "publish": "scp -r /build nastomju@192.168.1.23:/var/services/web/www/testScp",
+    "watch:server": "tsc -w",
+    "cp-client": "shx cp -r src/client/build build/client",
+    "build": "npm run build:server && npm run build:client && shx cp -r src/client/build build/src/client",
+    "publish": "shx scp -r /datas /build package.json nastomju@192.168.1.23:/var/services/web/www/testScp",
     "build:server": "npm run compile",
-    "build:client": "cd src/client && npm start",
-    "run:server": "node build/src/server/index.js",
-    "run:client": "cd src/client && npm start",
+    "build:client": "cd src/client && npm run build",
+    "dev": "npm run dev:client && npm watch:server",
+    "dev:server": "node build/src/server/index.js",
+    "dev:client": "cd src/client && npm start",
     "link": "npm run compile && cd build/src/common && npm link && cd ../../../src/client && npm link limitelimite-common"
   },
   "repository": {
