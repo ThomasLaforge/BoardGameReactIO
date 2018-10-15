@@ -1,6 +1,7 @@
 import * as express from 'express';
 import * as nodeHttp from 'http'
 import * as socketIo from 'socket.io';
+import * as path from 'path'
 
 // My socket
 import { SuperSocket } from './SuperSocket';
@@ -15,6 +16,8 @@ import { addChatEvents } from './socketEvents/chat'
 
 import { GameCollection } from '../common/modules/GameCollection';
 
+import { serverPort } from '../common/Server';
+
 const app = express()
 const http = new nodeHttp.Server(app);
 const io = socketIo(http);
@@ -23,9 +26,12 @@ let GC = new GameCollection()
 let hasLoggedAllSocketEvents = false
 
 // render index page
-console.log('dirName =', __dirname)
-app.get('/', function(req, res){
-  // res.sendFile(__dirname + '/index.html');
+console.log('dirName =', __dirname, path.join(__dirname, '../../src/client/build'))
+
+app.use(express.static(path.join(__dirname, '../../src/client/build')));
+
+app.get('/', function(req, res) {
+  res.sendFile(path.join(__dirname, '../../src/client/build', 'index.html'));
 });
 
 // INFO: naming of "on" events and emit: Category:portée.main_mission/sub_mision_or_state
@@ -75,6 +81,6 @@ io.on('connection', (baseSocket: ExtendedSocket) => {
 });
 
 // start server
-http.listen(3027, function(){
-  console.log('listening on *:3027');
+http.listen(serverPort, function(){
+  console.log('listening on localhost:' + serverPort);
 });
