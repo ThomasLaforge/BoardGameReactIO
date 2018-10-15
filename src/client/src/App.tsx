@@ -6,14 +6,16 @@ import RouterComponent from './Router/RouterComponent';
 import { Provider, observer } from 'mobx-react';
 import { Store } from './Stores/Store';
 import { DefaultProps } from './mobxInjector';
-import DebugBox from './components/DebugBox';
+// import DebugBox from './components/DebugBox';
 
 import './App.scss';
 
-const uri = location.origin + ':3027';
-const options = { transports: ['websocket'] };
-// let socket = io.connect(uri, options)
-const socket = io.connect(uri, options)
+const uri = location.protocol + '//' + location.hostname + ':3027';
+// console.log('path of api', location, uri)
+
+// const options = { transports: ['websocket'] };
+// const socket = io.connect(uri, options)
+const socket = io.connect(uri)
 
 interface AppProps extends DefaultProps {}
 
