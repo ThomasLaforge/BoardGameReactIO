@@ -26,12 +26,15 @@ let GC = new GameCollection()
 let hasLoggedAllSocketEvents = false
 
 // render index page
-console.log('dirName =', __dirname, path.join(__dirname, '../../src/client/build'))
+// console.log('dirName =', __dirname, path.join(__dirname, '../../src/client'))
+const clientDirPath = path.join(__dirname, '../../src/client')
 
-app.use(express.static(path.join(__dirname, '../../src/client/build')));
+// public directory
+app.use(express.static(clientDirPath));
 
+// render app
 app.get('/', function(req, res) {
-  res.sendFile(path.join(__dirname, '../../src/client/build', 'index.html'));
+  res.sendFile(path.join(clientDirPath, 'index.html'));
 });
 
 // INFO: naming of "on" events and emit: Category:portée.main_mission/sub_mision_or_state
@@ -48,6 +51,14 @@ io.on('connection', (baseSocket: ExtendedSocket) => {
   addChatEvents(socket)
   addLobbyEvents(socket, GC)
   addGameEvents(socket, GC)
+
+  socket.on('reconnecting', () => {
+    console.log('reconnecting...')
+  })
+
+  socket.on('reconnect', () => {
+    console.log('reconnect...')
+  })
 
   socket.on('disconnect', () => {
     let game = GC.getGameWithUser(socket.id)
