@@ -46,7 +46,7 @@ export class PropositionDeck extends Deck<PropositionCard> {
         super(cards)
     }
 
-    load(json: any[] = require('../../../../datas/propositions/limitelimite.json')){
+    load(json: any[] = require('../../../../datas/propositions/limitelimitelimite.json')){
         let cards = deserialize(PropositionCard, json)
         this.cards = cards
     }
@@ -61,7 +61,7 @@ export class SentenceDeck extends Deck<SentenceCard> {
         super(cards)
     }
 
-    load(json: any[] = require('../../../../datas/sentences/limitelimite.json')){
+    load(json: any[] = require('../../../../datas/sentences/limitelimitelimite.json')){
         let cards = deserialize(SentenceCard, json)
         this.cards = cards
     }
