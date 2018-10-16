@@ -31,3 +31,8 @@ export interface ITurn {
     sentence: SentenceCard,
     propositions: PropSent[]
 }
+
+export enum CollectionDeckFamily {
+    LimiteLimite = 'limitelimite',
+    LimiteLimiteLimite = 'limitelimitelimite'
+}
