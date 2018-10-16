@@ -19,6 +19,7 @@ export class Game {
         this.id = Date.now().toString()
         this.nbPlayer = nbPlayer
         this.players = []
+        this._forcedIsFull = false
     }
 
     get isFull(){
@@ -33,6 +34,9 @@ export class Game {
         this.players = this.players.filter(p => p.socketid !== socketId)
     }
 
+    get playersNames(){
+        return this.players.map(p => p.surname)
+    }
 }
 
 export class GameCollection {
