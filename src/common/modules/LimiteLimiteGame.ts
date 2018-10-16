@@ -1,6 +1,6 @@
 import { Player } from "./Player";
 import { PropositionDeck, SentenceDeck } from "./Deck";
-import { NB_CARD_IN_HAND, DEFAULT_IS_PRIVATE_GAME } from "../LimiteLimite";
+import { NB_CARD_IN_HAND, DEFAULT_IS_PRIVATE_GAME, DEFAULT_NB_TURN, ITurn } from "../LimiteLimite";
 import { SentenceCard } from "./SentenceCard";
 import { PropositionCard } from "./PropositionCard";
 
@@ -19,8 +19,10 @@ export class LimiteLimiteGame {
     public isFull: boolean
     public isPrivate: boolean
     public propsSent: PropSent[]
+    public nbTurnToPlay: number
+    public history: ITurn[]
 
-    constructor(player: Player, isPrivate = DEFAULT_IS_PRIVATE_GAME, propsDeck = new PropositionDeck(), sentencesDeck = new SentenceDeck()){
+    constructor(player: Player, nbTurn = DEFAULT_NB_TURN, isPrivate = DEFAULT_IS_PRIVATE_GAME, propsDeck = new PropositionDeck(), sentencesDeck = new SentenceDeck()){
         this.isFull = false
         this.id = Date.now().toString()
         this.players = [player]
@@ -29,6 +31,8 @@ export class LimiteLimiteGame {
         this.mainPlayerIndex = 0
         this.isPrivate = isPrivate
         this.propsSent = []
+        this.nbTurnToPlay = nbTurn
+        this.history = []
     }
     
     startGame(){
@@ -118,6 +122,14 @@ export class LimiteLimiteGame {
 
     isFirstPlayer(socketId: string){
         return this.players && this.players[0] && this.players[0].socketid === socketId
+    }
+
+    isGameOver(){
+        return this.nbTurnToPlay === this.nbTurnPlayed
+    }
+
+    get nbTurnPlayed(){
+        return this.history.length
     }
 
     get currentSentenceCard(): SentenceCard {
