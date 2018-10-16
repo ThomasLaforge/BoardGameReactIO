@@ -20,7 +20,14 @@ export interface GameLobbyListElt {
 
 export type GameLobbyList = GameLobbyListElt[]
 
+
+export interface PropSent {
+    playerIndex: number,
+    prop: PropositionCard[]
+}
+
+
 export interface ITurn {
     sentence: SentenceCard,
-    propositions: PropositionCard[]
+    propositions: PropSent[]
 }

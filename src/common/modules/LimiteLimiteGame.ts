@@ -1,13 +1,8 @@
 import { Player } from "./Player";
 import { PropositionDeck, SentenceDeck } from "./Deck";
-import { NB_CARD_IN_HAND, DEFAULT_IS_PRIVATE_GAME, DEFAULT_NB_TURN, ITurn } from "../LimiteLimite";
+import { NB_CARD_IN_HAND, DEFAULT_IS_PRIVATE_GAME, DEFAULT_NB_TURN, ITurn, PropSent } from "../LimiteLimite";
 import { SentenceCard } from "./SentenceCard";
 import { PropositionCard } from "./PropositionCard";
-
-export interface PropSent {
-    playerIndex: number,
-    prop: PropositionCard[]
-}
 
 export class LimiteLimiteGame {
 
@@ -15,28 +10,21 @@ export class LimiteLimiteGame {
     public mainPlayerIndex: number;
     public propsDeck: PropositionDeck;
     public sentencesDeck: SentenceDeck;
-    public id: string
-    public isFull: boolean
-    public isPrivate: boolean
     public propsSent: PropSent[]
     public nbTurnToPlay: number
     public history: ITurn[]
 
-    constructor(player: Player, nbTurn = DEFAULT_NB_TURN, isPrivate = DEFAULT_IS_PRIVATE_GAME, propsDeck = new PropositionDeck(), sentencesDeck = new SentenceDeck()){
-        this.isFull = false
-        this.id = Date.now().toString()
+    constructor(player: Player, nbTurn = DEFAULT_NB_TURN, propsDeck = new PropositionDeck(), sentencesDeck = new SentenceDeck()){
         this.players = [player]
         this.propsDeck = propsDeck
         this.sentencesDeck = sentencesDeck
         this.mainPlayerIndex = 0
-        this.isPrivate = isPrivate
         this.propsSent = []
         this.nbTurnToPlay = nbTurn
         this.history = []
     }
     
     startGame(){
-        this.isFull = true
         this.mainPlayerIndex = Math.floor(Math.random() * this.players.length)
         // give cards
         this.players.forEach(p => {
@@ -56,6 +44,10 @@ export class LimiteLimiteGame {
                 // console.log('after hand play', p.hand.cards.length);
                 let card = this.propsDeck.pick(cardsPlayedLastTurn.length)
                 p.addCard(card)
+                this.history.push({
+                    sentence: this.currentSentenceCard,
+                    propositions: this.propsSent
+                })
             }
             else {
                 // throw Error('next turn: can\'t find card played last turn')
@@ -98,14 +90,6 @@ export class LimiteLimiteGame {
     canResolveTurn(){
         console.log('can resolve turn', this.propsSent.length, this.players.length - 1)
         return this.propsSent.length === this.players.length - 1
-    }
-
-    addPlayer(p: Player){
-        this.players.push(p)
-    }
-
-    removePlayer(socketId: string){
-        this.players = this.players.filter(p => p.socketid !== socketId)
     }
 
     getMainPlayerSocketId(): string {
