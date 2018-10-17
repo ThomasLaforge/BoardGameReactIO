@@ -1,15 +1,16 @@
 import { GameLobbyList } from '../LimiteLimite'
 import { Game } from './Game';
+import { LimiteLimiteGame } from './LimiteLimiteGame';
 
 export class GameCollection {
 
-    public games: Game[]
+    public games: LimiteLimiteGame[]
 
-    constructor(games: Game[] = []){
+    constructor(games: LimiteLimiteGame[] = []){
         this.games = games
     }
 
-    addGame(game: Game){
+    addGame(game: LimiteLimiteGame){
         this.games.push(game)
     }
 

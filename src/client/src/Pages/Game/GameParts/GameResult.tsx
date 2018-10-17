@@ -16,6 +16,7 @@ interface GameResultProps extends DefaultProps {
     chosenPropositionIndex: number
     isFirstPlayer: boolean
     winnerPlayerName: string
+    // playersNames: string[]
 }
 interface GameResultState {
 }
@@ -39,11 +40,15 @@ class GameResult extends React.Component <GameResultProps, GameResultState> {
                 className={'player-propositions ' + (this.props.chosenPropositionIndex === k ? 'chosen-prop' : '')}
                 onClick={() => this.props.isFirstPlayer && this.props.socket.emit('game:end_turn', k) } 
             >
-                {props.map( (p, k2) => <PropositionCard 
-                    key={k2} 
-                    propositionCard={p}
-                />
+                {props.map( (p, k2) =>  
+                    <PropositionCard 
+                        key={k2} 
+                        propositionCard={p}
+                    />
                 )}
+                {/* { (this.props.chosenPropositionIndex || this.props.chosenPropositionIndex === 0) && 
+                    this.props.playersNames[k]
+                } */}
             </div>
         )
     }

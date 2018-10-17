@@ -45,15 +45,17 @@ export class SuperSocket {
 
     sendGameInfos(game: LimiteLimiteGame){
         const uiPlayers: PlayerListUI = game.players.map(p => {
+            let isFirstPlayer = game.isFirstPlayer(p.socketid)
             return {
                 name: p.surname,
                 score: p.score,
-                isFirstPlayer: (game as LimiteLimiteGame).isFirstPlayer(p.socketid),
-                meIndex: game.getPlayerIndex(game.getPlayer(this.id))
+                isFirstPlayer,
+                hasPlayed: !isFirstPlayer && game.playerHasPlayed(p)
             } as PlayerListUIElt
         })
         // console.log('game:player.ask_initial_infos', game.id, uiPlayers, game.isFirstPlayer(socket.id), initialChat)
-        this.emit('game:player.ask_initial_infos', game.id, uiPlayers, game.isFirstPlayer(this.id))
+        let myIndex = game.getPlayerIndex(game.getPlayer(this.id))
+        this.emit('game:player.ask_initial_infos', game.id, uiPlayers, game.isFirstPlayer(this.id), myIndex)
         this.baseSocket.to(game.id).broadcast.emit('game:players.new_player', uiPlayers)
     }
 

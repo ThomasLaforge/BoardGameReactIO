@@ -1,19 +1,24 @@
 import { Player } from "./Player";
 import { PropositionDeck, SentenceDeck } from "./Deck";
-import { NB_CARD_IN_HAND, DEFAULT_IS_PRIVATE_GAME, DEFAULT_NB_TURN, ITurn, PropSent } from "../LimiteLimite";
+import { NB_CARD_IN_HAND, DEFAULT_IS_PRIVATE_GAME, DEFAULT_NB_TURN, ITurn, PropSent, DEFAULT_NB_PLAYER } from "../LimiteLimite";
 import { SentenceCard } from "./SentenceCard";
 import { PropositionCard } from "./PropositionCard";
 
 export class LimiteLimiteGame {
 
     constructor(
-        public players: Player[], 
+        public creator: Player,
+        public isPrivate = DEFAULT_IS_PRIVATE_GAME,
+        public players: Player[] = [creator], 
         public nbTurnToPlay = DEFAULT_NB_TURN, 
         public propsDeck = new PropositionDeck(), 
         public sentencesDeck = new SentenceDeck(),
         public mainPlayerIndex = 0,
         public propsSent: PropSent[] = [],
-        public history: ITurn[] = []
+        public history: ITurn[] = [],
+        public id = Date.now().toString(),
+        private _forcedIsFull = false,
+        public nbPlayer = DEFAULT_NB_PLAYER
     ){}
     
     startGame(){
@@ -85,7 +90,7 @@ export class LimiteLimiteGame {
     }
 
     getMainPlayerSocketId(): string {
-        return this.players[this.mainPlayerIndex].socketid
+        return this.players[this.mainPlayerIndex] && this.players[this.mainPlayerIndex].socketid
     }
 
     getPropsPlayersSocketIds(): string[] {
@@ -97,7 +102,12 @@ export class LimiteLimiteGame {
     }
 
     isFirstPlayer(socketId: string){
-        return this.players && this.players[0] && this.players[0].socketid === socketId
+        return this.getMainPlayerSocketId() === socketId
+    }
+
+    playerHasPlayed(player: Player){
+        let playerIndex = this.getPlayerIndex(player)
+        return this.propsSent.findIndex(props => props.playerIndex === playerIndex) !== -1
     }
 
     isGameOver(){
@@ -121,6 +131,18 @@ export class LimiteLimiteGame {
     }
     get playersNames(){
         return this.players.map(p => p.surname)
+    }
+
+    addPlayer(p: Player){
+        this.players.push(p)
+    }
+    
+    removePlayer(socketId: string){
+        this.players = this.players.filter(p => p.socketid !== socketId)
+    }
+
+    get isFull(){
+        return this._forcedIsFull || this.nbPlayer === this.players.length
     }
 
 }

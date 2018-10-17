@@ -57,6 +57,13 @@
           }
         }
       }
+    
+      .player-me, 
+      .player-me .player-score, 
+      .player-me .player-name
+      {
+        border-color: $red;
+      }
 
       .first-player {
         border-color: $red;

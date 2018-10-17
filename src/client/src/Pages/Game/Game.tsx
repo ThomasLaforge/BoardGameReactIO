@@ -30,6 +30,7 @@ interface GameState {
     chosenPropositionIndex?: number
     hand?: any
     winnerPlayerName?: string
+    myIndex?: number
 }
 
 @inject(injector)
@@ -54,9 +55,9 @@ class Game extends React.Component <GameProps, GameState> {
             const socket = this.props.socket
             socket.emit('game:ask_initial_infos')
 
-            socket.on('game:player.ask_initial_infos', (gameId: string, players: PlayerListUI, isCreator: boolean, initialChat: ChatMessage[]) => {
-                console.log('players1', gameId, players, isCreator, initialChat)
-                this.setState({gameId, isCreator, players })
+            socket.on('game:player.ask_initial_infos', (gameId: string, players: PlayerListUI, isCreator: boolean, myIndex: number, initialChat: ChatMessage[]) => {
+                console.log('players1', gameId, players, isCreator, myIndex, initialChat)
+                this.setState({gameId, isCreator, players, myIndex })
             })
             socket.on('game:players.new_player', (players: PlayerListUI) => {
                 console.log('players2', players)
@@ -144,19 +145,20 @@ class Game extends React.Component <GameProps, GameState> {
                 className={'player' 
                     // red color for first player  
                     // + (this.state.gameStatus !== GameStatus.Preparing && p.isFirstPlayer ? ' first-player' : '')
+                    + (k === this.state.myIndex ? ' player-me' : '')
                 }  
             >
                 <div className="player-score">{p.score}</div>
                 <div className="player-name">{p.name}</div>
                 <div className="player-status">
-                    { this.state.gameStatus === GameStatus.Preparing && p.isFirstPlayer && 
-                        <div className="player-status-is-creator">Boss</div>
-                    }
-                    {/* { this.state.gameStatus !== GameStatus.Preparing && this.state.isFirstPlayer && 
+                    { p.isFirstPlayer && 
                         <div className="player-status-is-boss">Boss</div>
-                    } */}
-                    { this.state.gameStatus === GameStatus.Preparing && !p.isFirstPlayer && 
-                        <div className="waiting-player">...</div>
+                    }
+                    { this.state.gameStatus === GameStatus.InGame && !p.isFirstPlayer && p.hasPlayed && 
+                        <div className="player-status-has-played">&#x2714;</div>
+                    }
+                    { this.state.gameStatus === GameStatus.InGame && !p.isFirstPlayer && !p.hasPlayed &&
+                    <div className="player-status-choosing">...</div>
                     }
                 </div>   
             </div>

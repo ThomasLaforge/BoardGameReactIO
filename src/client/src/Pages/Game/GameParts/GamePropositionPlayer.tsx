@@ -67,9 +67,11 @@ class GamePropositionPlayer extends React.Component <GamePropositionPlayerProps,
 
     renderHand(){
         return this.props.hand.cards.map( (propCard:PropositionCardmodel, k) => 
-            <div className="hand-proposition">
+        <div 
+            key={k}
+            className="hand-proposition"
+        >
                 <PropositionCard 
-                    key={k}
                     className={this.state.selectedPropIndexes.includes(k) ? 'selected-proposition' : 'not-selected-proposition' }
                     propositionCard={propCard} 
                     onClick={() => !this.state.sent && this.selectProp(k)}

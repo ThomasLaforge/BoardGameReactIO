@@ -13,8 +13,8 @@ export const addGameEvents = (socket: SuperSocket, GC: GameCollection) => {
     socket.on('game:ask_initial_infos', () => {
         let game = GC.getGameWithUser(socket.id)
         if(game){
-          // let initialChat: ChatMessage[] = []
-          socket.sendGameInfos(game)
+            // let initialChat: ChatMessage[] = []
+            socket.sendGameInfos(game)
         }
     })
     
@@ -26,10 +26,12 @@ export const addGameEvents = (socket: SuperSocket, GC: GameCollection) => {
             
             socket.server.to(`${game.getMainPlayerSocketId()}`).emit('game:mp.start', sentence)
             game.getPropsPlayersSocketIds().forEach(socketId => {
-            const p = (game as LimiteLimiteGame).getPlayer(socketId)
-            const hand = p && serialize(p.hand)
-            socket.server.to(`${socketId}`).emit('game:op.start', sentence, hand)
+                const p = (game as LimiteLimiteGame).getPlayer(socketId)
+                const hand = p && serialize(p.hand)
+                socket.server.to(`${socketId}`).emit('game:op.start', sentence, hand)
             })
+
+            socket.sendGameInfos(game)
         }
     })
 
@@ -47,6 +49,8 @@ export const addGameEvents = (socket: SuperSocket, GC: GameCollection) => {
             else {
                 socket.emit('game:player.player_has_played')
             }
+
+            socket.sendGameInfos(game)
         }
     })
 
