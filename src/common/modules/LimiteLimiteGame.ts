@@ -6,23 +6,15 @@ import { PropositionCard } from "./PropositionCard";
 
 export class LimiteLimiteGame {
 
-    public players: Player[]
-    public mainPlayerIndex: number;
-    public propsDeck: PropositionDeck;
-    public sentencesDeck: SentenceDeck;
-    public propsSent: PropSent[]
-    public nbTurnToPlay: number
-    public history: ITurn[]
-
-    constructor(player: Player, nbTurn = DEFAULT_NB_TURN, propsDeck = new PropositionDeck(), sentencesDeck = new SentenceDeck()){
-        this.players = [player]
-        this.propsDeck = propsDeck
-        this.sentencesDeck = sentencesDeck
-        this.mainPlayerIndex = 0
-        this.propsSent = []
-        this.nbTurnToPlay = nbTurn
-        this.history = []
-    }
+    constructor(
+        public players: Player[], 
+        public nbTurnToPlay = DEFAULT_NB_TURN, 
+        public propsDeck = new PropositionDeck(), 
+        public sentencesDeck = new SentenceDeck(),
+        public mainPlayerIndex = 0,
+        public propsSent: PropSent[] = [],
+        public history: ITurn[] = []
+    ){}
     
     startGame(){
         this.mainPlayerIndex = Math.floor(Math.random() * this.players.length)
@@ -109,7 +101,7 @@ export class LimiteLimiteGame {
     }
 
     isGameOver(){
-        return this.nbTurnToPlay === this.nbTurnPlayed
+        return this.nbTurnToPlay !== 0 && this.nbTurnToPlay === this.nbTurnPlayed
     }
 
     get nbTurnPlayed(){

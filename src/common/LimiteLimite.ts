@@ -2,6 +2,7 @@ import { SentenceCard } from "./modules/SentenceCard";
 import { PropositionCard } from "./modules/PropositionCard";
 
 export const DEFAULT_IS_PRIVATE_GAME = false
+export const DEFAULT_NB_PLAYER = 0
 export const NB_CARD_IN_HAND = 6
 export const DEFAULT_NB_TURN = 10
 
