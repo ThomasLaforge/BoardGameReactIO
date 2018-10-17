@@ -1,6 +1,7 @@
 import { serializable, list, object, deserialize } from 'serializr';
 import { PropositionCard } from './PropositionCard';
 import { SentenceCard } from './SentenceCard';
+import { CollectionDeckFamily } from '../LimiteLimite';
 
 export abstract class Deck<T> {
 
@@ -47,6 +48,12 @@ export class PropositionDeck extends Deck<PropositionCard> {
     }
 
     load(json: any[] = require('../../../../datas/propositions/limitelimitelimite.json')){
+        let cards = deserialize(PropositionCard, json)
+        this.cards = cards
+    }
+
+    loadV2(decks: CollectionDeckFamily[] = []){
+        let json = require('../../../../datas/propositions/limitelimitelimite.json')
         let cards = deserialize(PropositionCard, json)
         this.cards = cards
     }
