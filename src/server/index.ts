@@ -11,7 +11,8 @@ import { SocketIoDescriptor } from './SocketIoDescriptor';
 // Events
 import { addLoginEvents } from './socketEvents/login'
 import { addLobbyEvents } from './socketEvents/lobby'
-import { addGameEvents } from './socketEvents/game'
+import { addLimiteLimiteEvents } from './socketEvents/limitelimite'
+import { addTarotCongolaisEvents } from './socketEvents/tarotCongolais'
 import { addChatEvents } from './socketEvents/chat'
 
 import { GameCollection } from '../common/modules/GameCollection';
@@ -50,7 +51,8 @@ io.on('connection', (baseSocket: ExtendedSocket) => {
   addLoginEvents(socket)
   addChatEvents(socket)
   addLobbyEvents(socket, GC)
-  addGameEvents(socket, GC)
+  addLimiteLimiteEvents(socket, GC)
+  addTarotCongolaisEvents(socket, GC)
 
   socket.on('reconnecting', () => {
     console.log('reconnecting...')

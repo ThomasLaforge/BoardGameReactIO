@@ -9,7 +9,7 @@ import {
     NB_SECONDS_BEFORE_NEXT_TURN
 } from '../../common';
 
-export const addGameEvents = (socket: SuperSocket, GC: GameCollection) => {
+export const addLimiteLimiteEvents = (socket: SuperSocket, GC: GameCollection) => {
     socket.on('game:ask_initial_infos', () => {
         let game = GC.getGameWithUser(socket.id)
         if(game){

@@ -8,7 +8,7 @@ import Chat from '../../components/Chat';
 import { Button, Switch, FormControlLabel } from '@material-ui/core';
 import { RouteEnum } from '../../Router/Route';
 
-import './game_lobby.scss'
+import './lobby.scss'
 
 interface GameLobbyProps extends DefaultProps {
 }

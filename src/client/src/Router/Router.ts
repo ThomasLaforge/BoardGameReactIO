@@ -3,8 +3,8 @@ import { observable } from "mobx";
 import { isString } from "util";
 
 import Home from '../Pages/Home/Home'
-import GameLobby from '../Pages/GameLobby/GameLobby'
-import Game from "../Pages/Game/Game";
+import GameLobby from '../Pages/Lobby/Lobby'
+import Game from "../Pages/LimiteLimite/Game";
 
 export type RouteDescriptor = RouteEnum | string
 
@@ -21,7 +21,7 @@ export class Router {
                 type: RouteEnum.Home
             },
             {
-                path: '/limitelimite_lobby',
+                path: '/lobby',
                 component: GameLobby,
                 type: RouteEnum.GameLobby
             },
