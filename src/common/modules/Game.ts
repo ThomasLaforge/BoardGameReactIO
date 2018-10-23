@@ -2,44 +2,24 @@ import { DEFAULT_IS_PRIVATE_GAME, DEFAULT_NB_PLAYER } from "../LimiteLimite";
 import { LimiteLimiteGame } from "./LimiteLimiteGame";
 import { Player } from "./Player";
 
-export class Game {
-    public gameClass: any
-    public game: LimiteLimiteGame | null
-    public isPrivate: boolean
+export abstract class Game {
     public id: string
-    public nbPlayer: number
-    public players: Player[]
-    private _forcedIsFull: boolean
+    public gameClass: any
+    public gameInstance: any
+    public creationDate: number
+    public startGameDate?: number
 
-
-    constructor(gameClass: any, isPrivate = DEFAULT_IS_PRIVATE_GAME, nbPlayer = DEFAULT_NB_PLAYER){
+    constructor(gameClass: any){
         this.gameClass = gameClass
-        this.game = null
-        this.isPrivate = isPrivate
+        this.gameInstance = null
         this.id = Date.now().toString()
-        this.nbPlayer = nbPlayer
-        this.players = []
-        this._forcedIsFull = false
+        this.creationDate = Date.now()
+        this.startGameDate = undefined
     }
 
-    start(){
-        this.game = new this.gameClass()
-    }
-    
-    addPlayer(p: Player){
-        this.players.push(p)
-    }
-    
-    removePlayer(socketId: string){
-        this.players = this.players.filter(p => p.socketid !== socketId)
-    }
-    
-    get playersNames(){
-        return this.players.map(p => p.surname)
-    }
-
-    get isFull(){
-        return this._forcedIsFull || this.nbPlayer === this.players.length
+    start(...options: any[]){
+        this.gameInstance = new this.gameClass(...options)
+        this.startGameDate = Date.now()
     }
 
 }

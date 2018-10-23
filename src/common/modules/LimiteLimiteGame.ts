@@ -7,20 +7,18 @@ import { PropositionCard } from "./PropositionCard";
 export class LimiteLimiteGame {
 
     constructor(
-        public creator: Player,
-        public isPrivate = DEFAULT_IS_PRIVATE_GAME,
-        public players: Player[] = [creator], 
+        public players: Player[],
         public nbTurnToPlay = DEFAULT_NB_TURN, 
-        public propsDeck = new PropositionDeck(), 
+
+        public propsDeck = new PropositionDeck(),
         public sentencesDeck = new SentenceDeck(),
+
         public mainPlayerIndex = 0,
         public propsSent: PropSent[] = [],
+        
         public history: ITurn[] = [],
-        public id = Date.now().toString(),
-        private _forcedIsFull = false,
-        public nbPlayer = DEFAULT_NB_PLAYER
     ){}
-    
+        
     startGame(){
         this.mainPlayerIndex = Math.floor(Math.random() * this.players.length)
         // give cards
@@ -139,10 +137,6 @@ export class LimiteLimiteGame {
     
     removePlayer(socketId: string){
         this.players = this.players.filter(p => p.socketid !== socketId)
-    }
-
-    get isFull(){
-        return this._forcedIsFull || this.nbPlayer === this.players.length
     }
 
 }
