@@ -2,7 +2,7 @@ import { DEFAULT_IS_PRIVATE_GAME, DEFAULT_NB_PLAYER } from "../LimiteLimite";
 import { LimiteLimiteGame } from "./LimiteLimiteGame";
 import { Player } from "./Player";
 
-export class Game {
+export abstract class Game {
     public id: string
     public gameClass: any
     public gameInstance: any

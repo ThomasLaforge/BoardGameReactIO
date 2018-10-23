@@ -18,6 +18,10 @@ export class MultiplayerGame extends Game {
         this._forcedIsFull = false
         this.canBeForcedIsFull = canBeForcedIsFull
     }
+
+    start(){
+        this.gameInstance = new this.gameClass(this.players)        
+    }
    
     addPlayer(p: Player){
         this.players.push(p)
