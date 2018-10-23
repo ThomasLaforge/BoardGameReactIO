@@ -1,20 +1,21 @@
 import { SuperSocket } from '../SuperSocket';
-import { GameCollection, LimiteLimiteGame } from '../../common';
+import { GameCollection, LimiteLimiteGame, GameType, DEFAULT_IS_PRIVATE_GAME } from '../../common';
+import { MultiplayerGame } from '../../common/modules/MultiplayerGame';
 
 export const addLobbyEvents = (socket: SuperSocket, GC: GameCollection) => {
   // connect on game room by matchmaking
-  socket.on('lobby:auto', () => {
-    let game: LimiteLimiteGame;
+  socket.on('lobby:auto', (gameType: GameType) => {
+    let game: MultiplayerGame;
     // get game room id by auto matchmaking
-    let gameRoomId = GC.getRandomAndNotFullGameRoomId();
+    let gameRoomId = GC.getRandomAndNotFullGameRoomId(gameType);
     console.log('getRandomAndNotFullGameRoomId : ' + gameRoomId)
     if(!gameRoomId) {
-      game = socket.createNewGame()
+      game = socket.createNewGame(gameType)
       GC.addGame(game)
       gameRoomId = game.id
     }
     else {
-      game = GC.getGame(gameRoomId) as LimiteLimiteGame
+      game = GC.getGame(gameRoomId) as MultiplayerGame
       game.addPlayer(socket.getOrCreatePlayer())
     }
 
@@ -25,7 +26,7 @@ export const addLobbyEvents = (socket: SuperSocket, GC: GameCollection) => {
   // connect on game room selecting a game
   socket.on('lobby:join', (gameRoomId: string) => {
       console.log('lobby-join : ' + gameRoomId + ', ' + socket.player.surname)
-      let game = GC.getGame(gameRoomId) 
+      let game = GC.getGame(gameRoomId) as MultiplayerGame 
       if( game ) {
           if( !game.isFull ){
               socket.playerEnterGameRoom(game)
@@ -41,8 +42,8 @@ export const addLobbyEvents = (socket: SuperSocket, GC: GameCollection) => {
   })
 
   // connect on game room creating a game
-  socket.on('lobby:create', () => {
-    let game = socket.createNewGame()
+  socket.on('lobby:create', (gameType: GameType, isPrivate = DEFAULT_IS_PRIVATE_GAME) => {
+    let game = socket.createNewGame(gameType, isPrivate)
     console.log('lobby-create : ' + game.id + ', ' + socket.player.surname)
     GC.addGame(game);
     socket.playerEnterGameRoom(game)

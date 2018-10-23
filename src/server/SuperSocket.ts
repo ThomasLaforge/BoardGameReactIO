@@ -3,7 +3,8 @@ import { SocketPlayer } from "../common/modules/SocketPlayer";
 import { Player } from "../common/modules/Player";
 import { LimiteLimiteGame } from "../common/modules/LimiteLimiteGame";
 import { DEFAULT_IS_PRIVATE_GAME } from '../common/LimiteLimite'
-import { PlayerListUI, PlayerListUIElt } from "../common";
+import { PlayerListUI, PlayerListUIElt, GameType, getClassGame, getGameClass, GameClass, GameTypeClass } from "../common";
+import { MultiplayerGame } from "../common/modules/MultiplayerGame";
 
 export class SuperSocket {
 
@@ -35,7 +36,7 @@ export class SuperSocket {
         this.baseSocket.leave(roomName)
     }
 
-    playerEnterGameRoom(game: LimiteLimiteGame){
+    playerEnterGameRoom(game: GameTypeClass){
         this.join(game.id)
         this.leave('lobby');
         let room = this.baseSocket.server.to(game.id) as ExtendedNamespace
@@ -59,8 +60,10 @@ export class SuperSocket {
         this.baseSocket.to(game.id).broadcast.emit('game:players.new_player', uiPlayers)
     }
 
-    createNewGame(isPrivate = DEFAULT_IS_PRIVATE_GAME){
-        return new LimiteLimiteGame(this.getOrCreatePlayer(), isPrivate)
+    createNewGame(gameType: GameType, isPrivate = DEFAULT_IS_PRIVATE_GAME): GameTypeClass {
+        let newGame = new MultiplayerGame(getGameClass(gameType), isPrivate)
+        newGame.addPlayer(this.getOrCreatePlayer())
+        return newGame
     }
 
     getOrCreatePlayer(){

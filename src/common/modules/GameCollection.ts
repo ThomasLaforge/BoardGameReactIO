@@ -1,16 +1,17 @@
 import { GameLobbyList } from '../LimiteLimite'
 import { Game } from './Game';
-import { LimiteLimiteGame } from './LimiteLimiteGame';
+import { GameTypeClass, GameType } from '..';
+import { MultiplayerGame } from './MultiplayerGame';
 
 export class GameCollection {
 
-    public games: LimiteLimiteGame[]
+    public games: GameTypeClass[]
 
-    constructor(games: LimiteLimiteGame[] = []){
+    constructor(games: GameTypeClass[] = []){
         this.games = games
     }
 
-    addGame(game: LimiteLimiteGame){
+    addGame(game: GameTypeClass){
         this.games.push(game)
     }
 
@@ -18,14 +19,14 @@ export class GameCollection {
         return this.games.find(g => g.id === gameRoomId)
     }
 
-    getRandomAndNotFullGameRoomId(){
-        let game = this.games.find(g => !g.isFull)
+    getRandomAndNotFullGameRoomId(gameType: GameType){
+        let game = this.multiplayerGames.find(g => !g.isFull && g.type === gameType)
         return game && game.id
     }
 
     getGameWithUser(socketId: string){
         // console.log('getGameWithUser', socketId)
-        return this.games.find(g => {
+        return this.multiplayerGames.find(g => {
             // console.log('game players', g.players)
             return g.players.filter(p => p.socketid === socketId).length === 1
         })
@@ -36,13 +37,17 @@ export class GameCollection {
     }
 
     getLobbyList( withFullGames = false, withPrivateGames = false ): GameLobbyList {
-        return this.games
+        return this.multiplayerGames
             .filter(g => (withFullGames || !g.isFull) && (withPrivateGames || !g.isPrivate) )
             .map(game => ({
                 gameId: game.id,
                 people: game.playersNames,
                 isFull: game.isFull
             }))
+    }
+
+    get multiplayerGames(): MultiplayerGame[] {
+        return this.games.filter( g => g instanceof MultiplayerGame) as MultiplayerGame[] 
     }
     
 }

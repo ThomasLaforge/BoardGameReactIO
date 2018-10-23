@@ -10,3 +10,28 @@ export * from './modules/PropositionCard'
 export * from './modules/SentenceCard'
 export * from './modules/SocketPlayer'
 export * from './LimiteLimiteUI'
+
+import { LimiteLimiteGame } from './modules/LimiteLimiteGame' 
+import { Game as TarotCongolaisGame } from './TarotCongolais/Game'
+import { MultiplayerGame } from './modules/MultiplayerGame';
+import { SoloGame } from './modules/SoloGame';
+
+export enum GameType {
+    LimiteLimite,
+    TarotCongolais
+}
+
+export const getGameClass = (gameType: GameType) => {
+    switch (gameType) {
+        case GameType.LimiteLimite:
+            return LimiteLimiteGame
+        case GameType.TarotCongolais:
+            return TarotCongolaisGame
+        default:
+            throw Error('try to get class of game type who doesn\'t exist')
+    }
+}
+
+export type GameClass = LimiteLimiteGame | TarotCongolaisGame
+
+export type GameTypeClass = MultiplayerGame | SoloGame

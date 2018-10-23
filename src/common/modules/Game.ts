@@ -1,16 +1,16 @@
-import { DEFAULT_IS_PRIVATE_GAME, DEFAULT_NB_PLAYER } from "../LimiteLimite";
-import { LimiteLimiteGame } from "./LimiteLimiteGame";
-import { Player } from "./Player";
+import { GameClass, GameType, getGameClass, GameTypeClass } from "..";
 
 export abstract class Game {
     public id: string
-    public gameClass: any
+    public type: GameType
+    public gameClass: GameClass
     public gameInstance: any
     public creationDate: number
     public startGameDate?: number
 
-    constructor(gameClass: any){
-        this.gameClass = gameClass
+    constructor(gameType: GameType){
+        this.type = gameType
+        this.gameClass = getGameClass(gameType)
         this.gameInstance = null
         this.id = Date.now().toString()
         this.creationDate = Date.now()
