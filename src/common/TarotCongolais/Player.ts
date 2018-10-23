@@ -1,8 +1,7 @@
 import {Hand} from './Hand';
 import {Card} from './Card';
-import {PlayerInterface} from './TarotCongolais'
 
-export class Player implements PlayerInterface {
+export class Player  {
 
     private _username:string;
 	private _socketid:string;
@@ -24,12 +23,16 @@ export class Player implements PlayerInterface {
 		this.pv += nbPV
 	}
 
-	addCard(card: Card | Card[]){
+	addCard(card: Card[]){
 		this.hand.addCards(card)
 	}
 
-	playCard(card: Card | Card[]){
+	playCard(card: Card){
 		this.hand.playCard(card)
+	}
+
+	isEqual(p: Player){
+		return p.socketid === this.socketid
 	}
 
 	/**

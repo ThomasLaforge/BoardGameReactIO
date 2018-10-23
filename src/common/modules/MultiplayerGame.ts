@@ -24,7 +24,7 @@ export class MultiplayerGame extends Game {
     }
    
     addPlayer(p: Player){
-        this.players.push(p)
+        this.players = this.players.concat(p)
     }
     
     removePlayer(socketId: string){

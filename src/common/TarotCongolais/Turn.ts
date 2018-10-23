@@ -1,18 +1,16 @@
 import {Trick} from './Trick';
 import {Player} from './Player';
-import {Bet} from './Bet';
-import {PlayerCollection} from './PlayerCollection';
-import * as  _ from 'lodash';
+import {Bet} from './TarotCongolais';
 
 export class Turn {
 
-    private _playerCollection: PlayerCollection;
-    private _nbCards: number;
-    private _arrTrick:Trick[];
-    private _arrBet:Bet[];
+    public players: Player[];
+    public nbCards: number;
+    public arrTrick:Trick[];
+    public arrBet:Bet[];
 
-	constructor(nbCards: number, pc: PlayerCollection, arrTrick: Trick[] = [], arrBet: Bet[] = []) {
-        this.playerCollection = pc;
+	constructor(nbCards: number, players: Player[], arrTrick: Trick[] = [], arrBet: Bet[] = []) {
+        this.players = players;
         this.nbCards = nbCards;
 		this.arrTrick = arrTrick;
 		this.arrBet = arrBet;
@@ -21,11 +19,11 @@ export class Turn {
     getLosers(): Player[] {
         let res: Player[] = [];
 
-        this.playerCollection.arrPlayers.forEach( player => {
+        this.players.forEach( player => {
             let score:number = 0;
             
             this.arrTrick.forEach(trick => {
-                if( _.isEqual(trick.getWinner(), player) ){
+                if( player.isEqual(trick.getWinner()) ){
                     score++;
                 }
             });
@@ -39,7 +37,7 @@ export class Turn {
     }
 
     allPlayerBet(){
-        return this.getPlayersHavingBet().length === this.playerCollection.getNbPlayer();
+        return this.getPlayersHavingBet().length === this.players.length;
     }
 
     getPlayersHavingBet(): Player[]{
@@ -53,7 +51,7 @@ export class Turn {
     }
 
     getBetFromPlayer(player:Player){
-        let res:number;
+        let res:number = this.arrBet[0] && this.arrBet[0].bet;
 
         this.arrBet.forEach(bet => {
             if(bet.player == player){
@@ -66,9 +64,8 @@ export class Turn {
 
     isPlayerToBet(player: Player){
         let nbPlayerAlreadyBet = this.arrBet.length;
-        let playerToBet = this.playerCollection.getPlayersPOV(this.playerCollection.getFirstPlayer())[ nbPlayerAlreadyBet-1 + 1];
-        
-        return _.isEqual(playerToBet, player)
+
+        return true
     }
 
     addbet(bet:Bet){
@@ -84,7 +81,7 @@ export class Turn {
     playerAlreadyBet(p:Player){
         let res:boolean = false;
         this.arrBet.forEach( bet => {
-            if(_.isEqual(bet.player,p)){
+            if(bet.player.socketid, p.socketid){
                 res = true;
             }
         })
@@ -104,36 +101,5 @@ export class Turn {
         })
         return sum;
     }
-
-    /**
-     * Getters / Setters
-     */
-	public get arrTrick(): Trick[] {
-		return this._arrTrick;
-	}
-	public set arrTrick(value: Trick[]) {
-		this._arrTrick = value;
-	}
-	public get arrBet(): Bet[] {
-		return this._arrBet;
-	}
-	public set arrBet(value: Bet[]) {
-		this._arrBet = value;
-	}
-	public get playerCollection(): PlayerCollection {
-		return this._playerCollection;
-	}
-	public set playerCollection(value: PlayerCollection) {
-		this._playerCollection = value;
-	}
-	public get nbCards(): number {
-		return this._nbCards;
-	}
-	public set nbCards(value: number) {
-		this._nbCards = value;
-	}
-    
-    
-    
 
 }

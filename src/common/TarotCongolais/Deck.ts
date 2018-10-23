@@ -100,7 +100,7 @@ export class Deck {
         return this.arrayDeck[index]
     }
 
-    length(){
+    get length(){
         return this.arrayDeck.length
     }
 

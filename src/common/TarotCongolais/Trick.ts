@@ -1,5 +1,4 @@
 import { Player } from './Player';
-import { PlayerCollection } from './PlayerCollection';
 import { Card } from './Card';
 import { Play } from './TarotCongolais';
 
@@ -54,26 +53,24 @@ export class Trick {
     playerAlreadyPlayed(p: Player){
         let res:boolean = false;
         this.arrPlay.forEach( (play: Play) => {
-            if(_.isEqual(play.player, p)){
+            if(p.isEqual(play.player)){
                 res = true;
             }
         })
         return res;
     }
 
+    // TODO
     isPlayerToPlay(p: Player){
-        let nbPlayerAlreadyPlay = this.arrPlay.length;
-        let playerToPlay = this.players.getPlayersPOV(this.playerCollection.getFirstPlayer())[ nbPlayerAlreadyPlay - 1 + 1];
-        
-        return _.isEqual(playerToPlay, p)
+        return true
     }
 
     getListOfPlayerHavingPlayed(){
-        return this.playerCollection.getPlayers().filter( (p: Player) => { return this.playerAlreadyPlayed(p) } )
+        return this.players.filter( (p: Player) => { return this.playerAlreadyPlayed(p) } )
     }
 
     allPlayerHavePlayed(){
-        return this.getListOfPlayerHavingPlayed().length === this.playerCollection.maxNbPlayer
+        return this.getListOfPlayerHavingPlayed().length === this.players.length
     }
 
 }

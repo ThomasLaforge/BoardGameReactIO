@@ -14,11 +14,16 @@ export class Game {
 	public actualTrick:Trick;
 	public history: Turn[]
 
-    constructor(players: Player[]){
-        this.players          = players;
+	public firstPlayerIndexAtStart: number;
+
+    constructor(players: Player[], firstPlayerIndexAtStart?: number, deck = new Deck()){
+		this.players          = players;
+		this.firstPlayerIndexAtStart = firstPlayerIndexAtStart || Math.floor((Math.random() * this.players.length));
 		this.deck             = new Deck();
+
 		this.actualTrick 	  = new Trick(this.players);
-		this.turn 			  = new Turn(this.turnCards, this.players);
+		this.turn 			  = new Turn(this.getTurnCards(), this.players);
+		
 		this.history 		  = []
 	}
 
@@ -32,7 +37,7 @@ export class Game {
 
 	dealCards(){
 		this.players.forEach( p => {
-			let newPlayerCards = this.deck.drawCards(this.turnCards);
+			let newPlayerCards = this.deck.drawCards(this.getTurnCards());
 			p.hand.addCards(newPlayerCards);
 		});
 	}
@@ -45,19 +50,12 @@ export class Game {
 
 
 	nextTurn(){
-		if( this.turnCards > 1 ) {
-			this.turnCards--;
-		} else { 
-			this.turnCards = Math.floor( 22 / this.getNbPlayer() );
-			this.changeFirstPlayer();
-		}
+		// add turn to history
+		this.history.push(this.turn)
+		// resets
 		this.actualTrick = new Trick(this.players);
-		this.turn = new Turn(this.turnCards, this.players);
+		this.turn = new Turn(this.getTurnCards(), this.players);
 	}
-
-    changeFirstPlayer(){
-		this.players.changeFirstPlayer();
-    }
 
 	// Play
 	addPlay(play: Play){
@@ -67,9 +65,6 @@ export class Game {
 		if(trickWinner){
 			this.addTrick();
 		}
-		// History
-		let action = new ActionHistory(GameAction.Play, play.card, play.player.username);
-		this.history.push(action);
 	}
 
 	// Bet
@@ -105,38 +100,18 @@ export class Game {
 		return this.turn.allPlayerBet()
 	}
 
-	// State
-	getPlayerGameState(p: Player){
-		let state = GameState.WaitingPlayers;
-
-		if(this.isFull()){ 
-			state = GameState.WaitingPlayersToBeReady
-			if(!this.isReady(p)){
-				state = GameState.WaitingToBeReady
-			}
-            
-            if(this.areAllPlayersReady()) { 
-                state = GameState.WaitingPlayersToBet
-
-                if(this.areAllPlayersBet()){ 
-                    state = GameState.WaitingPlayersToPlay
-                    if(this.isPlayerToPlay(p)){
-                        state = GameState.Play
-                    } 
-                }
-                else{
-                    if(this.isPlayerToBet(p)){
-                        state = GameState.Bet;
-                    }
-                }
-            }
-        }
-    
-		return state;
-	}
-
 	getNbPlayer(){
 		return this.players.length
 	}
-    
+	
+	getTurnCards(){
+		let nbPlayers = this.getNbPlayer()
+		let nbCards = new Deck().length
+
+		let nbTurnByPlayer = Math.floor(nbCards / nbPlayers)
+		
+		let nbTurnTotal = this.history.length
+
+		return nbTurnTotal % nbTurnByPlayer
+	}
 }
