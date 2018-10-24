@@ -40,4 +40,16 @@ export class MultiplayerGame extends Game {
         return this._forcedIsFull || this.nbPlayer === this.players.length
     }
 
+    isFirstPlayer(socketid: string){
+        return this.players[0] && this.players[0].socketid === socketid 
+    }
+
+    getPlayer(socketId: string){
+        return this.players.find(p => p.socketid === socketId) as Player
+    }
+
+    getPlayerIndex(p: Player){
+        return this.players.findIndex(player => player.socketid === p.socketid) as number
+    }
+
 }

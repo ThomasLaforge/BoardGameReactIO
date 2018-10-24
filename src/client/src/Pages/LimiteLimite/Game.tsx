@@ -7,6 +7,9 @@ import {deserialize, serialize} from 'serializr'
 import { GameStatus, DEFAULT_IS_PRIVATE_GAME, SentenceCard, Hand, PropositionCard } from 'limitelimite-common';
 import {PlayerListUI, PlayerListUIElt} from 'limitelimite-common/LimiteLimiteUI'
 import { ChatMessage } from 'limitelimite-common/Server';
+import { prefix } from 'limitelimite-common/LimiteLimite'
+
+console.log('prefix on render', prefix)
 
 import GamePropositionPlayer from './GameParts/GamePropositionPlayer';
 import GameBeforeStart from './GameParts/GameBeforeStart';
@@ -53,18 +56,18 @@ class Game extends React.Component <GameProps, GameState> {
     componentDidMount(){
         if(this.props.socket){
             const socket = this.props.socket
-            socket.emit('game:ask_initial_infos')
+            socket.emit(prefix + 'game:ask_initial_infos')
 
-            socket.on('game:player.ask_initial_infos', (gameId: string, players: PlayerListUI, isCreator: boolean, myIndex: number, initialChat: ChatMessage[]) => {
+            socket.on(prefix + 'game:player.ask_initial_infos', (gameId: string, players: PlayerListUI, isCreator: boolean, myIndex: number, initialChat: ChatMessage[]) => {
                 console.log('players1', gameId, players, isCreator, myIndex, initialChat)
                 this.setState({gameId, isCreator, players, myIndex })
             })
-            socket.on('game:players.new_player', (players: PlayerListUI) => {
+            socket.on(prefix + 'game:players.new_player', (players: PlayerListUI) => {
                 console.log('players2', players)
                 this.setState({ players })
             })
 
-            socket.on('game:mp.start', (sentenceJSON) => {
+            socket.on(prefix + 'game:mp.start', (sentenceJSON) => {
                 console.log('game:mp.start', sentenceJSON)
                 this.setState({
                     gameStatus: GameStatus.InGame,
@@ -73,7 +76,7 @@ class Game extends React.Component <GameProps, GameState> {
                 })
             })
             
-            socket.on('game:op.start', (sentenceJSON, handJSON) => {
+            socket.on(prefix + 'game:op.start', (sentenceJSON, handJSON) => {
                 console.log('game:op.start', sentenceJSON, handJSON)
                 this.setState({
                     gameStatus: GameStatus.InGame,
@@ -83,7 +86,7 @@ class Game extends React.Component <GameProps, GameState> {
                 })
             })
 
-            socket.on('game:players.turn_to_resolve', (propositions) => {
+            socket.on(prefix + 'game:players.turn_to_resolve', (propositions) => {
                 console.log('game:players.turn_to_resolve')
                 this.setState({ 
                     gameStatus: GameStatus.Result,
@@ -91,16 +94,16 @@ class Game extends React.Component <GameProps, GameState> {
                 })
             })
 
-            socket.on('game:player.player_has_played', () => {
+            socket.on(prefix + 'game:player.player_has_played', () => {
                 console.log('game:player.player_has_played')
 
             })
 
-            socket.on('game:players.turn_is_complete', (chosenPropositionIndex, winnerPlayerName) => {
+            socket.on(prefix + 'game:players.turn_is_complete', (chosenPropositionIndex, winnerPlayerName) => {
                 this.setState({ chosenPropositionIndex, winnerPlayerName })
             })
             
-            socket.on('game:mp.new_turn', (sentenceJSON) => {
+            socket.on(prefix + 'game:mp.new_turn', (sentenceJSON) => {
                 console.log('game:mp.new_turn', sentenceJSON)
                 this.setState({
                     gameStatus: GameStatus.InGame,
@@ -115,7 +118,7 @@ class Game extends React.Component <GameProps, GameState> {
                 })
 
             })
-            socket.on('game:op.new_turn', (sentenceJSON, handJSON) => {
+            socket.on(prefix + 'game:op.new_turn', (sentenceJSON, handJSON) => {
                 console.log('game:op.new_turn', sentenceJSON, handJSON)
                 this.setState({
                     gameStatus: GameStatus.InGame,
@@ -134,7 +137,7 @@ class Game extends React.Component <GameProps, GameState> {
     }
 
     startGame = () => {
-        this.props.socket.emit('game:start')
+        this.props.socket.emit(prefix + 'game:start')
     }
 
     renderPlayers(){

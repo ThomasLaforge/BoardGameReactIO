@@ -10,6 +10,8 @@ import {
 } from '../../common';
 
 export const addTarotCongolaisEvents = (socket: SuperSocket, GC: GameCollection) => {
+
+    
     socket.on('player_bet', (playerBet: number) => {
         console.log('player_bet', playerBet)
         // let g = GC.getGame(socket.gameRoomId);

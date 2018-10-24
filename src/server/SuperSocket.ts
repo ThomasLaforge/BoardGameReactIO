@@ -2,10 +2,12 @@ import { ExtendedSocket, ExtendedNamespace } from "./LimiteLimiteServer";
 import { SocketPlayer } from "../common/modules/SocketPlayer";
 import { Player } from "../common/modules/Player";
 import { LimiteLimiteGame } from "../common/modules/LimiteLimiteGame";
-import { DEFAULT_IS_PRIVATE_GAME } from '../common/LimiteLimite'
+import { DEFAULT_IS_PRIVATE_GAME, prefix } from '../common/LimiteLimite'
 import { PlayerListUI, PlayerListUIElt, GameType, getGameClass, GameClass, GameTypeClass } from "../common";
 import { MultiplayerGame } from "../common/modules/MultiplayerGame";
 import { SoloGame } from "../common/modules/SoloGame";
+
+import { prefix as limitelimiteprefix } from '../common/LimiteLimite'
 
 export class SuperSocket {
 
@@ -43,26 +45,6 @@ export class SuperSocket {
         let room = this.baseSocket.server.to(game.id) as ExtendedNamespace
         room.game = game
         this.emit('lobby:player.enter_in_game_table')
-    }
-
-    // TODO: Move this
-    sendGameInfos(game: MultiplayerGame){
-        let llgame = game.gameInstance as LimiteLimiteGame
-        if(llgame){
-            const uiPlayers: PlayerListUI = game.players.map(p => {
-                let isFirstPlayer = llgame.isFirstPlayer(p.socketid)
-                return {
-                    name: p.surname,
-                    score: p.score,
-                    isFirstPlayer,
-                    hasPlayed: !isFirstPlayer && llgame.playerHasPlayed(p)
-                } as PlayerListUIElt
-            })
-            // console.log('game:player.ask_initial_infos', game.id, uiPlayers, game.isFirstPlayer(socket.id), initialChat)
-            let myIndex = llgame.getPlayerIndex(llgame.getPlayer(this.id))
-            this.emit('game:player.ask_initial_infos', game.id, uiPlayers, llgame.isFirstPlayer(this.id), myIndex)
-            this.baseSocket.to(game.id).broadcast.emit('game:players.new_player', uiPlayers)
-        }
     }
 
     createNewMultiplayerGame(gameType: GameType, isPrivate = DEFAULT_IS_PRIVATE_GAME): MultiplayerGame {

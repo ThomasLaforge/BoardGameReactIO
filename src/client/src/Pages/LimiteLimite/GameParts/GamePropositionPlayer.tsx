@@ -8,6 +8,7 @@ import { SentenceCard as SentenceCardModel, PropositionCard as PropositionCardmo
 import { serialize } from 'serializr';
 import { Button } from '@material-ui/core';
 import { Fragment } from 'react';
+import { prefix } from 'limitelimite-common/LimiteLimite'
 
 interface GamePropositionPlayerProps extends DefaultProps {
     sentence: SentenceCardModel
@@ -61,7 +62,7 @@ class GamePropositionPlayer extends React.Component <GamePropositionPlayerProps,
 
     handleSendProps = () => {
         let propCards = this.state.selectedPropIndexes.map(index => this.props.hand.cards[index])
-        this.props.socket.emit('game:send_prop', serialize(propCards))
+        this.props.socket.emit(prefix + 'game:send_prop', serialize(propCards))
         this.setState({ sent: true })
     }
 

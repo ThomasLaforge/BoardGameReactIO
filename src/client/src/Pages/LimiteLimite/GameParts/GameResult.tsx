@@ -3,6 +3,7 @@ import {socketConnect} from 'socket.io-react'
 import {observer, inject} from 'mobx-react';
 import { DefaultProps, injector } from '../../../mobxInjector'
 import { SentenceCard as SentenceCardModel, PropositionCard as PropositionCardModel, NB_SECONDS_BEFORE_NEXT_TURN } from 'limitelimite-common';
+import { prefix } from 'limitelimite-common/LimiteLimite'
 
 console.log('timer init', NB_SECONDS_BEFORE_NEXT_TURN)
 
@@ -38,7 +39,7 @@ class GameResult extends React.Component <GameResultProps, GameResultState> {
             <div 
                 key={k}
                 className={'player-propositions ' + (this.props.chosenPropositionIndex === k ? 'chosen-prop' : '')}
-                onClick={() => this.props.isFirstPlayer && this.props.socket.emit('game:end_turn', k) } 
+                onClick={() => this.props.isFirstPlayer && this.props.socket.emit(prefix + 'game:end_turn', k) } 
             >
                 {props.map( (p, k2) =>  
                     <PropositionCard 

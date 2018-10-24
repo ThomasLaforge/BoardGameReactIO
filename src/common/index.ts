@@ -22,6 +22,7 @@ export enum GameType {
 }
 
 export const getGameClass = (gameType: GameType) : GameClass => {
+    console.log('getGameClass', gameType, gameType === GameType.LimiteLimite)
     switch (gameType) {
         case GameType.LimiteLimite:
             return LimiteLimiteGame
