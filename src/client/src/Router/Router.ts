@@ -4,8 +4,8 @@ import { isString } from "util";
 
 import Home from '../Pages/Home/Home'
 import GameLobby from '../Pages/Lobby/Lobby'
-import Game from "../Pages/LimiteLimite/Game";
-
+import LimiteLimiteGame from "../Pages/LimiteLimite/Game";
+import TarotCongolaisGame from '../Pages/TarotCongolais/Game'
 export type RouteDescriptor = RouteEnum | string
 
 export class Router {
@@ -26,9 +26,14 @@ export class Router {
                 type: RouteEnum.GameLobby
             },
             {
-                path: '/game',
-                component: Game,
-                type: RouteEnum.Game
+                path: '/limitelimite',
+                component: LimiteLimiteGame,
+                type: RouteEnum.LimiteLimite
+            },
+            {
+                path: '/tarotcongolais',
+                component: TarotCongolaisGame,
+                type: RouteEnum.TarotCongolais
             }
         ]
         this.routes = routeDefs.map(iRoute => new Route(iRoute))

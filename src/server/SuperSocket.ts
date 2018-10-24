@@ -39,12 +39,12 @@ export class SuperSocket {
         this.baseSocket.leave(roomName)
     }
 
-    playerEnterGameRoom(game: GameTypeClass){
+     playerEnterGameRoom(game: GameTypeClass){
         this.join(game.id)
         this.leave('lobby');
         let room = this.baseSocket.server.to(game.id) as ExtendedNamespace
         room.game = game
-        this.emit('lobby:player.enter_in_game_table')
+        this.emit('lobby:player.enter_in_game_table', game.type)
     }
 
     createNewMultiplayerGame(gameType: GameType, isPrivate = DEFAULT_IS_PRIVATE_GAME): MultiplayerGame {

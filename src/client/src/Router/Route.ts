@@ -4,7 +4,8 @@ export enum RouteEnum {
     Connexion,
     Home,
     GameLobby,
-    Game
+    LimiteLimite,
+    TarotCongolais
 }
 
 export interface IRoute {

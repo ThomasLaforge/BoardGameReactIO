@@ -63,19 +63,19 @@ io.on('connection', (baseSocket: ExtendedSocket) => {
   })
 
   socket.on('disconnect', () => {
-    // let game = GC.getGameWithUser(socket.id)
-    // if(game){
-    //   let gameHasStarted = game.isFull
-    //   if(gameHasStarted){
-    //     // delete the game
-    //     // GC.removeGame(game.id)
-    //   }
-    //   else {
-    //     // remove player
-    //     game.removePlayer(socket.id)
-    //   }
-    //   socket.baseSocket.to(game.id).emit('game:user_disconnect', socket.username, gameHasStarted)
-    // }
+    let game = GC.getGameWithUser(socket.id)
+    if(game){
+      let gameHasStarted = game.startGameDate
+      if(gameHasStarted){
+        // delete the game
+        // GC.removeGame(game.id)
+      }
+      else {
+        // remove player
+        game.removePlayer(socket.id)
+      }
+      socket.baseSocket.to(game.id).emit('game:user_disconnect', socket.username, gameHasStarted)
+    }
   })
 
   // Debugs

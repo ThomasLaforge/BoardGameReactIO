@@ -32,8 +32,18 @@ class GameLobby extends React.Component <GameLobbyProps, GameLobbyState> {
 
     componentDidMount(){
         if(this.props.socket){
-            this.props.socket.on('lobby:player.enter_in_game_table', () => {
-                this.props.ui.router.switchRoute(RouteEnum.Game)
+            this.props.socket.on('lobby:player.enter_in_game_table', (gameType: GameType) => {
+                console.log('where to go', gameType, GameType.TarotCongolais)
+                switch (gameType) {
+                    case GameType.LimiteLimite:                
+                        this.props.ui.router.switchRoute(RouteEnum.LimiteLimite)
+                        document.title = 'Limite Limite';
+                        break;
+                    case GameType.TarotCongolais:
+                        this.props.ui.router.switchRoute(RouteEnum.TarotCongolais)
+                        document.title = 'Tarot Congolais';
+                        break;
+                }
             })
         }
     }
@@ -106,7 +116,14 @@ class GameLobby extends React.Component <GameLobbyProps, GameLobbyState> {
                                 variant='raised'
                                 onClick={() => this.props.socket.emit('lobby:auto', GameType.LimiteLimite)}
                             >
-                                Find a game
+                                Find a limitelimite game
+                            </Button>
+                            <Button 
+                                className='lobby-btn'
+                                variant='raised'
+                                onClick={() => this.props.socket.emit('lobby:auto', GameType.TarotCongolais)}
+                            >
+                                Find a tarotcongolais game
                             </Button>
                         </div>
                     </div>
