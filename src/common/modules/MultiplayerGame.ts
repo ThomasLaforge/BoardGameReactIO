@@ -1,6 +1,7 @@
 import { Game } from "./Game";
 import { DEFAULT_IS_PRIVATE_GAME, DEFAULT_NB_PLAYER } from "../LimiteLimite";
 import { Player } from "./Player";
+import { GameType } from "..";
 
 export class MultiplayerGame extends Game {
 
@@ -10,8 +11,8 @@ export class MultiplayerGame extends Game {
     public canBeForcedIsFull?: Function
     private _forcedIsFull: boolean
 
-    constructor(gameClass: any,  isPrivate = DEFAULT_IS_PRIVATE_GAME, nbPlayer = DEFAULT_NB_PLAYER, canBeForcedIsFull?: Function){
-        super(gameClass)
+    constructor(gameType: GameType,  isPrivate = DEFAULT_IS_PRIVATE_GAME, nbPlayer = DEFAULT_NB_PLAYER, canBeForcedIsFull?: Function){
+        super(gameType)
         this.isPrivate = isPrivate
         this.players = []
         this.nbPlayer = nbPlayer
@@ -20,7 +21,7 @@ export class MultiplayerGame extends Game {
     }
 
     start(){
-        this.gameInstance = new this.gameClass(this.players)        
+        super.start(this.players)
     }
    
     addPlayer(p: Player){

@@ -10,7 +10,7 @@ export const addLobbyEvents = (socket: SuperSocket, GC: GameCollection) => {
     let gameRoomId = GC.getRandomAndNotFullGameRoomId(gameType);
     console.log('getRandomAndNotFullGameRoomId : ' + gameRoomId)
     if(!gameRoomId) {
-      game = socket.createNewGame(gameType)
+      game = socket.createNewMultiplayerGame(gameType)
       GC.addGame(game)
       gameRoomId = game.id
     }
@@ -43,7 +43,7 @@ export const addLobbyEvents = (socket: SuperSocket, GC: GameCollection) => {
 
   // connect on game room creating a game
   socket.on('lobby:create', (gameType: GameType, isPrivate = DEFAULT_IS_PRIVATE_GAME) => {
-    let game = socket.createNewGame(gameType, isPrivate)
+    let game = socket.createNewMultiplayerGame(gameType, isPrivate)
     console.log('lobby-create : ' + game.id + ', ' + socket.player.surname)
     GC.addGame(game);
     socket.playerEnterGameRoom(game)

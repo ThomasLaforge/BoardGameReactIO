@@ -16,11 +16,13 @@ export class GameCollection {
     }
 
     getGame(gameRoomId:string){
-        return this.games.find(g => g.id === gameRoomId)
+        return this.games.find(g => g.id === gameRoomId) as Game
     }
 
     getRandomAndNotFullGameRoomId(gameType: GameType){
+        console.log('game type asked', gameType)
         let game = this.multiplayerGames.find(g => !g.isFull && g.type === gameType)
+        console.log('game id', this.multiplayerGames, this.multiplayerGames.find(g => !g.isFull), this.multiplayerGames.find(g => g.type === gameType), game, game && game.id)
         return game && game.id
     }
 
@@ -47,6 +49,7 @@ export class GameCollection {
     }
 
     get multiplayerGames(): MultiplayerGame[] {
+        console.log('multiplayer games', this.games.filter( g => g instanceof MultiplayerGame))
         return this.games.filter( g => g instanceof MultiplayerGame) as MultiplayerGame[] 
     }
     

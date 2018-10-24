@@ -21,7 +21,7 @@ export enum GameType {
     TarotCongolais
 }
 
-export const getGameClass = (gameType: GameType) => {
+export const getGameClass = (gameType: GameType) : GameClass => {
     switch (gameType) {
         case GameType.LimiteLimite:
             return LimiteLimiteGame
@@ -32,6 +32,6 @@ export const getGameClass = (gameType: GameType) => {
     }
 }
 
-export type GameClass = LimiteLimiteGame | TarotCongolaisGame
+export type GameClass = any
 
 export type GameTypeClass = MultiplayerGame | SoloGame

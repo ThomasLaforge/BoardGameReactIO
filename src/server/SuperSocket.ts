@@ -3,8 +3,9 @@ import { SocketPlayer } from "../common/modules/SocketPlayer";
 import { Player } from "../common/modules/Player";
 import { LimiteLimiteGame } from "../common/modules/LimiteLimiteGame";
 import { DEFAULT_IS_PRIVATE_GAME } from '../common/LimiteLimite'
-import { PlayerListUI, PlayerListUIElt, GameType, getClassGame, getGameClass, GameClass, GameTypeClass } from "../common";
+import { PlayerListUI, PlayerListUIElt, GameType, getGameClass, GameClass, GameTypeClass } from "../common";
 import { MultiplayerGame } from "../common/modules/MultiplayerGame";
+import { SoloGame } from "../common/modules/SoloGame";
 
 export class SuperSocket {
 
@@ -44,26 +45,34 @@ export class SuperSocket {
         this.emit('lobby:player.enter_in_game_table')
     }
 
-    sendGameInfos(game: LimiteLimiteGame){
-        const uiPlayers: PlayerListUI = game.players.map(p => {
-            let isFirstPlayer = game.isFirstPlayer(p.socketid)
-            return {
-                name: p.surname,
-                score: p.score,
-                isFirstPlayer,
-                hasPlayed: !isFirstPlayer && game.playerHasPlayed(p)
-            } as PlayerListUIElt
-        })
-        // console.log('game:player.ask_initial_infos', game.id, uiPlayers, game.isFirstPlayer(socket.id), initialChat)
-        let myIndex = game.getPlayerIndex(game.getPlayer(this.id))
-        this.emit('game:player.ask_initial_infos', game.id, uiPlayers, game.isFirstPlayer(this.id), myIndex)
-        this.baseSocket.to(game.id).broadcast.emit('game:players.new_player', uiPlayers)
+    // TODO: Move this
+    sendGameInfos(game: MultiplayerGame){
+        let llgame = game.gameInstance as LimiteLimiteGame
+        if(llgame){
+            const uiPlayers: PlayerListUI = game.players.map(p => {
+                let isFirstPlayer = llgame.isFirstPlayer(p.socketid)
+                return {
+                    name: p.surname,
+                    score: p.score,
+                    isFirstPlayer,
+                    hasPlayed: !isFirstPlayer && llgame.playerHasPlayed(p)
+                } as PlayerListUIElt
+            })
+            // console.log('game:player.ask_initial_infos', game.id, uiPlayers, game.isFirstPlayer(socket.id), initialChat)
+            let myIndex = llgame.getPlayerIndex(llgame.getPlayer(this.id))
+            this.emit('game:player.ask_initial_infos', game.id, uiPlayers, llgame.isFirstPlayer(this.id), myIndex)
+            this.baseSocket.to(game.id).broadcast.emit('game:players.new_player', uiPlayers)
+        }
     }
 
-    createNewGame(gameType: GameType, isPrivate = DEFAULT_IS_PRIVATE_GAME): GameTypeClass {
-        let newGame = new MultiplayerGame(getGameClass(gameType), isPrivate)
+    createNewMultiplayerGame(gameType: GameType, isPrivate = DEFAULT_IS_PRIVATE_GAME): MultiplayerGame {
+        let newGame = new MultiplayerGame(gameType, isPrivate)
         newGame.addPlayer(this.getOrCreatePlayer())
         return newGame
+    }
+
+    createNewSoloGame(gameType: GameType, isPrivate = DEFAULT_IS_PRIVATE_GAME): SoloGame {
+        return new SoloGame(gameType, this.getOrCreatePlayer())
     }
 
     getOrCreatePlayer(){

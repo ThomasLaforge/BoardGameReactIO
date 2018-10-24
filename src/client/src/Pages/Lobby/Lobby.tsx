@@ -3,7 +3,7 @@ import {socketConnect} from 'socket.io-react'
 import {observer, inject} from 'mobx-react';
 import { DefaultProps, injector } from '../../mobxInjector'
 
-import {GameLobbyList, GameStatus} from 'limitelimite-common'
+import {GameLobbyList, GameStatus, GameType} from 'limitelimite-common'
 import Chat from '../../components/Chat';
 import { Button, Switch, FormControlLabel } from '@material-ui/core';
 import { RouteEnum } from '../../Router/Route';
@@ -104,7 +104,7 @@ class GameLobby extends React.Component <GameLobbyProps, GameLobbyState> {
                             <Button 
                                 className='lobby-btn'
                                 variant='raised'
-                                onClick={() => this.props.socket.emit('lobby:auto')}
+                                onClick={() => this.props.socket.emit('lobby:auto', GameType.LimiteLimite)}
                             >
                                 Find a game
                             </Button>

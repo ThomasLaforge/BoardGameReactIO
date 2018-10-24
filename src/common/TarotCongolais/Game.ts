@@ -1,10 +1,9 @@
 import {Deck} from './Deck';
 import {Player} from './Player';
-import {Card} from './Card';
 import {Trick} from './Trick';
 import {Turn} from './Turn';
-import {History} from './History';
-import {DEFAULT_NB_PLAYER, ExcuseValue, Bet, Play} from './TarotCongolais'
+import {Bet, Play} from './TarotCongolais'
+import { Card } from './Card';
 
 export class Game {
 	
@@ -77,9 +76,9 @@ export class Game {
 	 */
 
 	// Play
-	getPlayedCard(p: Player){
+	getPlayedCard(p: Player) : Card {
 		let play = this.actualTrick.arrPlay.filter(play => { return play.player.username === p.username })[0]
-		return play ? play.card : null
+		return play && play.card
 	}
 	isPlayerToPlay(p: Player){
 		return this.actualTrick.isPlayerToPlay(p)
