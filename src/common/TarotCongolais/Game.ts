@@ -4,6 +4,7 @@ import {Trick} from './Trick';
 import {Turn} from './Turn';
 import {Bet, Play} from './TarotCongolais'
 import { Card } from './Card';
+import { SocketPlayer } from '../modules/SocketPlayer';
 
 export class Game {
 	
@@ -15,8 +16,8 @@ export class Game {
 
 	public firstPlayerIndexAtStart: number;
 
-    constructor(players: Player[], firstPlayerIndexAtStart?: number, deck = new Deck()){
-		this.players          = players;
+    constructor(players: SocketPlayer[], firstPlayerIndexAtStart?: number, deck = new Deck()){
+		this.players          = players.map(socketPlayer => new Player(socketPlayer.surname, socketPlayer.socketid));
 		this.firstPlayerIndexAtStart = firstPlayerIndexAtStart || Math.floor((Math.random() * this.players.length));
 		this.deck             = new Deck();
 

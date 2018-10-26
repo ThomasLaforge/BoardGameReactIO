@@ -3,11 +3,13 @@ import { PropositionDeck, SentenceDeck } from "./Deck";
 import { NB_CARD_IN_HAND, DEFAULT_IS_PRIVATE_GAME, DEFAULT_NB_TURN, ITurn, PropSent, DEFAULT_NB_PLAYER } from "../LimiteLimite";
 import { SentenceCard } from "./SentenceCard";
 import { PropositionCard } from "./PropositionCard";
+import { SocketPlayer } from "./SocketPlayer";
 
 export class LimiteLimiteGame {
+    public players: Player[]
 
     constructor(
-        public players: Player[],
+        players: SocketPlayer[],
         public nbTurnToPlay = DEFAULT_NB_TURN, 
 
         public propsDeck = new PropositionDeck(),
@@ -17,7 +19,9 @@ export class LimiteLimiteGame {
         public propsSent: PropSent[] = [],
         
         public history: ITurn[] = [],
-    ){}
+    ){
+        this.players = players.map(sp => new Player(sp.surname, sp.socketid))
+    }
         
     startGame(){
         this.mainPlayerIndex = Math.floor(Math.random() * this.players.length)

@@ -1,12 +1,12 @@
 import { Game } from "./Game";
 import { DEFAULT_IS_PRIVATE_GAME, DEFAULT_NB_PLAYER } from "../LimiteLimite";
-import { Player } from "./Player";
 import { GameType } from "..";
+import { SocketPlayer } from "./SocketPlayer";
 
 export class MultiplayerGame extends Game {
 
     public nbPlayer: number
-    public players: Player[]
+    public players: SocketPlayer[]
     public isPrivate: boolean
     public canBeForcedIsFull?: Function
     private _forcedIsFull: boolean
@@ -24,7 +24,7 @@ export class MultiplayerGame extends Game {
         super.start(this.players)
     }
    
-    addPlayer(p: Player){
+    addPlayer(p: SocketPlayer){
         this.players = this.players.concat(p)
     }
     
@@ -45,10 +45,10 @@ export class MultiplayerGame extends Game {
     }
 
     getPlayer(socketId: string){
-        return this.players.find(p => p.socketid === socketId) as Player
+        return this.players.find(p => p.socketid === socketId) as SocketPlayer
     }
 
-    getPlayerIndex(p: Player){
+    getPlayerIndex(p: SocketPlayer){
         return this.players.findIndex(player => player.socketid === p.socketid) as number
     }
 

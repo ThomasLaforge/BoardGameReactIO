@@ -92,7 +92,7 @@ export const addLimiteLimiteEvents = (socket: SuperSocket, GC: GameCollection) =
 
 function sendGameInfos(socket: SuperSocket, game: MultiplayerGame){
     let llgame = game.gameInstance as LimiteLimiteGame
-    const uiPlayers: PlayerListUI = game.players.map(p => {
+    const uiPlayers: PlayerListUI = llgame.players.map(p => {
         let isFirstPlayer = llgame ? llgame.isFirstPlayer(p.socketid) : game.isFirstPlayer(p.socketid)
         return {
             name: p.surname,

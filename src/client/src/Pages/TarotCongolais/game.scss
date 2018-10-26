@@ -1,0 +1,63 @@
+@import '../../styles/colors';
+@import '../../styles/mixins';
+
+.game {
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+
+  .game-infos {
+    display: flex;
+    flex-direction: column;
+    width: 400px;
+    padding: 10px;
+    
+    .game-players {
+      padding: 30px;
+
+      display: flex;
+      flex-direction: column;
+
+      .player > * {
+        padding: 5px 0;
+      }
+      .player {
+        display: flex;
+        flex-direction: row;
+
+        border:3px solid $blue;
+        border-radius: 5px;
+        margin: 8px 0;
+
+        font-weight: bold;
+        color: $blue;
+        font-size: 18px;
+
+        .player-score {
+          width: 15%;
+          border-right: 3px solid $blue;
+          text-align: center;
+          font-weight: bold;
+          font-size: 18px;
+        }
+        .player-name {
+          width: 70%;
+          border-right: 3px solid $blue; 
+          text-align: left;
+          padding-left: 10px;
+        }
+      }
+    }
+  
+    .game-chat {
+      flex: 1;
+      height: 0px;
+    }
+  }
+
+  .game-content {
+    flex: 1;
+
+
+  }
+}

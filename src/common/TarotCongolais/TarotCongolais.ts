@@ -1,9 +1,12 @@
 import { Player } from './Player'
 import { Card } from './Card'
 
-export const DEFAULT_NB_PLAYER = 2;
+export const prefix = 'tarotcongolais-'
+
+export const DEFAULT_NB_PLAYER = 4;
 export const EXCUSE_VALUE_LOW = 0;
 export const EXCUSE_VALUE_HIGH = 22;
+export const DEFAULT_START_PV = 10;
 
 export enum GameState {
     WaitingPlayers,

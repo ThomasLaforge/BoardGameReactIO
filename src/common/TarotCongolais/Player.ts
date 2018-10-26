@@ -1,5 +1,6 @@
 import {Hand} from './Hand';
 import {Card} from './Card';
+import { DEFAULT_START_PV } from './TarotCongolais';
 
 export class Player  {
 
@@ -8,7 +9,7 @@ export class Player  {
 	private _hand:Hand;
 	private _pv:number;
 
-    constructor( username:string, socketid: string, hand = new Hand(), pv:number = 10 ){
+    constructor( username:string, socketid: string, hand = new Hand(), pv:number = DEFAULT_START_PV ){
         this._username 	= username;
 		this._hand		= hand;
 		this._pv		= pv;
