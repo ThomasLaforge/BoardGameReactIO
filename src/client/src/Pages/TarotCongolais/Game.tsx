@@ -57,11 +57,9 @@ class Game extends React.Component <GameProps, GameState> {
             socket.emit(prefix + 'game:ask_initial_infos')
 
             socket.on(prefix + 'game:player.ask_initial_infos', (gameId: string, players: any[], isCreator: boolean) => {
-                console.log('players1', gameId, players)
                 this.setState({gameId, players, isCreator })
             })
             socket.on(prefix + 'game:players.new_player', (players: PlayerListUI) => {
-                console.log('players2', players)
                 this.setState({ players })
             })
         }
