@@ -100,6 +100,10 @@ export class Game {
 		return this.turn.allPlayerBet()
 	}
 
+	getPlayer(socketid: string){
+		return this.players.find(p => p.socketid === socketid) as Player
+	}
+
 	getNbPlayer(){
 		return this.players.length
 	}
