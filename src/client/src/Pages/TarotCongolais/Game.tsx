@@ -5,8 +5,9 @@ import { DefaultProps, injector } from '../../mobxInjector'
 import {deserialize, serialize} from 'serializr'
 
 import {PlayerListUI, PlayerListUIElt} from 'limitelimite-common/LimiteLimiteUI'
-import { prefix } from 'limitelimite-common/TarotCongolais/TarotCongolais'
+import { prefix, Bet, Play } from 'limitelimite-common/TarotCongolais/TarotCongolais'
 import { Hand } from 'limitelimite-common/TarotCongolais/Hand'
+import { Card as TCCard } from 'limitelimite-common/TarotCongolais/Card'
 
 // console.log('prefix on render', prefix)
 
@@ -17,6 +18,7 @@ import BetPhase from './GameParts/BetPhase';
 import SoloCardPhase from './GameParts/SoloCardPhase';
 import TrickPhase from './GameParts/TrickPhase';
 import BeforeGameStart from './GameParts/BeforeGameStart';
+import { Card } from 'limitelimite-common/TarotCongolais/Card';
 
 interface GameProps extends DefaultProps {
 }
@@ -33,6 +35,9 @@ interface GameState {
     nbTurnCards?: number
 
     // game elts
+    bets?: Bet[]
+    plays?: Play[]
+    otherPlayersSoloCards?: TCCard[]
     hand?: Hand
 }
 
@@ -59,9 +64,23 @@ class Game extends React.Component <GameProps, GameState> {
             socket.on(prefix + 'game:player.ask_initial_infos', (gameId: string, players: any[], isCreator: boolean) => {
                 this.setState({gameId, players, isCreator })
             })
+
             socket.on(prefix + 'game:players.new_player', (players: PlayerListUI) => {
                 this.setState({ players })
             })
+
+            socket.on(prefix + 'game:player.new_bet', (bets: Bet[], isPlayerToBet: boolean) => {
+                this.setState({ isPlayerToBet, bets })
+            })
+
+            socket.on(prefix + 'game:player.new_solo_bet', (bets: Bet[], isPlayerToBet: boolean, otherPlayersCards: TCCard[] ) => {
+                this.setState({ isPlayerToBet, bets })
+            })
+
+            socket.on(prefix + 'game:player.new_play', (plays: Play[], isPlayerToPlay: boolean) => {
+                this.setState({ plays, isPlayerToPlay })
+            })
+
         }
     }
 
@@ -135,7 +154,7 @@ class Game extends React.Component <GameProps, GameState> {
                     { !!isPlayerToPlay && nbTurnCards === 1 && 
                         <SoloCardPhase
                             onPrediction={this.handleSoloPrediction}
-                            otherPlayersCards={[]}
+                            otherPlayersCards={this.state.otherPlayersSoloCards}
                         />
                     }
 
@@ -143,7 +162,7 @@ class Game extends React.Component <GameProps, GameState> {
                         <TrickPhase
                             hand={hand}
                             onPlay={this.handlePlay}
-                            otherPlayersTricks={[]}
+                            otherPlayersTricks={this.state.plays}
                         />
                     }
                     { isGameOver && 
