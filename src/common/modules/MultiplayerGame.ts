@@ -11,17 +11,40 @@ export class MultiplayerGame extends Game {
     public canBeForcedIsFull?: Function
     private _forcedIsFull: boolean
 
-    constructor(gameType: GameType,  isPrivate = DEFAULT_IS_PRIVATE_GAME, nbPlayer = DEFAULT_NB_PLAYER, canBeForcedIsFull?: Function){
+    constructor(gameType: GameType,  isPrivate = DEFAULT_IS_PRIVATE_GAME, nbPlayer?: number, canBeForcedIsFull?: Function){
         super(gameType)
         this.isPrivate = isPrivate
         this.players = []
-        this.nbPlayer = nbPlayer
         this._forcedIsFull = false
         this.canBeForcedIsFull = canBeForcedIsFull
+
+        if(!nbPlayer){
+            switch (gameType) {
+                case GameType.LimiteLimite:
+                    nbPlayer = 0; break;
+                case GameType.TarotCongolais:
+                    nbPlayer = 2; break;
+                default:
+                    nbPlayer = DEFAULT_NB_PLAYER; break;
+            }
+        }
+        this.nbPlayer = nbPlayer
     }
 
     start(){
-        super.start(this.players)
+        console.log('multiplayer game start', this.canStart())
+        if(this.canStart()){
+            super.start(this.players)
+        }
+        else {
+            throw Error('can\t start the game')
+        }
+    }
+
+    canStart(){
+        return this.nbPlayer === 0
+            || ( this.nbPlayer > 0 && this.players.length === this.nbPlayer )
+            || ( this.nbPlayer < 0 && this.players.length > Math.abs(this.nbPlayer) )
     }
    
     addPlayer(p: SocketPlayer){

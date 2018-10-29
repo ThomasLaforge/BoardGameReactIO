@@ -36,7 +36,7 @@ export class Turn {
         return res;
     }
 
-    allPlayerBet(){
+    allPlayersBet(){
         return this.getPlayersHavingBet().length === this.players.length;
     }
 
@@ -100,6 +100,10 @@ export class Turn {
             }
         })
         return sum;
+    }
+
+    isComplete(){
+        return this.arrTrick.length === this.nbCards
     }
 
 }

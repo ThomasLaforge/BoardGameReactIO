@@ -8,28 +8,32 @@ import { SocketPlayer } from '../modules/SocketPlayer';
 
 export class Game {
 	
-    public deck:Deck;
+    public deck: Deck;
     public players: Player[];
-	public turn:Turn;
-	public actualTrick:Trick;
-	public history: Turn[]
+	public turn: Turn;
+	public actualTrick: Trick;
+	public history: Turn[];
 
-	public firstPlayerIndexAtStart: number;
-
-    constructor(players: SocketPlayer[], firstPlayerIndexAtStart?: number, deck = new Deck()){
+    constructor(players: SocketPlayer[]){
 		this.players          = players.map(socketPlayer => new Player(socketPlayer.surname, socketPlayer.socketid));
-		this.firstPlayerIndexAtStart = firstPlayerIndexAtStart || Math.floor((Math.random() * this.players.length));
 		this.deck             = new Deck();
-
 		this.actualTrick 	  = new Trick(this.players);
-		this.turn 			  = new Turn(this.getTurnCards(), this.players);
+		this.turn 			  = new Turn(this.getNbCardForTurn(), this.players);
 		
 		this.history 		  = []
+		console.log('---------------history on constructor', this.history)
+		this.shufflePlayers()
 	}
 
 	/**
 	 * Game actions
 	 */
+
+	shufflePlayers(){
+		this.players = this.players.sort(function() {
+			return .5 - Math.random();
+		});
+	}
 
 	start(){
 		this.dealCards();
@@ -37,7 +41,7 @@ export class Game {
 
 	dealCards(){
 		this.players.forEach( p => {
-			let newPlayerCards = this.deck.drawCards(this.getTurnCards());
+			let newPlayerCards = this.deck.drawCards(this.getNbCardForTurn());
 			p.hand.addCards(newPlayerCards);
 		});
 	}
@@ -45,16 +49,33 @@ export class Game {
 	// Turn
 	addTrick() {
 		this.turn.addTrick(this.actualTrick);
-		this.actualTrick = new Trick(this.players);
+		if(this.turn.isComplete()){
+			this.nextTurn()
+		}
+		else {
+			this.actualTrick = new Trick(this.players);
+		}
 	}
 
+	isOnBetPhase(){
+		return !this.turn.allPlayersBet
+	}
+	isOnPlayPhase(){
+		return this.turn.allPlayersBet && this.turn.arrTrick.length < this.players.length
+	}
 
 	nextTurn(){
 		// add turn to history
+		this.players.forEach(p => {
+			const playerHasLost = this.turn.getLosers().findIndex(loser => loser.isEqual(p)) !== -1
+			if(playerHasLost){
+				p.losePV()
+			}
+		})
 		this.history.push(this.turn)
 		// resets
 		this.actualTrick = new Trick(this.players);
-		this.turn = new Turn(this.getTurnCards(), this.players);
+		this.turn = new Turn(this.getNbCardForTurn(), this.players);
 	}
 
 	// Play
@@ -97,18 +118,18 @@ export class Game {
 		return this.turn.isPlayerToBet(p)
 	}
 	areAllPlayersBet(){
-		return this.turn.allPlayerBet()
+		return this.turn.allPlayersBet()
 	}
 
 	getPlayer(socketid: string){
 		return this.players.find(p => p.socketid === socketid) as Player
 	}
 
-	getNbPlayer(){
-		return this.players.length
+	getNextPlayerIndex(){
+		return (this.firstPlayerIndex + this.getTurnIndex()) % this.getNbPlayer()
 	}
-	
-	getTurnCards(){
+
+	get firstPlayerIndex(){
 		let nbPlayers = this.getNbPlayer()
 		let nbCards = new Deck().length
 
@@ -116,6 +137,45 @@ export class Game {
 		
 		let nbTurnTotal = this.history.length
 
+		return Math.floor(nbTurnTotal / nbTurnByPlayer) % nbPlayers
+	}
+
+	getNbPlayer(){
+		return this.players.length
+	}
+	
+	getTurnIndex(){
+		let nbPlayers = this.getNbPlayer()
+		let nbCards = new Deck().length
+
+		let nbTurnByPlayer = Math.floor(nbCards / nbPlayers)
+		console.log('history on getTurnIndex method', this, this.history)
+		
+		let nbTurnTotal = this.history.length
+
 		return nbTurnTotal % nbTurnByPlayer
 	}
+
+	getNbCardForTurn(turnindex = this.getTurnIndex()){
+		let nbPlayers = this.getNbPlayer()
+		let nbCards = new Deck().length
+		let nbTurnByPlayer = Math.floor(nbCards / nbPlayers)
+
+		return nbTurnByPlayer - turnindex
+	}
+
+	// Get players with First player Point Of Vue
+	get playersFPOV(){
+		let playersFPOV: Player[] = []
+		
+		playersFPOV.push( ...this.players.slice(this.firstPlayerIndex, this.players.length) ) 
+		playersFPOV.push( ...this.players.slice(0, this.firstPlayerIndex) )
+
+		return playersFPOV
+	}
+
+	isGameOver(){
+		return this.players.filter(p => p.pv === 0).length > 0
+	}
+
 }

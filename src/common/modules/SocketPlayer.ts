@@ -9,4 +9,5 @@ export class SocketPlayer {
         this.surname = surname
         this.socketid = socketid
     }
+    
 }

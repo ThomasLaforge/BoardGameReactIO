@@ -13,13 +13,13 @@ export abstract class Game {
         this.gameInstance = null
         this.creationDate = Date.now()
         this.startGameDate = undefined
-
         console.log('game constructor', this.type)
     }
 
     start(...options: any[]){
         let gameClass = getGameClass(this.type)
         this.gameInstance = new gameClass(...options)
+        console.log('Game start', options, this.gameInstance)
         this.startGameDate = Date.now()
     }
 

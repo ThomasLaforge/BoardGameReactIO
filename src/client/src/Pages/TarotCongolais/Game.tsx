@@ -18,7 +18,6 @@ import BetPhase from './GameParts/BetPhase';
 import SoloCardPhase from './GameParts/SoloCardPhase';
 import TrickPhase from './GameParts/TrickPhase';
 import BeforeGameStart from './GameParts/BeforeGameStart';
-import { Card } from 'limitelimite-common/TarotCongolais/Card';
 
 interface GameProps extends DefaultProps {
 }
@@ -26,7 +25,8 @@ interface GameState {
     players: any[]
     gameId: string
     isCreator: boolean,
-    myIndex: number
+    myIndex: number,
+    nbPlayersToStart: number,
 
     // to build game states
     isPlayerToBet?: boolean
@@ -52,7 +52,8 @@ class Game extends React.Component <GameProps, GameState> {
             gameId: '',
             isCreator: false,
             players: [],
-            myIndex: 0
+            myIndex: 0,
+            nbPlayersToStart: 0
         }
     }
 
@@ -61,26 +62,30 @@ class Game extends React.Component <GameProps, GameState> {
             const socket = this.props.socket
             socket.emit(prefix + 'game:ask_initial_infos')
 
-            socket.on(prefix + 'game:player.ask_initial_infos', (gameId: string, players: any[], isCreator: boolean) => {
-                this.setState({gameId, players, isCreator })
+            socket.on(prefix + 'game:player.ask_initial_infos', (gameId: string, players: any[], isCreator: boolean, nbPlayersToStart: number) => {
+                this.setState({gameId, players, isCreator, nbPlayersToStart })
             })
 
             socket.on(prefix + 'game:players.new_player', (players: PlayerListUI) => {
                 this.setState({ players })
             })
 
-            socket.on(prefix + 'game:player.new_bet', (bets: Bet[], isPlayerToBet: boolean) => {
-                this.setState({ isPlayerToBet, bets })
-            })
 
-            socket.on(prefix + 'game:player.new_solo_bet', (bets: Bet[], isPlayerToBet: boolean, otherPlayersCards: TCCard[] ) => {
-                this.setState({ isPlayerToBet, bets })
-            })
+            // socket.on(prefix + 'game:player.new_bet', (bets: Bet[], isPlayerToBet: boolean) => {
+            //     this.setState({ isPlayerToBet, bets })
+            // })
 
-            socket.on(prefix + 'game:player.new_play', (plays: Play[], isPlayerToPlay: boolean) => {
-                this.setState({ plays, isPlayerToPlay })
-            })
+            // socket.on(prefix + 'game:player.new_solo_bet', (bets: Bet[], isPlayerToBet: boolean, otherPlayersCards: TCCard[] ) => {
+            //     this.setState({ isPlayerToBet, bets })
+            // })
 
+            // socket.on(prefix + 'game:player.new_play', (plays: Play[], isPlayerToPlay: boolean) => {
+            //     this.setState({ plays, isPlayerToPlay })
+            // })
+
+            socket.on(prefix + 'game:players.update', (isGameOver: boolean, bets: Bet[], plays: Play[], isPlayerToBet: boolean, isPlayerToPlay: boolean, hand: Hand, otherPlayersSoloCards: TCCard[]) => {
+                this.setState({ plays, isPlayerToPlay, bets, isPlayerToBet, hand, otherPlayersSoloCards })
+            })
         }
     }
 
@@ -139,7 +144,7 @@ class Game extends React.Component <GameProps, GameState> {
                             gameId={this.state.gameId}
                             isCreator={this.state.isCreator}
                             nbPlayers={this.state.players.length}
-                            nbPlayersToStart={4}
+                            nbPlayersToStart={this.state.nbPlayersToStart}
                             startGame={this.startGame}
                         />
                     }

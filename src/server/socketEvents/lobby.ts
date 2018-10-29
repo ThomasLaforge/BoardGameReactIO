@@ -42,8 +42,8 @@ export const addLobbyEvents = (socket: SuperSocket, GC: GameCollection) => {
   })
 
   // connect on game room creating a game
-  socket.on('lobby:create', (gameType: GameType, isPrivate = DEFAULT_IS_PRIVATE_GAME) => {
-    let game = socket.createNewMultiplayerGame(gameType, isPrivate)
+  socket.on('lobby:create', (gameType: GameType, isPrivate = DEFAULT_IS_PRIVATE_GAME, nbPlayerToStart?: number) => {
+    let game = socket.createNewMultiplayerGame(gameType, isPrivate, nbPlayerToStart)
     console.log('lobby-create : ' + game.id + ', ' + socket.player.surname)
     GC.addGame(game);
     socket.playerEnterGameRoom(game)
