@@ -112,6 +112,7 @@ class Game extends React.Component <GameProps, GameState> {
 
     handleBet = (betValue: number) => {
         console.log('bet to send', betValue)
+        this.props.socket.emit(prefix + 'player_bet', betValue)
     }
 
     handleSoloPrediction = (answer: boolean) => {
@@ -120,6 +121,7 @@ class Game extends React.Component <GameProps, GameState> {
 
     handlePlay = (cardIndex: number) => {
         console.log('play', cardIndex)
+        this.props.socket.emit(prefix + 'player_play', cardIndex)
     }
 
     render() {

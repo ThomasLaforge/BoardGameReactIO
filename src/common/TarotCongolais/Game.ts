@@ -15,13 +15,12 @@ export class Game {
 	public history: Turn[];
 
     constructor(players: SocketPlayer[]){
+		this.history 		  = []
 		this.players          = players.map(socketPlayer => new Player(socketPlayer.surname, socketPlayer.socketid));
 		this.deck             = new Deck();
 		this.actualTrick 	  = new Trick(this.players);
 		this.turn 			  = new Turn(this.getNbCardForTurn(), this.players);
 		
-		this.history 		  = []
-		console.log('---------------history on constructor', this.history)
 		this.shufflePlayers()
 	}
 
@@ -149,7 +148,6 @@ export class Game {
 		let nbCards = new Deck().length
 
 		let nbTurnByPlayer = Math.floor(nbCards / nbPlayers)
-		console.log('history on getTurnIndex method', this, this.history)
 		
 		let nbTurnTotal = this.history.length
 

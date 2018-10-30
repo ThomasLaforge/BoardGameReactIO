@@ -25,10 +25,8 @@ export const addTarotCongolaisEvents = (socket: SuperSocket, GC: GameCollection)
         let game = GC.getGameWithUser(socket.id)
         if(game){
             game.start()
-            console.log('game after start', game, game.gameInstance)
             let tcgame = game.gameInstance as TarotCongolaisGame
             tcgame.start()
-            console.log('tc game after start', tcgame)
             
             updateUI(socket, game)
         }

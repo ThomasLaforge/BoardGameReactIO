@@ -25,8 +25,9 @@ class Hand extends React.Component <HandProps, HandState> {
     renderCards(){
         return this.props.cards.map( (c, k) => 
             <Card
+                key={k}
                 card={c}
-                onClick={() => this.props.onCardSelection(k)}
+                onClick={() => this.props.onCardSelection && this.props.onCardSelection(k)}
                 selected={this.props.selectedIndex && this.props.selectedIndex === k}
             />
         )
