@@ -64,8 +64,9 @@ export class Turn {
 
     isPlayerToBet(player: Player){
         let nbPlayerAlreadyBet = this.arrBet.length;
+        const playerIndex = this.players.findIndex(p => p.isEqual(player))
 
-        return true
+        return playerIndex === nbPlayerAlreadyBet
     }
 
     addbet(bet:Bet){

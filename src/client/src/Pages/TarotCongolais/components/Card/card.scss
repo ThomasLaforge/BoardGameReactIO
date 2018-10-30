@@ -1,0 +1,21 @@
+.card {
+    $card_width: 100px;
+    $card_heigth: 1.5 * $card_width;
+
+    border: 5px solid black;
+    border-radius: 10%;
+    height: $card_heigth;
+    width: $card_width;
+
+    .card-value {
+        color: black;
+        text-align: center;
+        font-size: 35px;
+        font-weight: bold;
+        line-height: $card_heigth;
+    }
+}
+
+.card-selected {
+    border-color: greenyellow;
+}

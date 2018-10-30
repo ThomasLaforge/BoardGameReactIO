@@ -6,7 +6,6 @@ import RouterComponent from './Router/RouterComponent';
 import { Provider, observer } from 'mobx-react';
 import { Store } from './Stores/Store';
 import { DefaultProps } from './mobxInjector';
-// import DebugBox from './components/DebugBox';
 
 import './App.scss';
 
@@ -63,7 +62,6 @@ class AppContent extends React.Component<DefaultProps> {
 		console.log('props', this.props)
 		return <div className="App">
 			<RouterComponent />
-			{/* <DebugBox /> */}
 		</div>
 	}
 }

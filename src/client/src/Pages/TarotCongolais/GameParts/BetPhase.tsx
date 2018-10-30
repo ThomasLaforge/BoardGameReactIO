@@ -5,7 +5,7 @@ import { DefaultProps, injector } from '../../../mobxInjector'
 import { Hand as TCHand} from 'limitelimite-common/TarotCongolais/Hand';
 import { prefix } from 'limitelimite-common/TarotCongolais/TarotCongolais'
 
-import Hand from '../components/Hand'
+import Hand from '../components/Hand/Hand'
 import { Button } from '@material-ui/core';
 
 enum OperationOnBetValue {

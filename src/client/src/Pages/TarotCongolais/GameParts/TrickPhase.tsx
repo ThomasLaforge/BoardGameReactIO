@@ -5,8 +5,8 @@ import { DefaultProps, injector } from '../../../mobxInjector'
 import { Hand as TCHand} from 'limitelimite-common/TarotCongolais/Hand';
 
 import { Button } from '@material-ui/core';
-import Trick from '../components/Trick'
-import Hand from '../components/Hand';
+import Trick from '../components/Trick/Trick'
+import Hand from '../components/Hand/Hand';
 
 interface TrickPhaseProps extends DefaultProps {
     otherPlayersTricks: any[]

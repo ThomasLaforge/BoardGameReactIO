@@ -2,7 +2,9 @@ import * as React from 'react';
 
 import { Card as TarotCongolaisCard } from 'limitelimite-common/TarotCongolais/Card'
 
-import Card from './Card'
+import Card from '../Card/Card'
+
+import './hand.scss'
 
 interface HandProps {
     cards: TarotCongolaisCard[]

@@ -33,11 +33,11 @@ export const addTarotCongolaisEvents = (socket: SuperSocket, GC: GameCollection)
     })
 
     socket.on(prefix + 'player_bet', (playerBet: number) => {
-        console.log('player_bet', playerBet)
         let g = GC.getGameWithUser(socket.id)
         if(g){
             let tcgame = g.gameInstance as TarotCongolaisGame 
             try {
+                console.log('player betting')
                 tcgame.addBet( {
                     bet: playerBet,
                     player: tcgame.getPlayer(socket.id)

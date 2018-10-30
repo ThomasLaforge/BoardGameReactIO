@@ -2,6 +2,8 @@ import * as React from 'react';
 
 import { Card as TarotCongolaisCard } from 'limitelimite-common/TarotCongolais/Card'
 
+import './card.scss'
+
 interface CardProps {
     card: TarotCongolaisCard
     onClick?: Function
