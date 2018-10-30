@@ -32,10 +32,6 @@ export class Trick {
     }
 
     getWinner(): Player { 
-        return this.getLeader()
-    }
-    
-    getLeader(): Player {
         let res: Player = this.arrPlay[0] && this.arrPlay[0].player;
         let maxValueCard:number = -1;
 
@@ -48,7 +44,6 @@ export class Trick {
 
         return res as Player;
     }
-
 
     playerAlreadyPlayed(p: Player){
         let res:boolean = false;
