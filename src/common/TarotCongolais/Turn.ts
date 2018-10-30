@@ -73,6 +73,7 @@ export class Turn {
         let player = bet.player;
         if( this.isPlayerToBet(player) ) {
             this.arrBet.push(bet);
+            console.log('arr bet after bet', this.arrBet)
         }
         else{
             throw new Error('Not good player to bet');

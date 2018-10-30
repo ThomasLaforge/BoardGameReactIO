@@ -2,7 +2,7 @@ import {Deck} from './Deck';
 import {Player} from './Player';
 import {Trick} from './Trick';
 import {Turn} from './Turn';
-import {Bet, Play} from './TarotCongolais'
+import {Bet, Play, GamePhase} from './TarotCongolais'
 import { Card } from './Card';
 import { SocketPlayer } from '../modules/SocketPlayer';
 
@@ -174,6 +174,10 @@ export class Game {
 
 	isGameOver(){
 		return this.players.filter(p => p.pv === 0).length > 0
+	}
+
+	getGamePhase(){
+		return this.turn.allPlayersBet() ? GamePhase.Play : GamePhase.Bet
 	}
 
 }

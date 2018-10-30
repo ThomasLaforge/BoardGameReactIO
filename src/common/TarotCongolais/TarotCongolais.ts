@@ -8,17 +8,6 @@ export const EXCUSE_VALUE_LOW = 0;
 export const EXCUSE_VALUE_HIGH = 22;
 export const DEFAULT_START_PV = 10;
 
-export enum GameState {
-    WaitingPlayers,
-    WaitingToBeReady,
-    WaitingPlayersToBeReady,
-    InGame,
-    WaitingPlayersToBet,
-    Bet,
-    WaitingPlayersToPlay,
-    Play
-}
-
 export enum ExcuseValue {
     LOW,
     HIGH
@@ -45,10 +34,15 @@ export interface playerInfos {
     nbTricks?: number,
     cardPlayed?: Card,
     handLength?: number,
-    gameState?: GameState
+    gameState?: GamePhase
 }
 
 export interface myPlayerInfos extends playerInfos {
     hand?: Card[],
     turnNbCard?: number
+}
+
+export enum GamePhase {
+    Bet = 1,
+    Play = 2
 }

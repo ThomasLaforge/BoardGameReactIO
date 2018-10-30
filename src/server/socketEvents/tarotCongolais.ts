@@ -96,8 +96,9 @@ function updateUI(socket: SuperSocket, game: MultiplayerGame){
     if(tcgame){
         let params: any[] = [
             tcgame.isGameOver(),
+            tcgame.getGamePhase(),
             tcgame.turn.arrBet,
-            tcgame.actualTrick.arrPlay
+            tcgame.actualTrick.arrPlay,
         ]
 
         tcgame.players.forEach( p => {

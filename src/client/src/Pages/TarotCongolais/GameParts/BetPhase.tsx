@@ -16,6 +16,7 @@ enum OperationOnBetValue {
 interface BetPhaseProps extends DefaultProps {
     hand: TCHand
     onValidateBet: Function
+    isPlayerToBet: boolean
 }
 interface BetPhaseState {
     betValue: number
@@ -53,35 +54,47 @@ class BetPhase extends React.Component <BetPhaseProps, BetPhaseState> {
         return (
             <div className="game-part-bet">
                 <div className="bet-content">
-                    <Button
-                        onClick={() => this.handleChangeBetValue(OperationOnBetValue.Decrease)}
-                        disabled={!this.canDecrease}
-                    >
-                        Decrease
-                    </Button>
+                    <div className="bet-value-selector">
+                        <Button
+                            className='bet-btn-change-value bet-btn-decrease'
+                            onClick={() => this.handleChangeBetValue(OperationOnBetValue.Decrease)}
+                            disabled={!this.canDecrease}
+                            >
+                            -
+                        </Button>
 
-                    <div className="bet-value">{this.state.betValue}</div>
+                        <div className="bet-value">{this.state.betValue}</div>
 
-                    <Button
-                        onClick={() => this.handleChangeBetValue(OperationOnBetValue.Increase)}
-                        disabled={!this.canIncrease}
-                    >
-                        Increase
-                    </Button>
+                        <Button
+                            className='bet-btn-change-value bet-btn-increase'
+                            onClick={() => this.handleChangeBetValue(OperationOnBetValue.Increase)}
+                            disabled={!this.canIncrease}
+                            >
+                            +
+                        </Button>
+                    </div>
+
+                    <div className="validate-bet">
+                        <Button
+                            onClick={() => this.props.onValidateBet(this.state.betValue)}
+                        >
+                            Validate
+                        </Button>
+                    </div>
                 </div>
 
-                <div className="validate-bet">
-                    <Button 
-                        onClick={() => this.props.onValidateBet(this.state.betValue)}
-                    >
-                        Validate
-                    </Button>
-                </div>
                 
                 <div className="bet-hand">
                     <Hand 
                         cards={this.props.hand.cards}
                     />
+                </div>
+
+                <div className="game-info">
+                    { this.props.isPlayerToBet 
+                        ? 'Vous devez annoncer le nombre de plis que vous comptez réaliser avec votre main'
+                        : 'Vous devez attendre que les autre joueurs parient'
+                    }
                 </div>
             </div>
         );

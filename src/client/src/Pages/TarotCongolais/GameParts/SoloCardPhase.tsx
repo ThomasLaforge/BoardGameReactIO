@@ -9,6 +9,7 @@ import { Button } from '@material-ui/core';
 interface SoloCardPhaseProps extends DefaultProps {
     otherPlayersCards: TCCard[]
     onPrediction: Function
+    isPlayerToPlay: boolean
 }
 interface SoloCardPhaseState {
 }

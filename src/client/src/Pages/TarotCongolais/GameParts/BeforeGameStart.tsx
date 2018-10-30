@@ -42,7 +42,7 @@ class GameBeforeStart extends React.Component <GameBeforeStartProps, GameBeforeS
                         ? [
                             'Game creator will start the game when every player have joined ( ' + this.props.nbPlayers + ' / ' + this.props.nbPlayersToStart + ' )',
                             <br />,
-                            'Please, Wait a moment ... ('
+                            'Please, Wait a moment ...'
                         ]
                         : this.props.nbPlayers === this.props.nbPlayersToStart
                             ? [ 
@@ -50,9 +50,9 @@ class GameBeforeStart extends React.Component <GameBeforeStartProps, GameBeforeS
                                 <br />,
                                 'You can now start to play',
                                 <Button 
-                                variant='raised'
-                                className='start-game-btn'
-                                onClick={() => {this.props.startGame()}}
+                                    variant='raised'
+                                    className='start-game-btn'
+                                    onClick={() => {this.props.startGame()}}
                                 >
                                         Start
                                     </Button>

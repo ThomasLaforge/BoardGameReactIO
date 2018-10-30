@@ -5,7 +5,7 @@ import { DefaultProps, injector } from '../../mobxInjector'
 import {deserialize, serialize} from 'serializr'
 
 import {PlayerListUI, PlayerListUIElt} from 'limitelimite-common/LimiteLimiteUI'
-import { prefix, Bet, Play } from 'limitelimite-common/TarotCongolais/TarotCongolais'
+import { prefix, Bet, Play, GamePhase } from 'limitelimite-common/TarotCongolais/TarotCongolais'
 import { Hand } from 'limitelimite-common/TarotCongolais/Hand'
 import { Card as TCCard } from 'limitelimite-common/TarotCongolais/Card'
 
@@ -29,6 +29,7 @@ interface GameState {
     nbPlayersToStart: number,
 
     // to build game states
+    gamePhase?: GamePhase
     isPlayerToBet?: boolean
     isPlayerToPlay?: boolean
     isGameOver?: boolean
@@ -83,8 +84,8 @@ class Game extends React.Component <GameProps, GameState> {
             //     this.setState({ plays, isPlayerToPlay })
             // })
 
-            socket.on(prefix + 'game:players.update', (isGameOver: boolean, bets: Bet[], plays: Play[], isPlayerToBet: boolean, isPlayerToPlay: boolean, hand: Hand, otherPlayersSoloCards: TCCard[]) => {
-                this.setState({ plays, isPlayerToPlay, bets, isPlayerToBet, hand, otherPlayersSoloCards })
+            socket.on(prefix + 'game:players.update', (isGameOver: boolean, gamePhase: GamePhase, bets: Bet[], plays: Play[], isPlayerToBet: boolean, isPlayerToPlay: boolean, hand: Hand, otherPlayersSoloCards: TCCard[]) => {
+                this.setState({ isGameOver, gamePhase, plays, isPlayerToPlay, bets, isPlayerToBet, hand, otherPlayersSoloCards })
             })
         }
     }
@@ -151,17 +152,21 @@ class Game extends React.Component <GameProps, GameState> {
                         />
                     }
 
-                    { !!isPlayerToBet && 
-                        <BetPhase 
+                    {/* Must be this one but ts weird error ... */}
+                    {/* { this.state.gamePhase && this.state.gamePhase === GamePhase.Bet && this.state.gamePhase &&  */}
+                    { this.state.gamePhase && this.state.gamePhase !== GamePhase.Play && this.state.gamePhase && 
+                        <BetPhase
                             hand={hand}
                             onValidateBet={this.handleBet}
+                            isPlayerToBet={isPlayerToBet}
                         />
                     }
 
-                    { !!isPlayerToPlay && nbTurnCards === 1 && 
+                    { this.state.gamePhase && this.state.gamePhase === GamePhase.Play && nbTurnCards === 1 && 
                         <SoloCardPhase
                             onPrediction={this.handleSoloPrediction}
                             otherPlayersCards={this.state.otherPlayersSoloCards}
+                            isPlayerToPlay={isPlayerToPlay}
                         />
                     }
 

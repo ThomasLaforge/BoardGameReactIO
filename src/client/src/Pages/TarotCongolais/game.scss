@@ -58,6 +58,48 @@
   .game-content {
     flex: 1;
 
+    .game-part-bet {
+      @include fullFlex();
+      flex-direction: column;
+      justify-content: space-around;
 
+      .bet-content {
+        display: flex;
+        flex-direction: column;
+
+        .bet-value-selector {
+          display: flex;
+          flex-direction: row;
+          justify-content: center;
+
+          .bet-btn-change-value {
+            margin: 0 20px;
+          }
+          // .bet-btn-decrease {
+
+          // }
+          // .bet-btn-increase {
+
+          // }
+          
+          .bet-value {
+            border: 3px solid black;
+            width: 50px;
+            text-align: center;
+            height: 50px;
+            line-height: 45px;
+          }
+        }
+        .validate-bet {
+          margin: auto;
+          margin-top: 15px;
+        }
+
+      }
+
+      .bet-hand {
+        
+      }
+    }
   }
 }
