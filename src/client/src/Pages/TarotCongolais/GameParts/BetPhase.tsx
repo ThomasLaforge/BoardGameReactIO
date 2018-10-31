@@ -76,6 +76,7 @@ class BetPhase extends React.Component <BetPhaseProps, BetPhaseState> {
 
                     <div className="validate-bet">
                         <Button
+                            disabled={!this.props.isPlayerToBet}
                             onClick={() => this.props.onValidateBet(this.state.betValue)}
                         >
                             Validate
