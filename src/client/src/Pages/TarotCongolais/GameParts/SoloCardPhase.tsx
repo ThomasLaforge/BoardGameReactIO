@@ -44,7 +44,7 @@ class SoloCardPhase extends React.Component <SoloCardPhaseProps, SoloCardPhaseSt
                         <Button
                             onClick={()=> this.props.onPrediction(false)}
                         >
-                            Yes
+                            No
                         </Button>
             	    </div>
                 </div>
