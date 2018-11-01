@@ -30,7 +30,7 @@ class Hand extends React.Component <HandProps, HandState> {
                 key={k}
                 card={c}
                 onClick={() => this.props.onCardSelection && this.props.onCardSelection(k)}
-                selected={this.props.selectedIndex && this.props.selectedIndex === k}
+                selected={(this.props.selectedIndex || this.props.selectedIndex === 0)  && this.props.selectedIndex === k}
             />
         )
     }

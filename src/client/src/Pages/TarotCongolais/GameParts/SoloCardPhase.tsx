@@ -9,7 +9,7 @@ import { Button } from '@material-ui/core';
 interface SoloCardPhaseProps extends DefaultProps {
     otherPlayersCards: TCCard[]
     onPrediction: Function
-    isPlayerToPlay: boolean
+    isPlayerToBet: boolean
 }
 interface SoloCardPhaseState {
 }
@@ -38,11 +38,13 @@ class SoloCardPhase extends React.Component <SoloCardPhaseProps, SoloCardPhaseSt
                     <div className="prediction-choice-choices">
                         <Button
                             onClick={()=> this.props.onPrediction(true)}
+                            variant='raised'
                         >
                             Yes
                         </Button>
                         <Button
                             onClick={()=> this.props.onPrediction(false)}
+                            variant='raised'
                         >
                             No
                         </Button>

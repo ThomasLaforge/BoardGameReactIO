@@ -102,7 +102,7 @@ export class Game {
 		return play && play.card
 	}
 	isPlayerToPlay(p: Player){
-		return this.actualTrick.isPlayerToPlay(p)
+		return this.areAllPlayersBet() && this.actualTrick.isPlayerToPlay(p)
 	}
 
 	// Turn
@@ -178,6 +178,10 @@ export class Game {
 
 	getGamePhase(){
 		return this.turn.allPlayersBet() ? GamePhase.Play : GamePhase.Bet
+	}
+
+	isLastPlayer(p:Player){
+		return this.players[this.getNbPlayer() - 1].isEqual(p)
 	}
 
 }

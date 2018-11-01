@@ -25,24 +25,31 @@ export class Trick {
     }
 
     isWinner(p: Player){
-        if(!p || !this.getWinner()){
+        if(!this.getWinner()){
             throw Error('no winner to compare')
         }
-        return this.getWinner().socketid === p.socketid
+        else {
+            return this.isComplete() && (this.getWinner() as Player).socketid === p.socketid
+        }
     }
 
-    getWinner(): Player { 
-        let res: Player = this.arrPlay[0] && this.arrPlay[0].player;
-        let maxValueCard:number = -1;
+    getWinner(): Player | null {
+        if(this.isComplete()){
+            let res: Player = this.arrPlay[0] && this.arrPlay[0].player;
+            let maxValueCard:number = -1;
 
-        this.arrPlay.forEach( (play: Play) => {
-            if(play.card.value > maxValueCard){
-                maxValueCard = play.card.value;
-                res = play.player;
-            }
-        });
+            this.arrPlay.forEach( (play: Play) => {
+                if(play.card.value > maxValueCard){
+                    maxValueCard = play.card.value;
+                    res = play.player;
+                }
+            });
 
-        return res as Player;
+            return res as Player
+        }
+        else {
+            return null
+        }
     }
 
     playerAlreadyPlayed(p: Player){
@@ -56,8 +63,10 @@ export class Trick {
     }
 
     // TODO
-    isPlayerToPlay(p: Player){
-        return true
+    isPlayerToPlay(player: Player){
+        const playerIndex = this.players.findIndex(p => p.isEqual(player))
+        const nbTricksPlayed = this.arrPlay.length
+        return playerIndex === nbTricksPlayed
     }
 
     getListOfPlayerHavingPlayed(){
@@ -67,5 +76,9 @@ export class Trick {
     allPlayerHavePlayed(){
         return this.getListOfPlayerHavingPlayed().length === this.players.length
     }
+
+    isComplete(){
+        return this.arrPlay.length === this.players.length
+    }    
 
 }

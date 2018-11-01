@@ -23,7 +23,7 @@ export class Turn {
             let score:number = 0;
             
             this.arrTrick.forEach(trick => {
-                if( player.isEqual(trick.getWinner()) ){
+                if( trick.isComplete() && player.isEqual(trick.getWinner() as Player) ){
                     score++;
                 }
             });
@@ -51,15 +51,8 @@ export class Turn {
     }
 
     getBetFromPlayer(player:Player){
-        let res:number = this.arrBet[0] && this.arrBet[0].bet;
-
-        this.arrBet.forEach(bet => {
-            if(bet.player == player){
-                res = bet.bet;
-            }
-        });
-
-        return res;
+        let bet = this.arrBet.find(bet => bet.player.isEqual(player))
+        return bet && bet.bet;
     }
 
     isPlayerToBet(player: Player){

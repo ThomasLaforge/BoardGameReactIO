@@ -12,6 +12,7 @@ interface TrickPhaseProps extends DefaultProps {
     otherPlayersTricks: any[]
     hand: TCHand
     onPlay: Function
+    isPlayerToPlay: boolean
 }
 interface TrickPhaseState {
     selectedCardIndex?: number
@@ -49,16 +50,25 @@ class TrickPhase extends React.Component <TrickPhaseProps, TrickPhaseState> {
                         <Hand 
                             cards={this.props.hand.cards} 
                             onCardSelection={this.handleCardSelect}
+                            selectedIndex={this.state.selectedCardIndex}
+
                         />
                     </div>
                     <div className="play-zone-action">
                         <Button
-                            disabled={typeof this.state.selectedCardIndex === "undefined"}
+                            disabled={typeof this.state.selectedCardIndex === "undefined" || !this.props.isPlayerToPlay}
                             onClick={() => this.props.onPlay(this.state.selectedCardIndex)}
+                            variant='raised'
                         >
                             Play
                         </Button>
                     </div>
+                </div>
+                <div className="game-part-infos">
+                    { this.props.isPlayerToPlay
+                        ? ''
+                        : ''
+                    }
                 </div>
             </div>
         );

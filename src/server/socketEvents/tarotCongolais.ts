@@ -78,7 +78,7 @@ function sendGameInfos(socket: SuperSocket, game: MultiplayerGame, initialCall =
         {
             name: tcgame ? p.username : p.surname,
             pv: tcgame ? p.pv : DEFAULT_START_PV,
-            bet: tcgame ? tcgame.getBet(p) : 0,
+            bet: tcgame && tcgame.getBet(p),
             nbTricks: tcgame ? tcgame.getNbWonTrick(p) : 0,
         }
     ))
@@ -90,12 +90,13 @@ function sendGameInfos(socket: SuperSocket, game: MultiplayerGame, initialCall =
 
 function updateUI(socket: SuperSocket, game: MultiplayerGame){
     // Return array
-    // bets: Bet[], plays: Play[], isPlayerToBet: boolean, isPlayerToPlay: boolean, hand: Hand, otherPlayersSoloCards: TCCard[]
+    // socket.on(prefix + 'game:players.update', (isGameOver: boolean, nbTurnCards: number, gamePhase: GamePhase, bets: Bet[], plays: Play[], isPlayerToBet: boolean, isPlayerToPlay: boolean, hand: Hand, otherPlayersSoloCards: TCCard[]) => {
     
     let tcgame = game.gameInstance as TarotCongolaisGame
     if(tcgame){
         let params: any[] = [
             tcgame.isGameOver(),
+            tcgame.getNbCardForTurn(),
             tcgame.getGamePhase(),
             tcgame.turn.arrBet,
             tcgame.actualTrick.arrPlay,
@@ -103,14 +104,19 @@ function updateUI(socket: SuperSocket, game: MultiplayerGame){
 
         tcgame.players.forEach( p => {
             // let nextPlayer: TCPlayer = tcgame.players[tcgame.getNextPlayerIndex()]
+            console.log('isFirst bet, play', tcgame.isPlayerToBet(p), tcgame.isPlayerToPlay(p), p.socketid)
             let otherPlayers = tcgame.players.filter(op => !op.isEqual(p))
-            params.push(
+            let playerSpecificsParams = params.slice()
+            playerSpecificsParams.push(
                 tcgame.isPlayerToBet(p),
                 tcgame.isPlayerToPlay(p),
                 tcgame.getNbCardForTurn() > 1 ? p.hand : undefined,
-                tcgame.getNbCardForTurn() === 1 ? otherPlayers.map(p => p.hand.cards[0]) : undefined
+                tcgame.getNbCardForTurn() === 1 ? otherPlayers.map(p => p.hand.cards[0]) : undefined,
+                tcgame.isLastPlayer(p)
             )
-            socket.server.to(p.socketid).emit(prefix + 'game:players.update', ...params)
+
+            socket.server.to(p.socketid).emit(prefix + 'game:players.update', ...playerSpecificsParams)
         })
+        sendGameInfos(socket, game)
     }
 }

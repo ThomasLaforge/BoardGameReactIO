@@ -17,6 +17,7 @@ interface BetPhaseProps extends DefaultProps {
     hand: TCHand
     onValidateBet: Function
     isPlayerToBet: boolean
+    impossibleBetForLastPlayer: number | undefined
 }
 interface BetPhaseState {
     betValue: number
@@ -51,6 +52,7 @@ class BetPhase extends React.Component <BetPhaseProps, BetPhaseState> {
     }
 
     render() {
+        console.log('isPlayerToBet', this.props.isPlayerToBet)
         return (
             <div className="game-part-bet">
                 <div className="bet-content">
@@ -59,7 +61,8 @@ class BetPhase extends React.Component <BetPhaseProps, BetPhaseState> {
                             className='bet-btn-change-value bet-btn-decrease'
                             onClick={() => this.handleChangeBetValue(OperationOnBetValue.Decrease)}
                             disabled={!this.canDecrease}
-                            >
+                            variant='raised'
+                        >
                             -
                         </Button>
 
@@ -69,15 +72,17 @@ class BetPhase extends React.Component <BetPhaseProps, BetPhaseState> {
                             className='bet-btn-change-value bet-btn-increase'
                             onClick={() => this.handleChangeBetValue(OperationOnBetValue.Increase)}
                             disabled={!this.canIncrease}
-                            >
+                            variant='raised'
+                        >
                             +
                         </Button>
                     </div>
 
                     <div className="validate-bet">
                         <Button
-                            disabled={!this.props.isPlayerToBet}
+                            disabled={!this.props.isPlayerToBet && this.state.betValue !== this.props.impossibleBetForLastPlayer}
                             onClick={() => this.props.onValidateBet(this.state.betValue)}
+                            variant='raised'
                         >
                             Validate
                         </Button>

@@ -25,8 +25,8 @@ interface GameState {
     players: any[]
     gameId: string
     isCreator: boolean,
-    myIndex: number,
     nbPlayersToStart: number,
+    isLastPlayer?: boolean
 
     // to build game states
     gamePhase?: GamePhase
@@ -53,7 +53,6 @@ class Game extends React.Component <GameProps, GameState> {
             gameId: '',
             isCreator: false,
             players: [],
-            myIndex: 0,
             nbPlayersToStart: 0
         }
     }
@@ -84,8 +83,9 @@ class Game extends React.Component <GameProps, GameState> {
             //     this.setState({ plays, isPlayerToPlay })
             // })
 
-            socket.on(prefix + 'game:players.update', (isGameOver: boolean, gamePhase: GamePhase, bets: Bet[], plays: Play[], isPlayerToBet: boolean, isPlayerToPlay: boolean, hand: Hand, otherPlayersSoloCards: TCCard[]) => {
-                this.setState({ isGameOver, gamePhase, plays, isPlayerToPlay, bets, isPlayerToBet, hand, otherPlayersSoloCards })
+            socket.on(prefix + 'game:players.update', (isGameOver: boolean, nbTurnCards: number, gamePhase: GamePhase, bets: Bet[], plays: Play[], isPlayerToBet: boolean, isPlayerToPlay: boolean, hand: Hand, otherPlayersSoloCards: TCCard[], isLastPlayer: boolean) => {
+                console.log('on update ui', { isGameOver, gamePhase, bets, plays, isPlayerToBet, isPlayerToPlay, hand, otherPlayersSoloCards })
+                this.setState({ isGameOver, gamePhase, bets, plays, isPlayerToBet, isPlayerToPlay, hand, otherPlayersSoloCards, nbTurnCards })
             })
         }
     }
@@ -99,16 +99,21 @@ class Game extends React.Component <GameProps, GameState> {
         return this.state.players.map( (p: any, k) => 
             <div 
                 key={k}
-                className={'player' 
-                    + (k === this.state.myIndex ? ' player-me' : '')
-                }  
+                className={'player'}  
             >
                 <div className="player-pv">{p.pv}</div>
                 <div className="player-name">{p.name}</div>
-                <div className="player-bet">{p.bet}</div>   
-                <div className="player-tricks">{p.nbTricks}</div>   
+                <div className="player-tricks">{p.nbTricks}</div>
+                <div className="player-separator-tricks-bet">/</div>
+                <div className="player-bet">{ (!!p.bet || p.bet === 0) ? p.bet : '?'}</div>   
             </div>
         )
+    }
+
+    get impossibleBetForLastPlayer(){
+        return this.state.isLastPlayer 
+            ? this.state.nbTurnCards - this.state.players.reduce( (sumBets, p) => sumBets + (p.bet || 0), 0)
+            : undefined
     }
 
     handleBet = (betValue: number) => {
@@ -142,7 +147,7 @@ class Game extends React.Component <GameProps, GameState> {
                     </div>
                 </div>
                 <div className="game-content">
-                    { !isPlayerToBet && !isPlayerToPlay && !isGameOver &&
+                    { !this.state.gamePhase && !isGameOver &&
                         <BeforeGameStart
                             gameId={this.state.gameId}
                             isCreator={this.state.isCreator}
@@ -153,12 +158,12 @@ class Game extends React.Component <GameProps, GameState> {
                     }
 
                     {/* Must be this one but ts weird error ... */}
-                    {/* { this.state.gamePhase && this.state.gamePhase === GamePhase.Bet && this.state.gamePhase &&  */}
-                    { this.state.gamePhase && this.state.gamePhase !== GamePhase.Play && this.state.gamePhase && 
+                    { this.state.gamePhase && this.state.gamePhase === GamePhase.Bet &&
                         <BetPhase
                             hand={hand}
                             onValidateBet={this.handleBet}
                             isPlayerToBet={isPlayerToBet}
+                            impossibleBetForLastPlayer={this.impossibleBetForLastPlayer}
                         />
                     }
 
@@ -166,15 +171,16 @@ class Game extends React.Component <GameProps, GameState> {
                         <SoloCardPhase
                             onPrediction={this.handleSoloPrediction}
                             otherPlayersCards={this.state.otherPlayersSoloCards}
-                            isPlayerToPlay={isPlayerToPlay}
+                            isPlayerToBet={isPlayerToBet}
                         />
                     }
 
-                    { !!isPlayerToPlay && nbTurnCards > 1 &&  
+                    { this.state.gamePhase && this.state.gamePhase === GamePhase.Play && nbTurnCards > 1 &&  
                         <TrickPhase
                             hand={hand}
                             onPlay={this.handlePlay}
                             otherPlayersTricks={this.state.plays}
+                            isPlayerToPlay={isPlayerToPlay}
                         />
                     }
                     { isGameOver && 
