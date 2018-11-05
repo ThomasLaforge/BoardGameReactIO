@@ -1,19 +1,28 @@
-import { ExcuseValue, EXCUSE_VALUE_LOW, EXCUSE_VALUE_HIGH } from './TarotCongolais'
+import { EXCUSE_VALUE_LOW, EXCUSE_VALUE_HIGH } from './TarotCongolais'
 
 export class Card {
     
-    public value:number;
+    private _value:number;
 
     constructor(value:number) {
-        this.value = value;
+        this._value = value;
     }
 
-    choseExcuseValue(val: ExcuseValue){
-        this.value = val === ExcuseValue.HIGH ? EXCUSE_VALUE_HIGH : EXCUSE_VALUE_LOW
+    choseExcuseValue(val: number){
+        this._value = val === EXCUSE_VALUE_HIGH ? EXCUSE_VALUE_HIGH : EXCUSE_VALUE_LOW
     }
 
     isExcuse(){
-        return this.value === -1 || this.value === 0 || this.value === 22
+        return this._value === -1 || this._value === EXCUSE_VALUE_LOW || this._value === EXCUSE_VALUE_HIGH
     }
+    
+    switchExcuseValue(){
+        this._value = this._value === EXCUSE_VALUE_HIGH ? EXCUSE_VALUE_HIGH : EXCUSE_VALUE_LOW
+    }
+
+    get value(){
+        return this._value === -1 ? EXCUSE_VALUE_HIGH : this._value
+    }
+
     
 }

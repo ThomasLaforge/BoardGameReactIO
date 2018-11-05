@@ -20,6 +20,11 @@ class Card extends React.Component <CardProps, CardState> {
         }
     }
 
+    handleChangeExcuse = (e) => {
+        e.stopPropagation()
+        this.props.card.switchExcuseValue()
+    }
+
     render() {
         const card = this.props.card
         return (
@@ -29,6 +34,11 @@ class Card extends React.Component <CardProps, CardState> {
                     onClick={() => this.props.onClick && this.props.onClick()}
                 >
                     {card.value}
+                </div>
+                <div className='card-excuse-btn'
+                    onClick={this.handleChangeExcuse}
+                >
+                    change value
                 </div>
             </div>
         );
