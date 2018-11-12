@@ -11,6 +11,7 @@ import { MultiplayerGame } from '../../common/modules/MultiplayerGame';
 import { Game as TarotCongolaisGame } from '../../common/TarotCongolais/Game'
 import { Card } from '../../common/TarotCongolais/Card';
 import { Player as TCPlayer } from '../../common/TarotCongolais/Player';
+import { serialize } from 'serializr';
 
 export const addTarotCongolaisEvents = (socket: SuperSocket, GC: GameCollection) => {
 
@@ -49,17 +50,16 @@ export const addTarotCongolaisEvents = (socket: SuperSocket, GC: GameCollection)
         }
     })
 
-    socket.on(prefix + 'player_play', (cardValue: number) => {
-        console.log('player_play', cardValue)
+    socket.on(prefix + 'player_play', (cardIndex: number) => {
+        console.log('player_play', cardIndex)
         let g = GC.getGameWithUser(socket.id);
         if(g){
-            let tcgame = g.gameInstance as TarotCongolaisGame 
-            // let card = new Card(cardValue)
             try {
-            let tcgame = g.gameInstance as TarotCongolaisGame 
+                let tcgame = g.gameInstance as TarotCongolaisGame 
+                let player = tcgame.getPlayer(socket.id)
                 tcgame.addPlay({
-                    player: tcgame.getPlayer(socket.id),
-                    card: new Card(cardValue)
+                    player,
+                    card: player.hand.cards[cardIndex]
                 })
                 updateUI(socket, g)
             } catch (error) {
@@ -105,12 +105,13 @@ function updateUI(socket: SuperSocket, game: MultiplayerGame){
         tcgame.players.forEach( p => {
             // let nextPlayer: TCPlayer = tcgame.players[tcgame.getNextPlayerIndex()]
             console.log('isFirst bet, play', tcgame.isPlayerToBet(p), tcgame.isPlayerToPlay(p), p.socketid)
+            console.log('hand', p.hand.cards[0])
             let otherPlayers = tcgame.players.filter(op => !op.isEqual(p))
             let playerSpecificsParams = params.slice()
             playerSpecificsParams.push(
                 tcgame.isPlayerToBet(p),
                 tcgame.isPlayerToPlay(p),
-                tcgame.getNbCardForTurn() > 1 ? p.hand : undefined,
+                tcgame.getNbCardForTurn() > 1 ? serialize(p.hand) : undefined,
                 tcgame.getNbCardForTurn() === 1 ? otherPlayers.map(p => p.hand.cards[0]) : undefined,
                 tcgame.isLastPlayer(p)
             )

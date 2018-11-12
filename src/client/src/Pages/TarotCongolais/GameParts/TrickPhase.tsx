@@ -2,7 +2,8 @@ import * as React from 'react';
 import {socketConnect} from 'socket.io-react'
 import {observer, inject} from 'mobx-react';
 import { DefaultProps, injector } from '../../../mobxInjector'
-import { Hand as TCHand} from 'limitelimite-common/TarotCongolais/Hand';
+import { Hand as TCHand } from 'limitelimite-common/TarotCongolais/Hand';
+import { Card as TCCard } from 'limitelimite-common/TarotCongolais/Card';
 
 import { Button } from '@material-ui/core';
 import Trick from '../components/Trick/Trick'
@@ -12,6 +13,7 @@ interface TrickPhaseProps extends DefaultProps {
     otherPlayersTricks: any[]
     hand: TCHand
     onPlay: Function
+    onChangeExcuseValue: Function
     isPlayerToPlay: boolean
 }
 interface TrickPhaseState {
@@ -31,12 +33,19 @@ class TrickPhase extends React.Component <TrickPhaseProps, TrickPhaseState> {
 
     renderTricks(){
         return this.props.otherPlayersTricks.map(t => 
-            <Trick card={t.card} playerName={t.playerName} />
+            <Trick card={new TCCard(t.card._value)} playerName={t.playerName} />
         )
     }
 
     handleCardSelect = (cardIndex: number) => {
         this.setState({ selectedCardIndex: this.state.selectedCardIndex && this.state.selectedCardIndex === cardIndex ? undefined : cardIndex})
+    }
+
+    onPlay = () => {
+        this.props.onPlay(this.state.selectedCardIndex)
+        this.setState({
+            selectedCardIndex: undefined
+        })
     }
 
     render() {
@@ -51,13 +60,13 @@ class TrickPhase extends React.Component <TrickPhaseProps, TrickPhaseState> {
                             cards={this.props.hand.cards} 
                             onCardSelection={this.handleCardSelect}
                             selectedIndex={this.state.selectedCardIndex}
-
+                            passChangeExcuseValue={(cardIndex) => this.props.onChangeExcuseValue && this.props.onChangeExcuseValue(cardIndex)}
                         />
                     </div>
                     <div className="play-zone-action">
                         <Button
                             disabled={typeof this.state.selectedCardIndex === "undefined" || !this.props.isPlayerToPlay}
-                            onClick={() => this.props.onPlay(this.state.selectedCardIndex)}
+                            onClick={this.onPlay}
                             variant='raised'
                         >
                             Play
@@ -66,8 +75,8 @@ class TrickPhase extends React.Component <TrickPhaseProps, TrickPhaseState> {
                 </div>
                 <div className="game-part-infos">
                     { this.props.isPlayerToPlay
-                        ? ''
-                        : ''
+                        ? 'Select a card on play it'
+                        : 'wait for current player to play. You can select a card.'
                     }
                 </div>
             </div>

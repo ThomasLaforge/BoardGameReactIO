@@ -1,5 +1,4 @@
 import { Player } from './Player';
-import { Card } from './Card';
 import { Play } from './TarotCongolais';
 
 // Trick = un pli

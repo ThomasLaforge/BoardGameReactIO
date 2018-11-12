@@ -1,8 +1,10 @@
+import {serializable, list, object} from 'serializr'
+
 import { Card } from "./Card";
 
 export class Hand {
-
-    public cards: Card[]
+    
+    @serializable(list(object(Card))) public cards: Card[]
 
     constructor(cards: Card[] = []){
         this.cards = cards

@@ -2,7 +2,7 @@ import * as React from 'react';
 import {socketConnect} from 'socket.io-react'
 import {observer, inject} from 'mobx-react';
 import { DefaultProps, injector } from '../../mobxInjector'
-import {deserialize, serialize} from 'serializr'
+import {deserialize} from 'serializr'
 
 import {PlayerListUI, PlayerListUIElt} from 'limitelimite-common/LimiteLimiteUI'
 import { prefix, Bet, Play, GamePhase } from 'limitelimite-common/TarotCongolais/TarotCongolais'
@@ -83,10 +83,22 @@ class Game extends React.Component <GameProps, GameState> {
             //     this.setState({ plays, isPlayerToPlay })
             // })
 
-            socket.on(prefix + 'game:players.update', (isGameOver: boolean, nbTurnCards: number, gamePhase: GamePhase, bets: Bet[], plays: Play[], isPlayerToBet: boolean, isPlayerToPlay: boolean, hand: Hand, otherPlayersSoloCards: TCCard[], isLastPlayer: boolean) => {
-                console.log('on update ui', { isGameOver, gamePhase, bets, plays, isPlayerToBet, isPlayerToPlay, hand, otherPlayersSoloCards })
-                this.setState({ isGameOver, gamePhase, bets, plays, isPlayerToBet, isPlayerToPlay, hand, otherPlayersSoloCards, nbTurnCards })
+            socket.on(prefix + 'game:players.update', (isGameOver: boolean, nbTurnCards: number, gamePhase: GamePhase, bets: Bet[], plays: Play[], isPlayerToBet: boolean, isPlayerToPlay: boolean, handJSON: any, otherPlayersSoloCards: TCCard[], isLastPlayer: boolean) => {
+                console.log('on update ui', { isGameOver, gamePhase, bets, plays, isPlayerToBet, isPlayerToPlay, handJSON, otherPlayersSoloCards, isLastPlayer })
+                this.setState({ 
+                    isGameOver, 
+                    gamePhase, 
+                    bets, 
+                    plays, 
+                    isPlayerToBet, 
+                    isPlayerToPlay, 
+                    hand: handJSON ? deserialize(Hand, handJSON) : undefined,
+                    otherPlayersSoloCards, 
+                    nbTurnCards,
+                    isLastPlayer 
+                })
             })
+
         }
     }
 
@@ -103,9 +115,12 @@ class Game extends React.Component <GameProps, GameState> {
             >
                 <div className="player-pv">{p.pv}</div>
                 <div className="player-name">{p.name}</div>
-                <div className="player-tricks">{p.nbTricks}</div>
-                <div className="player-separator-tricks-bet">/</div>
-                <div className="player-bet">{ (!!p.bet || p.bet === 0) ? p.bet : '?'}</div>   
+                { !!this.state.gamePhase && <div className="player-trick-zone">
+                        <div className="player-tricks">{p.nbTricks}</div>
+                        <div className="player-separator-tricks-bet">/</div>
+                        <div className="player-bet">{ (!!p.bet || p.bet === 0) ? p.bet : '?'}</div>   
+                    </div>
+                }
             </div>
         )
     }
@@ -116,13 +131,28 @@ class Game extends React.Component <GameProps, GameState> {
             : undefined
     }
 
+    handleChangeExcuseValue = (cardIndex: number) => {
+        console.log('change excuse value')
+        const newCards = this.state.hand.cards.map( (c, k) => {
+            if(k === cardIndex){
+                c.isExcuse() && c.switchExcuseValue()
+            }
+            return c
+        })
+        this.setState({
+            hand: new Hand(newCards)
+        })
+    }
+
     handleBet = (betValue: number) => {
         console.log('bet to send', betValue)
         this.props.socket.emit(prefix + 'player_bet', betValue)
     }
 
-    handleSoloPrediction = (answer: boolean) => {
-        console.log('prediction chosen', answer)
+    handleSoloPrediction = (iHaveTheBiggest: boolean) => {
+        const betValue = iHaveTheBiggest ? 1 : 0
+        console.log('prediction chosen', betValue)
+        this.props.socket.emit(prefix + 'player_bet', betValue)
     }
 
     handlePlay = (cardIndex: number) => {
@@ -157,17 +187,27 @@ class Game extends React.Component <GameProps, GameState> {
                         />
                     }
 
-                    {/* Must be this one but ts weird error ... */}
-                    { this.state.gamePhase && this.state.gamePhase === GamePhase.Bet &&
+                    { this.state.gamePhase && this.state.gamePhase === GamePhase.Bet && nbTurnCards > 1 &&
                         <BetPhase
                             hand={hand}
                             onValidateBet={this.handleBet}
                             isPlayerToBet={isPlayerToBet}
                             impossibleBetForLastPlayer={this.impossibleBetForLastPlayer}
+                            onChangeExcuseValue={this.handleChangeExcuseValue}
                         />
                     }
 
-                    { this.state.gamePhase && this.state.gamePhase === GamePhase.Play && nbTurnCards === 1 && 
+                    { this.state.gamePhase && this.state.gamePhase === GamePhase.Play && nbTurnCards > 1 &&  
+                        <TrickPhase
+                        hand={hand}
+                        onPlay={this.handlePlay}
+                        otherPlayersTricks={this.state.plays}
+                        isPlayerToPlay={isPlayerToPlay}
+                        onChangeExcuseValue={this.handleChangeExcuseValue}
+                        />
+                    }
+                    
+                    { this.state.gamePhase && this.state.gamePhase === GamePhase.Bet && nbTurnCards === 1 && 
                         <SoloCardPhase
                             onPrediction={this.handleSoloPrediction}
                             otherPlayersCards={this.state.otherPlayersSoloCards}
@@ -175,14 +215,6 @@ class Game extends React.Component <GameProps, GameState> {
                         />
                     }
 
-                    { this.state.gamePhase && this.state.gamePhase === GamePhase.Play && nbTurnCards > 1 &&  
-                        <TrickPhase
-                            hand={hand}
-                            onPlay={this.handlePlay}
-                            otherPlayersTricks={this.state.plays}
-                            isPlayerToPlay={isPlayerToPlay}
-                        />
-                    }
                     { isGameOver && 
                         <div>Game over!</div>
                     }

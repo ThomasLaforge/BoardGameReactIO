@@ -1,8 +1,10 @@
+import {serializable} from 'serializr'
+
 import { EXCUSE_VALUE_LOW, EXCUSE_VALUE_HIGH } from './TarotCongolais'
 
 export class Card {
     
-    private _value:number;
+    @serializable private _value:number;
 
     constructor(value:number) {
         this._value = value;
@@ -17,7 +19,7 @@ export class Card {
     }
     
     switchExcuseValue(){
-        this._value = this._value === EXCUSE_VALUE_HIGH ? EXCUSE_VALUE_HIGH : EXCUSE_VALUE_LOW
+        this._value = (this._value === EXCUSE_VALUE_HIGH || this._value === -1) ? EXCUSE_VALUE_LOW : EXCUSE_VALUE_HIGH
     }
 
     get value(){

@@ -9,5 +9,9 @@ export class SocketPlayer {
         this.surname = surname
         this.socketid = socketid
     }
+
+    isEqual(p: SocketPlayer){
+        return this.socketid === p.socketid
+    }
     
 }

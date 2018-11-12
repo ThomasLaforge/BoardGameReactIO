@@ -97,8 +97,12 @@ export class Turn {
         return sum;
     }
 
-    isComplete(){
+    allPlayersPlay(){
         return this.arrTrick.length === this.nbCards
+    }
+
+    isComplete(){
+        return this.nbCards === 1 ? this.allPlayersBet() : this.allPlayersPlay()
     }
 
 }

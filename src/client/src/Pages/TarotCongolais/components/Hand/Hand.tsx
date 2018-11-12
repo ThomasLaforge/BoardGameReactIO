@@ -9,6 +9,7 @@ import './hand.scss'
 interface HandProps {
     cards: TarotCongolaisCard[]
     onCardSelection?: Function
+    passChangeExcuseValue?: Function
     selectedIndex?: number
 }
 interface HandState {
@@ -29,8 +30,9 @@ class Hand extends React.Component <HandProps, HandState> {
             <Card
                 key={k}
                 card={c}
-                onClick={() => this.props.onCardSelection && this.props.onCardSelection(k)}
+                onClick={(cardValue) => this.props.onCardSelection && this.props.onCardSelection(k, cardValue)}
                 selected={(this.props.selectedIndex || this.props.selectedIndex === 0)  && this.props.selectedIndex === k}
+                changeExcuseValue={() => this.props.passChangeExcuseValue && this.props.passChangeExcuseValue(k)}
             />
         )
     }

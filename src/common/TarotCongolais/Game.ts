@@ -64,17 +64,30 @@ export class Game {
 	}
 
 	nextTurn(){
-		// add turn to history
 		this.players.forEach(p => {
 			const playerHasLost = this.turn.getLosers().findIndex(loser => loser.isEqual(p)) !== -1
 			if(playerHasLost){
 				p.losePV()
 			}
 		})
+
 		this.history.push(this.turn)
 		// resets
 		this.actualTrick = new Trick(this.players);
 		this.turn = new Turn(this.getNbCardForTurn(), this.players);
+
+		this.deck = new Deck()
+		this.dealCards()
+
+		// Auto play cards for turn with only one card
+		if(this.getNbCardForTurn() === 1){
+			this.playersFPOV.forEach(p => {
+				this.addPlay({
+					card: p.hand.cards[0], 
+					player:p
+				})
+			})
+		}
 	}
 
 	// Play
@@ -82,7 +95,7 @@ export class Game {
 		// Action
 		play.player.playCard(play.card)
 		let trickWinner = this.actualTrick.addPlay( play );
-		if(trickWinner){
+		if(this.getNbCardForTurn() !== 1 && trickWinner){
 			this.addTrick();
 		}
 	}
@@ -90,6 +103,11 @@ export class Game {
 	// Bet
 	addBet(bet: Bet){
 		this.turn.addbet(bet)
+
+		// solo card turn
+		if(this.turn.isComplete()){
+			this.nextTurn()
+		}
 	}
 
 	/**
@@ -159,7 +177,8 @@ export class Game {
 		let nbCards = new Deck().length
 		let nbTurnByPlayer = Math.floor(nbCards / nbPlayers)
 
-		return nbTurnByPlayer - turnindex
+		// return nbTurnByPlayer - turnindex
+		return 1
 	}
 
 	// Get players with First player Point Of Vue

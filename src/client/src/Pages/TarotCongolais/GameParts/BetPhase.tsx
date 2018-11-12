@@ -18,6 +18,7 @@ interface BetPhaseProps extends DefaultProps {
     onValidateBet: Function
     isPlayerToBet: boolean
     impossibleBetForLastPlayer: number | undefined
+    onChangeExcuseValue: Function
 }
 interface BetPhaseState {
     betValue: number
@@ -52,7 +53,7 @@ class BetPhase extends React.Component <BetPhaseProps, BetPhaseState> {
     }
 
     render() {
-        console.log('isPlayerToBet', this.props.isPlayerToBet)
+        console.log('isPlayerToBet', this.props.isPlayerToBet, this.props.impossibleBetForLastPlayer)
         return (
             <div className="game-part-bet">
                 <div className="bet-content">
@@ -80,7 +81,7 @@ class BetPhase extends React.Component <BetPhaseProps, BetPhaseState> {
 
                     <div className="validate-bet">
                         <Button
-                            disabled={!this.props.isPlayerToBet && this.state.betValue !== this.props.impossibleBetForLastPlayer}
+                            disabled={!this.props.isPlayerToBet || this.state.betValue === this.props.impossibleBetForLastPlayer}
                             onClick={() => this.props.onValidateBet(this.state.betValue)}
                             variant='raised'
                         >
@@ -93,6 +94,7 @@ class BetPhase extends React.Component <BetPhaseProps, BetPhaseState> {
                 <div className="bet-hand">
                     <Hand 
                         cards={this.props.hand.cards}
+                        passChangeExcuseValue={(cardIndex) => this.props.onChangeExcuseValue && this.props.onChangeExcuseValue(cardIndex)}
                     />
                 </div>
 

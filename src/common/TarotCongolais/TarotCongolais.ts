@@ -1,7 +1,7 @@
 import { Player } from './Player'
 import { Card } from './Card'
 
-export const prefix = 'tarotcongolais-'
+export const prefix = 'tarotcongolais'
 
 export const DEFAULT_NB_PLAYER = 4;
 export const EXCUSE_VALUE_LOW = 0;
