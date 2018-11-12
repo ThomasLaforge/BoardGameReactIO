@@ -13,12 +13,14 @@ export * from './LimiteLimiteUI'
 
 import { LimiteLimiteGame } from './modules/LimiteLimiteGame' 
 import { Game as TarotCongolaisGame } from './TarotCongolais/Game'
+import { Game as GifDefinitor } from './GifDefinitor/Game'
 import { MultiplayerGame } from './modules/MultiplayerGame';
 import { SoloGame } from './modules/SoloGame';
 
 export enum GameType {
     LimiteLimite,
-    TarotCongolais
+    TarotCongolais,
+    GifDefinitor
 }
 
 export const getGameClass = (gameType: GameType) : GameClass => {
@@ -27,6 +29,8 @@ export const getGameClass = (gameType: GameType) : GameClass => {
             return LimiteLimiteGame
         case GameType.TarotCongolais:
             return TarotCongolaisGame
+        case GameType.GifDefinitor:
+            return GifDefinitor
         default:
             throw Error('try to get class of game type who doesn\'t exist')
     }
