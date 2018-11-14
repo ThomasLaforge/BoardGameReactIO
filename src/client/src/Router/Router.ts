@@ -6,6 +6,7 @@ import Home from '../Pages/Home/Home'
 import GameLobby from '../Pages/Lobby/Lobby'
 import LimiteLimiteGame from "../Pages/LimiteLimite/Game";
 import TarotCongolaisGame from '../Pages/TarotCongolais/Game'
+import GifDefinitorGame from '../Pages/GifDefinitor/Game'
 export type RouteDescriptor = RouteEnum | string
 
 export class Router {
@@ -34,6 +35,11 @@ export class Router {
                 path: '/tarotcongolais',
                 component: TarotCongolaisGame,
                 type: RouteEnum.TarotCongolais
+            },
+            {
+                path: '/gifdefinitor',
+                component: GifDefinitorGame,
+                type: RouteEnum.GifDefinitor
             }
         ]
         this.routes = routeDefs.map(iRoute => new Route(iRoute))

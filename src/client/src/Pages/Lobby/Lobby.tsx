@@ -43,6 +43,10 @@ class GameLobby extends React.Component <GameLobbyProps, GameLobbyState> {
                         this.props.ui.router.switchRoute(RouteEnum.TarotCongolais)
                         document.title = 'Tarot Congolais';
                         break;
+                    case GameType.GifDefinitor:
+                        this.props.ui.router.switchRoute(RouteEnum.GifDefinitor)
+                        document.title = 'Gif Definitor';
+                        break;
                 }
             })
         }
@@ -124,6 +128,13 @@ class GameLobby extends React.Component <GameLobbyProps, GameLobbyState> {
                                 onClick={() => this.props.socket.emit('lobby:auto', GameType.TarotCongolais)}
                             >
                                 Find a tarotcongolais game
+                            </Button>
+                            <Button 
+                                className='lobby-btn'
+                                variant='raised'
+                                onClick={() => this.props.socket.emit('lobby:auto', GameType.GifDefinitor)}
+                            >
+                                Find a gif definitor game
                             </Button>
                         </div>
                     </div>

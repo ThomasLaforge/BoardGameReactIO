@@ -24,6 +24,7 @@ export const addLimiteLimiteEvents = (socket: SuperSocket, GC: GameCollection) =
             const gif = serialize(gd.currentGif)
 
             sendGameInfos(socket, game)
+            updateUI(socket, game)
         }
     })
 
@@ -75,8 +76,7 @@ export const addLimiteLimiteEvents = (socket: SuperSocket, GC: GameCollection) =
         if(game){
             let gd = game.gameInstance as GifDefinitorGame
             let winners = gd.turn.getWinners()
-            gd.endTurn()
-            let winnerPlayerName = gd.getPlayer(winnerPlayerSocketId).surname 
+            gd.nextTurn()
             socket.server.in(game.id).emit(prefix + 'game:players.turn_is_complete', propositionCardIndex, winnerPlayerName)
 
             setTimeout( () => {
