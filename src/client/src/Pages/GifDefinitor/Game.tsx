@@ -9,11 +9,9 @@ import {PlayerListUI, PlayerListUIElt} from 'limitelimite-common/LimiteLimiteUI'
 import { ChatMessage } from 'limitelimite-common/Server';
 import { prefix } from 'limitelimite-common/GifDefinitor/GifDefinitor'
 
-console.log('prefix on render', prefix)
-
-import GamePropositionPlayer from './GameParts/GamePropositionPlayer';
 import GameBeforeStart from './GameParts/GameBeforeStart';
-import GameMainPlayer from './GameParts/GameMainPlayer';
+import GamePropositionSender from './GameParts/GamePropositionSender';
+import GamePropositionChoser from './GameParts/GamePropositionChoser';
 import GameResult from './GameParts/GameResult';
 import Chat from '../../components/Chat';
 
@@ -30,7 +28,7 @@ interface GameState {
     gifUrl?: string
     propositions?: any
     chosenPropositionIndexes?: number[]
-    winnerPlayerNames?: string
+    winnerPlayerNames?: string[]
     myIndex?: number
 }
 
@@ -46,7 +44,7 @@ class Game extends React.Component <GameProps, GameState> {
             isCreator: false,
             gameStatus: GameStatus.Preparing,
             players: [],
-            winnerPlayerNames: ''
+            winnerPlayerNames: []
         }
     }
 
@@ -85,21 +83,13 @@ class Game extends React.Component <GameProps, GameState> {
                 <div className="player-score">{p.score}</div>
                 <div className="player-name">{p.name}</div>
                 <div className="player-status">
-                    { p.isFirstPlayer && 
-                        <div className="player-status-is-boss">Boss</div>
-                    }
-                    { this.state.gameStatus === GameStatus.InGame && !p.isFirstPlayer && p.hasPlayed && 
-                        <div className="player-status-has-played">&#x2714;</div>
-                    }
-                    { this.state.gameStatus === GameStatus.InGame && !p.isFirstPlayer && !p.hasPlayed &&
-                    <div className="player-status-choosing">...</div>
-                    }
                 </div>   
             </div>
         )
     }
 
     render() {
+
         return (
             <div className='game'>
                 <div className="game-infos">
@@ -120,28 +110,25 @@ class Game extends React.Component <GameProps, GameState> {
                         />
                     }
 
-                    {this.state.gameStatus === GameStatus.InGame && this.state.isFirstPlayer &&
-                        <GameMainPlayer
-                            sentence={this.state.sentence}
-                            propositions={this.state.propositions}
-                        />
-                    }                 
-                    
-                    {this.state.gameStatus === GameStatus.InGame && !this.state.isFirstPlayer &&
-                        <GamePropositionPlayer
-                            sentence={this.state.sentence}
-                            hand={this.state.hand}
+                    {this.state.gameStatus === GameStatus.InGame && !this.state.propositions &&
+                        <GamePropositionSender
+                            gifUrl={this.state.gifUrl}
                         />
                     }
 
+                    {this.state.gameStatus === GameStatus.InGame && this.state.propositions &&
+                        <GamePropositionChoser
+                            propositions={this.state.propositions}
+                            gifUrl={this.state.gifUrl}
+                        />
+                    }                 
                     
                     {this.state.gameStatus === GameStatus.Result &&
                         <GameResult
-                            sentence={this.state.sentence}
                             propositions={this.state.propositions}
                             chosenPropositionIndexes={this.state.chosenPropositionIndexes}
-                            isFirstPlayer={this.state.isFirstPlayer}
                             winnerPlayerNames={this.state.winnerPlayerNames}
+                            gifUrl={this.state.gifUrl}
                         />
                     }
                 </div>

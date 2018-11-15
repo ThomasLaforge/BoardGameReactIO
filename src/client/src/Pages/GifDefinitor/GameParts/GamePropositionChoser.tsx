@@ -6,6 +6,7 @@ import { DefaultProps, injector } from '../../../mobxInjector'
 import Gif from '../components/Gif';
 import { Input, Button } from '@material-ui/core';
 import { prefix } from 'limitelimite-common/GifDefinitor/GifDefinitor';
+import Proposition from '../components/Proposition';
 
 interface GamePropositionChoserProps extends DefaultProps {
     gifUrl: string
@@ -39,10 +40,11 @@ class GamePropositionChoser extends React.Component <GamePropositionChoserProps,
 
     renderPropositions(){
         return this.props.propositions.map( (p, k) => 
-            <div 
+            <Proposition 
                 className="props-list-elt"
                 onClick={() => this.selectProposition(k)}
-            >{p}</div> 
+                content={p}
+            /> 
         )
     }
 
