@@ -7,19 +7,19 @@ import Gif from '../components/Gif';
 import { Input, Button } from '@material-ui/core';
 import { prefix } from 'limitelimite-common/GifDefinitor/GifDefinitor';
 
-interface GameResultProps extends DefaultProps {
+interface GamePropositionSenderProps extends DefaultProps {
     gifUrl: string
 }
-interface GameResultState {
+interface GamePropositionSenderState {
     propostion: string
 }
 
 @inject(injector)
 @observer
 @socketConnect
-class GameResult extends React.Component <GameResultProps, GameResultState> {
+class GamePropositionSender extends React.Component <GamePropositionSenderProps, GamePropositionSenderState> {
 
-    constructor(props: GameResultProps){
+    constructor(props: GamePropositionSenderProps){
         super(props)
         this.state = {
             propostion: ''
@@ -56,4 +56,4 @@ class GameResult extends React.Component <GameResultProps, GameResultState> {
     }
 }
 
-export default GameResult;
+export default GamePropositionSender;
