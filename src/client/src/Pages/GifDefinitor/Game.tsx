@@ -69,6 +69,14 @@ class Game extends React.Component <GameProps, GameState> {
         this.props.socket.emit(prefix + 'game:start')
     }
 
+    handleSendProp = (propostion: string) => {
+        this.props.socket.emit(prefix + 'game:send-prop', propostion)
+    }
+
+    handleVote = (propostionChoice: number) => {
+        this.props.socket.emit(prefix + 'game:send-vote', propostionChoice)
+    }
+
     renderPlayers(){
         console.log('show players', this.state.players)
         return this.state.players.map( (p: PlayerListUIElt, k) => 
@@ -113,6 +121,7 @@ class Game extends React.Component <GameProps, GameState> {
                     {this.state.gameStatus === GameStatus.InGame && !this.state.propositions &&
                         <GamePropositionSender
                             gifUrl={this.state.gifUrl}
+                            handleSendProp={this.handleSendProp}
                         />
                     }
 
@@ -120,6 +129,7 @@ class Game extends React.Component <GameProps, GameState> {
                         <GamePropositionChoser
                             propositions={this.state.propositions}
                             gifUrl={this.state.gifUrl}
+                            handleVote={this.handleVote}
                         />
                     }                 
                     
