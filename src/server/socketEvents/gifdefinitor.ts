@@ -1,11 +1,12 @@
-import { serialize, deserialize } from 'serializr'
+import { serialize, deserialize, getDefaultModelSchema } from 'serializr'
 
 import { SuperSocket } from '../SuperSocket';
-import { GameCollection } from '../../common';
+import { GameCollection, GameStatus } from '../../common';
 import { MultiplayerGame } from '../../common/modules/MultiplayerGame';
 
 import { Game as GifDefinitorGame } from '../../common/GifDefinitor/Game'
 import { prefix, NB_SECONDS_BEFORE_NEXT_TURN } from '../../common/GifDefinitor/GifDefinitor'
+import { Game } from '../../common/TarotCongolais/Game';
 
 export const addLimiteLimiteEvents = (socket: SuperSocket, GC: GameCollection) => {
     socket.on(prefix + 'game:ask_initial_infos', () => {
@@ -19,9 +20,9 @@ export const addLimiteLimiteEvents = (socket: SuperSocket, GC: GameCollection) =
         let game = GC.getGameWithUser(socket.id)
         if(game){
             game.start()
-            let gd = game.gameInstance as GifDefinitorGame
-            await gd.startGame()
-            const gif = serialize(gd.currentGif)
+            let gdgame = game.gameInstance as GifDefinitorGame
+            await gdgame.startGame()
+            const gif = serialize(gdgame.currentGif)
 
             sendGameInfos(socket, game)
             updateUI(socket, game)
@@ -32,14 +33,14 @@ export const addLimiteLimiteEvents = (socket: SuperSocket, GC: GameCollection) =
         let game = GC.getGameWithUser(socket.id)
         if(game){
             // game
-            let gd = game.gameInstance as GifDefinitorGame
-            gd.turn.addProposition({
+            let gdgame = game.gameInstance as GifDefinitorGame
+            gdgame.turn.addProposition({
                 player: socket.getOrCreatePlayer(), 
                 sentence: proposition
             })
             
-            if(gd.turn.allPlayersAnswered()){
-                socket.server.in(game.id).emit(prefix + 'game:players.time_to_vote', gd.turn.propositions.map(p => p.sentence))
+            if(gdgame.turn.allPlayersAnswered()){
+                socket.server.in(game.id).emit(prefix + 'game:players.time_to_vote', gdgame.turn.propositions.map(p => p.sentence))
             }
             else {
                 socket.emit(prefix + 'game:player.player_has_played')
@@ -53,14 +54,14 @@ export const addLimiteLimiteEvents = (socket: SuperSocket, GC: GameCollection) =
         let game = GC.getGameWithUser(socket.id)
         if(game){
             // game
-            let gd = game.gameInstance as GifDefinitorGame
-            gd.turn.addVote({
+            let gdgame = game.gameInstance as GifDefinitorGame
+            gdgame.turn.addVote({
                 voter: socket.getOrCreatePlayer(), 
                 propositionIndex: propositionIndex
             })
             
-            if(gd.turn.allPlayerVoted()){
-                socket.server.in(game.id).emit(prefix + 'game:players.results_ready', gd.turn.votes.map(v => v.))
+            if(gdgame.turn.allPlayerVoted()){
+                socket.server.in(game.id).emit(prefix + 'game:players.results_ready', gdgame.turn.votes.map(v => v.))
             }
             else {
                 socket.emit(prefix + 'game:player.player_has_played')
@@ -74,22 +75,22 @@ export const addLimiteLimiteEvents = (socket: SuperSocket, GC: GameCollection) =
         let game = GC.getGameWithUser(socket.id)
         console.log('socket end turn:', !!game, propositionCardIndex)
         if(game){
-            let gd = game.gameInstance as GifDefinitorGame
-            let winners = gd.turn.getWinners()
-            gd.nextTurn()
+            let gdgame = game.gameInstance as GifDefinitorGame
+            let winners = gdgame.turn.getWinners()
+            gdgame.nextTurn()
             socket.server.in(game.id).emit(prefix + 'game:players.turn_is_complete', propositionCardIndex, winnerPlayerName)
 
             setTimeout( () => {
-                gd = gd as GifDefinitorGame
-                const sentence = serialize(gd.currentSentenceCard)
-                console.log(gd.getMainPlayerSocketId(), gd.getPropsPlayersSocketIds());
-                socket.server.to(`${gd.getMainPlayerSocketId()}`).emit(prefix + 'game:mp.new_turn', sentence)
-                gd.getPropsPlayersSocketIds().forEach( (socketId: string) => {
-                    const p = (gd as GifDefinitorGame).getPlayer(socketId)
+                gdgame = gdgame as GifDefinitorGame
+                const sentence = serialize(gdgame.currentSentenceCard)
+                console.log(gdgame.getMainPlayerSocketId(), gdgame.getPropsPlayersSocketIds());
+                socket.server.to(`${gdgame.getMainPlayerSocketId()}`).emit(prefix + 'game:mp.new_turn', sentence)
+                gdgame.getPropsPlayersSocketIds().forEach( (socketId: string) => {
+                    const p = (gdgame as GifDefinitorGame).getPlayer(socketId)
                     const hand = p && serialize(p.hand)
                     socket.server.to(`${socketId}`).emit(prefix + 'game:op.new_turn', sentence, hand)
                 })
-                sendGameInfos(socket, gd)
+                sendGameInfos(socket, gdgame)
             }, NB_SECONDS_BEFORE_NEXT_TURN  * 1000)
         }
     })
@@ -97,22 +98,53 @@ export const addLimiteLimiteEvents = (socket: SuperSocket, GC: GameCollection) =
 }
 
 function sendGameInfos(socket: SuperSocket, game: MultiplayerGame){
-    let gd = game.gameInstance as GifDefinitorGame
-    const playersToShow: any[] = gd ? gd.players : game.players
+    let gdgame = game.gameInstance as GifDefinitorGame
+    const playersToShow: any[] = gdgame ? gdgame.players : game.players
     const uiPlayers = playersToShow.map( (p) => {
-        const hasPlayedOrVoted = gd && (
-                (!gd.turn.allPlayersAnswered() && gd.turn.hasAnswered(p) ) 
-            ||  (gd.turn.allPlayersAnswered() && gd.turn.hasVoted(p))
+        const hasPlayedOrVoted = gdgame && (
+                (!gdgame.turn.allPlayersAnswered() && gdgame.turn.hasAnswered(p) ) 
+            ||  (gdgame.turn.allPlayersAnswered() && gdgame.turn.hasVoted(p))
         )
         return {
             name: p.surname,
-            score: gd ? gd.getScore(p) : 0,
+            score: gdgame ? gdgame.getScore(p) : 0,
             hasPlayedOrVoted
         }
     })
     // console.log('game:player.ask_initial_infos', game.id, uiPlayers, game.isFirstPlayer(socket.id), initialChat)
-    let myIndex = gd? gd.getPlayerIndex(gd.getPlayer(socket.id)) : game.getPlayerIndex(game.getPlayer(socket.id))
+    let myIndex = gdgame? gdgame.getPlayerIndex(gdgame.getPlayer(socket.id)) : game.getPlayerIndex(game.getPlayer(socket.id))
     console.log('prefix on super socket', prefix)
-    socket.emit(prefix + 'game:player.ask_initial_infos', game.id, uiPlayers, gd ? gd.isFirstPlayer(socket.id) : game.isFirstPlayer(socket.id), myIndex)
+    socket.emit(prefix + 'game:player.ask_initial_infos', game.id, uiPlayers, gdgame ? gdgame.isFirstPlayer(socket.id) : game.isFirstPlayer(socket.id), myIndex)
     socket.baseSocket.to(game.id).broadcast.emit(prefix + 'game:players.new_player', uiPlayers)
+}
+
+function updateUI(socket: SuperSocket, game: MultiplayerGame){
+    let gameId = game.id
+    let gdgame = game.gameInstance as GifDefinitorGame
+    let gameStatus;
+    if(gdgame){
+        if(gdgame.turn && gdgame.turn.allPlayerVoted()){
+            gameStatus = GameStatus.Result
+        }
+        else {
+            gameStatus = GameStatus.InGame
+        }
+    }
+    else {
+        gameStatus = GameStatus.Preparing
+    }
+
+    if(gdgame){
+        gdgame.players.forEach(p => {
+            let msgObj = {
+                gifUrl: gdgame.currentGif,
+                isCreator: game.players[0].isEqual(p),
+                gameStatus,
+                propositions: gdgame.turn ? gdgame.turn.propositions : null,
+                chosenPropositionIndexes: (gdgame.turn && gdgame.turn.allPlayerVoted()) ? gdgame.turn.getWinners().map(p => gdgame.players.findIndex(pElt => pElt.isEqual(p))) : null,
+                winnerPlayerNames: (gdgame.turn && gdgame.turn.allPlayerVoted()) ? gdgame.turn.getWinners() : null,
+                myIndex: game.players.findIndex(pElt => pElt.isEqual(p))
+            }
+        })
+    }
 }

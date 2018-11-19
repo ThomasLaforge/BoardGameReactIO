@@ -65,6 +65,7 @@ class Game extends React.Component <GameProps, GameState> {
         }
     }
 
+    // socket events
     startGame = () => {
         this.props.socket.emit(prefix + 'game:start')
     }
@@ -127,18 +128,18 @@ class Game extends React.Component <GameProps, GameState> {
 
                     {this.state.gameStatus === GameStatus.InGame && this.state.propositions &&
                         <GamePropositionChoser
-                            propositions={this.state.propositions}
                             gifUrl={this.state.gifUrl}
+                            propositions={this.state.propositions}
                             handleVote={this.handleVote}
                         />
                     }                 
                     
                     {this.state.gameStatus === GameStatus.Result &&
                         <GameResult
+                            gifUrl={this.state.gifUrl}
                             propositions={this.state.propositions}
                             chosenPropositionIndexes={this.state.chosenPropositionIndexes}
                             winnerPlayerNames={this.state.winnerPlayerNames}
-                            gifUrl={this.state.gifUrl}
                         />
                     }
                 </div>
