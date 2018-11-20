@@ -22,7 +22,6 @@ export const addGifDefinitorEvents = (socket: SuperSocket, GC: GameCollection) =
             let gdgame = game.gameInstance as GifDefinitorGame
             await gdgame.startGame()
 
-            sendGameInfos(socket, game)
             updateUI(socket, game)
         }
     })
@@ -37,14 +36,14 @@ export const addGifDefinitorEvents = (socket: SuperSocket, GC: GameCollection) =
                 sentence: proposition
             })
             
-            if(gdgame.turn.allPlayersAnswered()){
-                socket.server.in(game.id).emit(prefix + 'game:players.time_to_vote', gdgame.turn.propositions.map(p => p.sentence))
-            }
-            else {
-                socket.emit(prefix + 'game:player.player_has_played')
-            }
+            // if(gdgame.turn.allPlayersAnswered()){
+            //     socket.server.in(game.id).emit(prefix + 'game:players.time_to_vote', gdgame.turn.propositions.map(p => p.sentence))
+            // }
+            // else {
+            //     socket.emit(prefix + 'game:player.player_has_played')
+            // }
 
-            sendGameInfos(socket, game)
+            updateUI(socket, game)
         }
     })
 
@@ -56,34 +55,22 @@ export const addGifDefinitorEvents = (socket: SuperSocket, GC: GameCollection) =
             gdgame.turn.addVote({
                 voter: socket.getOrCreatePlayer(), 
                 propositionIndex: propositionIndex
-            })
+            })  
+            
+            updateUI(socket, game)
             
             if(gdgame.turn.allPlayerVoted()){
-                socket.server.in(game.id).emit(prefix + 'game:players.results_ready', gdgame.turn.votes.map(v => v.propositionIndex))
+                console.log('nextTurn start in ', NB_SECONDS_BEFORE_NEXT_TURN, ' seconds')            
+                setTimeout( async () => {
+                    gdgame = gdgame as GifDefinitorGame
+                    await gdgame.nextTurn()
+                    console.log('nextTurn send new turn')
+                    updateUI(socket, game as MultiplayerGame)
+                }, NB_SECONDS_BEFORE_NEXT_TURN  * 1000)
             }
-            else {
-                socket.emit(prefix + 'game:player.player_has_played')
-            }
-
-            sendGameInfos(socket, game)
-        }
-    })
-
-    socket.on(prefix + 'game:get_results', (propositionCardIndex: number) => {
-        let game = GC.getGameWithUser(socket.id)
-        let gdgame = game && game.gameInstance as GifDefinitorGame
-
-        if(game && gdgame && gdgame.turn){
-            let winners = gdgame.turn.getWinners()
-            gdgame.nextTurn()
-            // socket.server.in(game.id).emit(prefix + 'game:players.turn_is_complete', propositionIndexes, winnerPlayerNames)
-
-            setTimeout( () => {
-                gdgame = gdgame as GifDefinitorGame
-                gdgame.players.forEach(p => {
-                    sendGameInfos(socket, game as MultiplayerGame)
-                })
-            }, NB_SECONDS_BEFORE_NEXT_TURN  * 1000)
+            // else {
+            //     socket.emit(prefix + 'game:player.player_has_played')
+            // }
         }
     })
 
@@ -127,11 +114,24 @@ function updateUI(socket: SuperSocket, game: MultiplayerGame){
 
     if(gdgame){
         gdgame.players.forEach(p => {
+            let propositions;
+            if(gdgame.turn && gdgame.turn.propositions && gdgame.turn.propositions.length === gdgame.players.length){
+                if(gdgame.turn.allPlayerVoted()){
+                    propositions = gdgame.turn.propositions
+                }
+                else {
+                    propositions = gdgame.turn.propositions.filter(prop => !prop.player.isEqual(p))
+                }
+            } 
+            else {
+                propositions = null
+            }
+
             let msgObj: any = {
-                gifUrl: gdgame.currentGif,
-                isCreator: game.players[0].isEqual(p),
+                gifUrl: gdgame.currentGif && gdgame.currentGif.url,
+                // isCreator: game.players[0].isEqual(p),
                 gameStatus,
-                propositions: gdgame.turn ? gdgame.turn.propositions : null,
+                propositions,
                 chosenPropositionIndexes: (gdgame.turn && gdgame.turn.allPlayerVoted()) ? gdgame.turn.getWinners().map(p => gdgame.players.findIndex(pElt => pElt.isEqual(p))) : null,
                 winnerPlayerNames: (gdgame.turn && gdgame.turn.allPlayerVoted()) ? gdgame.turn.getWinners() : null,
                 myIndex: game.players.findIndex(pElt => pElt.isEqual(p))

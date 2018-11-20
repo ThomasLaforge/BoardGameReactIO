@@ -4,6 +4,7 @@ interface PropositionProps {
     content: string
     onClick?: Function
     className?: string
+    selected?: boolean
 }
 interface PropositionState {
 }
@@ -17,8 +18,12 @@ class Proposition extends React.Component <PropositionProps, PropositionState> {
     }
 
     render() {
+        console.log('content of prop', this.props.content)
         return (
-            <div className={"proposition" + (this.props.className ? ' ' + this.props.className : '')}>
+            <div className={ "proposition" 
+                + (this.props.className ? ' ' + this.props.className : '') 
+                + (this.props.selected ? ' proposition-selected' : '')
+            }>
                 <div className='proposition-content'
                     onClick={() => this.props.onClick && this.props.onClick()}
                 >

@@ -105,123 +105,85 @@
       }
     }
 
-    .game-main-player {
-      @include fullFlex();
-      flex-direction: column;
-      justify-content: space-between;
-
-      .game-main-player-sentence {
-        margin: auto;
-      }
-
-      .game-main-player-infos {
-        @include infoBox();
-        margin: 40px auto;
-      }
-    }
-
-    .game-prop-player {
+    .game-prop {
       @include fullFlex();
       flex-direction: column;
       justify-content: space-around;
-      
-      .sentence {
-        margin: auto;          
+
+      .game-prop-gif {
       }
 
-      .hand {
-        display: flex;
-        flex-direction: row;
-        flex-wrap: wrap;
-        justify-content: center;
+      .game-prop-form {
+        margin: auto;
+        width: 400px;
 
-        .card {
-          margin: 20px 25px;
-        }
-
-        .proposition-index {
+        .game-prop-input {
           width: 100%;
-          text-align: center;
-          color: $blue;
-          font-weight: bold;
-          font-size: 20px;
-          height: 35px;
         }
 
-        .selected-proposition{
-          position: relative;
-          
+        .game-prop-send-submit {
+          width: 20%;
+          margin: 20px auto;
+          // .game-prop-send-btn {
+          //   margin: auto;
+          // }
         }
 
-        .selected-proposition:after {
-          content: '';
-          position: absolute;
-          top: -5px;
-          left: -5px;
-          bottom: -5px;
-          right: -5px;
-          border: 5px lightgreen solid;
-          border-radius: 15px;
-        }
-
-      }
-
-      .send-button {
-        @include limitelimiteBtn();
-        width: 125px;
-        margin: auto;
-      }
-      .send-button-disabled {
-        background-color: lighten($color: $red, $amount: 15)
-      }
-
-      .game-infos-zone {
-        @include infoBox();
       }
     }
 
-  }
-
-  .game-result {
-    @include fullFlex();
-    flex-direction: column;
-    justify-content: space-around;
-    
-    .game-result-sentence {
-      margin: auto;
-    }
-    .game-result-propositions {
-      margin: auto;
-      display: flex;
-      flex-direction: row;
+    .game-vote {
+      @include fullFlex();
+      flex-direction: column;
       justify-content: space-around;
-      width: 100%;
-      flex-wrap: wrap;
 
-      .player-propositions {
-        @include fullFlex();
-        width: fit-content;
-        padding: 25px;
-        margin: 20px;
-        border: 3px solid $blue;
-        border-radius: 10px;
+      .game-vote-gif {
+      }
 
-        .propositon-card {
-          margin: 0 10px;
+      .game-vote-form {
+        margin: auto;
+        width: 400px;
+
+        .game-vote-input {
+          width: 100%;
         }
-      }
 
-      .chosen-prop {
-        border-color: $red;
+        .game-vote-send-submit {
+          width: 20%;
+          margin: 20px auto;
+          // .game-prop-send-btn {
+          //   margin: auto;
+          // }
+        }
+
       }
     }
-    .game-result-indication {
-      @include infoBox();
+  }
+}
 
-      
-      .timer {
-       display: inline; 
-      }
-    }
+.game-infos-zone {
+  @include infoBox();
+}
+
+.proposition {
+  width: 200px;
+  padding: 10px;
+  border: 3px solid black;
+  border-radius: 10px;
+}
+
+.proposition-selected {
+  border-color: greenyellow;
+}
+
+$gif_heigth: 300px;
+
+.gif {
+  margin: 15px auto;
+  height: $gif_heigth;
+  max-height: $gif_heigth;
+
+  .gif-img {
+    height: 100%;
   }
 }

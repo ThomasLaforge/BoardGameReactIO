@@ -12,6 +12,7 @@ interface GamePropositionChoserProps extends DefaultProps {
     gifUrl: string
     propositions: string[]
     handleVote: Function
+    hasVotedProp: boolean
 }
 interface GamePropositionChoserState {
     propostionChoice: number
@@ -30,17 +31,19 @@ class GamePropositionChoser extends React.Component <GamePropositionChoserProps,
     }
 
     selectProposition = (index: number) => {
+        console.log('choice', index)
         this.setState({
             propostionChoice: (this.state.propostionChoice === index) ? null : index
         })
     }
 
     renderPropositions(){
-        return this.props.propositions.map( (p, k) => 
+        return this.props.propositions.map( (p: any, k) => 
             <Proposition 
                 className="props-list-elt"
                 onClick={() => this.selectProposition(k)}
-                content={p}
+                content={p.sentence}
+                selected={this.state.propostionChoice === k}
             /> 
         )
     }
@@ -56,8 +59,16 @@ class GamePropositionChoser extends React.Component <GamePropositionChoserProps,
                 </div>
                 <div className="game-prop-send-btn">
                     <Button 
+                        variant='raised'
                         onClick={() => this.props.handleVote(this.state.propostionChoice)}
+                        disabled={this.props.hasVotedProp}
                     >Send</Button>
+                </div>
+                <div className='game-infos-zone'>
+                    {this.props.hasVotedProp 
+                        ? 'Please wait other players send their vote...'
+                        : 'Select the best proposal, then submit it when you are happy with it!'
+                    }
                 </div>
             </div>
         );

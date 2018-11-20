@@ -5,6 +5,8 @@ import { DefaultProps, injector } from '../../../mobxInjector'
 
 import Gif from '../components/Gif';
 import Proposition from '../components/Proposition';
+import { NB_SECONDS_BEFORE_NEXT_TURN } from 'limitelimite-common/GifDefinitor/GifDefinitor';
+import Timer from 'src/components/Timer';
 
 interface GameResultProps extends DefaultProps {
     gifUrl: string
@@ -27,11 +29,11 @@ class GameResult extends React.Component <GameResultProps, GameResultState> {
     }
 
     renderPropositions(){
-        console.log('props', this.props.propositions)
-        return this.props.propositions.map( (p, k) =>   
+        console.log('props', this.props.propositions, this.props.winnerPlayerNames, this.props.chosenPropositionIndexes)
+        return this.props.propositions.map( (p: any, k) =>   
             <Proposition 
                 key={k} 
-                content={p}
+                content={p.sentence}
             />
         )
     }
@@ -45,7 +47,8 @@ class GameResult extends React.Component <GameResultProps, GameResultState> {
                 <div className="game-result-propositions">
                     {this.renderPropositions()}
                 </div>
-                <div className='game-zone-info'>
+                <div className='game-infos-zone'>
+                    <Timer duration={NB_SECONDS_BEFORE_NEXT_TURN}/>
                 </div>
             </div>
         );

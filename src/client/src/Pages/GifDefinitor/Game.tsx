@@ -17,16 +17,22 @@ import Chat from '../../components/Chat';
 
 import './game.scss'
 
+interface PlayerGifDefinitor { 
+    name: string, 
+    score: number, 
+    hasPlayedOrVoted: boolean
+}
+
 interface GameProps extends DefaultProps {
 }
 interface GameState {
     gameId: string
     isCreator: boolean
     gameStatus: GameStatus
-    players: PlayerListUI
+    players: PlayerGifDefinitor[]
 
     gifUrl?: string
-    propositions?: any
+    propositions?: string[]
     chosenPropositionIndexes?: number[]
     winnerPlayerNames?: string[]
     myIndex?: number
@@ -53,13 +59,20 @@ class Game extends React.Component <GameProps, GameState> {
             const socket = this.props.socket
             socket.emit(prefix + 'game:ask_initial_infos')
 
-            socket.on(prefix + 'game:player.ask_initial_infos', (gameId: string, players: PlayerListUI, isCreator: boolean, myIndex: number, initialChat: ChatMessage[]) => {
-                console.log('players1', gameId, players, isCreator, myIndex, initialChat)
+            socket.on(prefix + 'game:player.ask_initial_infos', (gameId: string, players: PlayerGifDefinitor[], isCreator: boolean, myIndex: number, initialChat: ChatMessage[]) => {
+                console.log('players1', gameId, isCreator, players, myIndex, initialChat)
                 this.setState({gameId, isCreator, players, myIndex })
             })
-            socket.on(prefix + 'game:players.new_player', (players: PlayerListUI) => {
+            socket.on(prefix + 'game:players.new_player', (players: PlayerGifDefinitor[]) => {
                 console.log('players2', players)
                 this.setState({ players })
+            })
+
+            socket.on(prefix + 'game:players.update', (gifUrl, gameStatus, propositions, chosenPropositionIndexes, winnerPlayerNames, myIndex) => {
+                console.log('players update', gifUrl, gameStatus, propositions, chosenPropositionIndexes, winnerPlayerNames, myIndex)
+                this.setState({ 
+                    gifUrl, gameStatus, propositions, chosenPropositionIndexes, winnerPlayerNames, myIndex
+                })
             })
 
         }
@@ -71,16 +84,17 @@ class Game extends React.Component <GameProps, GameState> {
     }
 
     handleSendProp = (propostion: string) => {
-        this.props.socket.emit(prefix + 'game:send-prop', propostion)
+        console.log('send prop', propostion)
+        this.props.socket.emit(prefix + 'game:send_prop', propostion)
     }
 
     handleVote = (propostionChoice: number) => {
-        this.props.socket.emit(prefix + 'game:send-vote', propostionChoice)
+        this.props.socket.emit(prefix + 'game:send_vote', propostionChoice)
     }
 
     renderPlayers(){
-        console.log('show players', this.state.players)
-        return this.state.players.map( (p: PlayerListUIElt, k) => 
+        console.log('show players', this.state.players, this.state.propositions)
+        return this.state.players.map( (p: PlayerGifDefinitor, k) => 
             <div 
                 key={k}
                 className={'player' 
@@ -122,6 +136,7 @@ class Game extends React.Component <GameProps, GameState> {
                     {this.state.gameStatus === GameStatus.InGame && !this.state.propositions &&
                         <GamePropositionSender
                             gifUrl={this.state.gifUrl}
+                            hasSendProp={this.state.players[this.state.myIndex].hasPlayedOrVoted}
                             handleSendProp={this.handleSendProp}
                         />
                     }
@@ -131,6 +146,7 @@ class Game extends React.Component <GameProps, GameState> {
                             gifUrl={this.state.gifUrl}
                             propositions={this.state.propositions}
                             handleVote={this.handleVote}
+                            hasVotedProp={this.state.players[this.state.myIndex].hasPlayedOrVoted}
                         />
                     }
                     
