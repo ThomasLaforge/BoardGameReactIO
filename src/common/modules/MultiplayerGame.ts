@@ -22,6 +22,8 @@ export class MultiplayerGame extends Game {
             switch (gameType) {
                 case GameType.LimiteLimite:
                     nbPlayer = 0; break;
+                case GameType.GifDefinitor:
+                    nbPlayer = 0; break;
                 case GameType.TarotCongolais:
                     nbPlayer = 2; break;
                 default:
@@ -35,6 +37,7 @@ export class MultiplayerGame extends Game {
         console.log('multiplayer game start', this.canStart())
         if(this.canStart()){
             super.start(this.players)
+            this._forcedIsFull = true
         }
         else {
             throw Error('can\t start the game')
