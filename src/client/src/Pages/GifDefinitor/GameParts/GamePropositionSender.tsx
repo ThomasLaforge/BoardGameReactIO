@@ -9,6 +9,7 @@ import { prefix } from 'limitelimite-common/GifDefinitor/GifDefinitor';
 
 interface GamePropositionSenderProps extends DefaultProps {
     gifUrl: string
+    handleSendProp: Function
 }
 interface GamePropositionSenderState {
     propostion: string
@@ -30,10 +31,6 @@ class GamePropositionSender extends React.Component <GamePropositionSenderProps,
         this.setState({ propostion: e.target.value })
     }
 
-    handleSendProp = () => {
-        this.props.socket.emit(prefix + 'game:send-prop', this.state.propostion)
-    }
-
     render() {
         return (
             <div className="game-prop">
@@ -48,7 +45,7 @@ class GamePropositionSender extends React.Component <GamePropositionSenderProps,
                 </div>
                 <div className="game-prop-send-btn">
                     <Button 
-                        onClick={this.handleSendProp}
+                        onClick={() => this.props.handleSendProp(this.state.propostion)}
                     >Send</Button>
                 </div>
             </div>

@@ -11,6 +11,7 @@ import Proposition from '../components/Proposition';
 interface GamePropositionChoserProps extends DefaultProps {
     gifUrl: string
     propositions: string[]
+    handleVote: Function
 }
 interface GamePropositionChoserState {
     propostionChoice: number
@@ -26,10 +27,6 @@ class GamePropositionChoser extends React.Component <GamePropositionChoserProps,
         this.state = {
             propostionChoice: null
         }
-    }
-
-    handleVote = () => {
-        this.props.socket.emit(prefix + 'game:send-vote', this.state.propostionChoice)
     }
 
     selectProposition = (index: number) => {
@@ -59,7 +56,7 @@ class GamePropositionChoser extends React.Component <GamePropositionChoserProps,
                 </div>
                 <div className="game-prop-send-btn">
                     <Button 
-                        onClick={this.handleVote}
+                        onClick={() => this.props.handleVote(this.state.propostionChoice)}
                     >Send</Button>
                 </div>
             </div>
