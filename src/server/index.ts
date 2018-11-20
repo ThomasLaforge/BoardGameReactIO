@@ -13,6 +13,7 @@ import { addLoginEvents } from './socketEvents/login'
 import { addLobbyEvents } from './socketEvents/lobby'
 import { addLimiteLimiteEvents } from './socketEvents/limitelimite'
 import { addTarotCongolaisEvents } from './socketEvents/tarotCongolais'
+import { addGifDefinitorEvents } from './socketEvents/gifDefinitor'
 import { addChatEvents } from './socketEvents/chat'
 
 import { GameCollection } from '../common/modules/GameCollection';
@@ -53,6 +54,7 @@ io.on('connection', (baseSocket: ExtendedSocket) => {
   addLobbyEvents(socket, GC)
   addLimiteLimiteEvents(socket, GC)
   addTarotCongolaisEvents(socket, GC)
+  addGifDefinitorEvents(socket, GC)
 
   socket.on('reconnecting', () => {
     console.log('reconnecting...')

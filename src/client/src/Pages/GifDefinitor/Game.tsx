@@ -121,7 +121,7 @@ class Game extends React.Component <GameProps, GameState> {
                             propositions={this.state.propositions}
                             gifUrl={this.state.gifUrl}
                         />
-                    }                 
+                    }
                     
                     {this.state.gameStatus === GameStatus.Result &&
                         <GameResult

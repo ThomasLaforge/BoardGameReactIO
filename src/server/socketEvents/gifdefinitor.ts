@@ -7,7 +7,7 @@ import { MultiplayerGame } from '../../common/modules/MultiplayerGame';
 import { Game as GifDefinitorGame } from '../../common/GifDefinitor/Game'
 import { prefix, NB_SECONDS_BEFORE_NEXT_TURN } from '../../common/GifDefinitor/GifDefinitor'
 
-export const addLimiteLimiteEvents = (socket: SuperSocket, GC: GameCollection) => {
+export const addGifDefinitorEvents = (socket: SuperSocket, GC: GameCollection) => {
     socket.on(prefix + 'game:ask_initial_infos', () => {
         let game = GC.getGameWithUser(socket.id)
         if(game){
