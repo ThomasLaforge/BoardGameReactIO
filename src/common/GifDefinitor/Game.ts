@@ -29,6 +29,7 @@ export class Game {
     }
     async nextTurn(){
         if(this.turn){
+            this.history = this.history.concat(this.turn)
             await this.startTurn()
         }
         else {
