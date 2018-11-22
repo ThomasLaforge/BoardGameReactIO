@@ -8,9 +8,9 @@ export class Turn {
     public gif: Gif
     public votes: Vote[]
     public propositions: Proposition[]
-    public scrumbler: number[]
+    public scrumbler?: number[]
 
-    constructor(players: Player[], gif: Gif, scrumbler: number[]){
+    constructor(players: Player[], gif: Gif, scrumbler?: number[]){
         this.players = players
         this.gif = gif
         this.votes = []
