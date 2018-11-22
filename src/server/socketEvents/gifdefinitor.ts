@@ -47,24 +47,33 @@ export const addGifDefinitorEvents = (socket: SuperSocket, GC: GameCollection) =
         }
     })
 
-    socket.on(prefix + 'game:send_vote', (propositionIndex: number) => {
+    socket.on(prefix + 'game:send_vote', (uiPropositionIndex: number) => {
         let game = GC.getGameWithUser(socket.id)
         let gdgame = game && game.gameInstance as GifDefinitorGame
         if(game && gdgame && gdgame.turn){
-            // game
+            const player = socket.getOrCreatePlayer()
+            
+            // get proposition index from ui proposition index
+            let propositionIndex = uiPropositionIndex
+            if( gdgame.getPlayerIndex(player) <= uiPropositionIndex ){
+                propositionIndex++
+            }
+
+            // add vote
             gdgame.turn.addVote({
-                voter: socket.getOrCreatePlayer(), 
+                voter: player, 
                 propositionIndex: propositionIndex
             })  
             
             updateUI(socket, game)
-            
+
+            // If turn is complete, wait x seconds and start the next turn
             if(gdgame.turn.allPlayerVoted()){
                 console.log('nextTurn start in ', NB_SECONDS_BEFORE_NEXT_TURN, ' seconds')            
                 setTimeout( async () => {
                     gdgame = gdgame as GifDefinitorGame
                     await gdgame.nextTurn()
-                    console.log('nextTurn send new turn')
+                    console.log('nextTurn send new turn', gdgame.players.map(p => gdgame && gdgame.getScore(p)))
                     updateUI(socket, game as MultiplayerGame)
                 }, NB_SECONDS_BEFORE_NEXT_TURN  * 1000)
             }
