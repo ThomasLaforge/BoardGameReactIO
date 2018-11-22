@@ -81,7 +81,7 @@ export class Turn {
     }
 
     isWinner(p: Player){
-        return this.getWinners().filter( (winner: Player) => winner.isEqual(p)).length
+        return this.getWinners().filter( (winner: Player) => winner.isEqual(p)).length === 1
     }
 
     hasAnswered(p: Player){
