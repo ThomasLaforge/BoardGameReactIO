@@ -61,7 +61,7 @@ class GamePropositionChoser extends React.Component <GamePropositionChoserProps,
                     <Button 
                         variant='raised'
                         onClick={() => this.props.handleVote(this.state.propostionChoice)}
-                        disabled={this.props.hasVotedProp}
+                        disabled={this.props.hasVotedProp || this.state.propostionChoice === null}
                     >Send</Button>
                 </div>
                 <div className='game-infos-zone'>
