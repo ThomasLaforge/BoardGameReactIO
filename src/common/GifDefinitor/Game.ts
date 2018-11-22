@@ -29,9 +29,6 @@ export class Game {
     }
     async nextTurn(){
         if(this.turn){
-            this.turn.getWinners().forEach(winner => {
-                winner.score++
-            })
             await this.startTurn()
         }
         else {
@@ -43,13 +40,19 @@ export class Game {
         return this.players.map( (p, i) => i).sort( () => .5 - Math.random()) }
     
     async getRandomGif(){
-        return fetch('https://api.giphy.com/v1/gifs/random?api_key=wrxBKkmJ1o4LqGeNg7TueyumUzagodPR&rating=r')
-            .catch(e => console.error('error on getting gif', e))
-            .then(res => res && res.json())
-            .then(json => {
-                // console.log('gif json', json.data.images.original.url)
-                return new Gif(json.data.images.original.url)
-        });
+        let gifUrl: string;
+
+        try {
+            let gifData = await fetch('https://api.giphy.com/v1/gifs/random?api_key=wrxBKkmJ1o4LqGeNg7TueyumUzagodPR&rating=r')
+            let gifDataJson = await gifData.json()
+            gifUrl = gifDataJson.data.images.original.url
+        }
+        catch(e){
+            console.error('error on getting gif', e)
+            gifUrl = 'default_gif_url'
+        }
+        
+        return new Gif(gifUrl)
     }
 
     getScore(p: Player){
@@ -95,5 +98,9 @@ export class Game {
 
     get currentGif(){
         return this.turn && this.turn.gif
+    }
+
+    getPlayerIndex(player: Player){
+        return this.players.findIndex(p => p.isEqual(player))
     }
 }
