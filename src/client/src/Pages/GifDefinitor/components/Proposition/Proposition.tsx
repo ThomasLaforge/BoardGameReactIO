@@ -23,11 +23,12 @@ class Proposition extends React.Component <PropositionProps, PropositionState> {
         console.log('content of prop', this.props.content)
         return (
             <div className={ "proposition" 
-                + (this.props.className ? ' ' + this.props.className : '') 
-                + (this.props.selected ? ' proposition-selected' : '')
-            }>
+                    + (this.props.className ? ' ' + this.props.className : '') 
+                    + (this.props.selected ? ' proposition-selected' : '')
+                }
+                onClick={() => this.props.onClick && this.props.onClick()}
+            >
                 <div className='proposition-content'
-                    onClick={() => this.props.onClick && this.props.onClick()}
                 >
                     {this.props.content} 
                 </div>
