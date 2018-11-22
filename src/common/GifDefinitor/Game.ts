@@ -27,7 +27,17 @@ export class Game {
         const [gif, scrumbler] = await Promise.all( [this.getRandomGif(), this.generateScrumbler() ])
         this.turn = new Turn(this.players, gif, scrumbler)
     }
-    nextTurn = this.startTurn
+    async nextTurn(){
+        if(this.turn){
+            this.turn.getWinners().forEach(winner => {
+                winner.score++
+            })
+            await this.startTurn()
+        }
+        else {
+            throw Error('Try to finish a turn but turn doesnt exist')
+        }
+    }
 
     async generateScrumbler(){
         return this.players.map( (p, i) => i).sort( () => .5 - Math.random()) }
