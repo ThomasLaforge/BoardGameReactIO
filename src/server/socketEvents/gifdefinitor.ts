@@ -83,6 +83,13 @@ export const addGifDefinitorEvents = (socket: SuperSocket, GC: GameCollection) =
         }
     })
 
+    socket.on(prefix + 'debug', () => {
+        let game = GC.getGameWithUser(socket.id)
+        let gdgame = game && game.gameInstance as GifDefinitorGame
+        console.log('---------------------debug---------------------------')
+        // Insert your tests here ...
+    })
+
 }
 
 function sendGameInfos(socket: SuperSocket, game: MultiplayerGame){

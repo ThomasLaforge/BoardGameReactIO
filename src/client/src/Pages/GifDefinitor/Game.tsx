@@ -16,6 +16,7 @@ import GameResult from './GameParts/GameResult';
 import Chat from '../../components/Chat';
 
 import './game.scss'
+import { Button } from '@material-ui/core';
 
 interface PlayerGifDefinitor { 
     name: string, 
@@ -124,6 +125,11 @@ class Game extends React.Component <GameProps, GameState> {
                     </div>
                 </div>
                 <div className="game-content">
+                    {/* <Button 
+                        variant='raised'
+                        onClick={() => this.props.socket.emit(prefix + 'debug')}
+                    >Debug</Button> */}
+
                     {this.state.gameStatus === GameStatus.Preparing &&
                         <GameBeforeStart
                             isCreator={this.state.isCreator}
