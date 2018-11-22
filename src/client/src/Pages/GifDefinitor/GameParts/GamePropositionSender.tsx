@@ -3,7 +3,7 @@ import {socketConnect} from 'socket.io-react'
 import {observer, inject} from 'mobx-react';
 import { DefaultProps, injector } from '../../../mobxInjector'
 
-import Gif from '../components/Gif';
+import Gif from '../components/Gif/Gif';
 import { Input, Button } from '@material-ui/core';
 import { prefix } from 'limitelimite-common/GifDefinitor/GifDefinitor';
 
@@ -38,7 +38,8 @@ class GamePropositionSender extends React.Component <GamePropositionSenderProps,
                 <div className="game-prop-gif">
                     <Gif url={this.props.gifUrl} />
                 </div>
-                <div className="game-prop-form">
+                
+                {!this.props.hasSendProp && <div className="game-prop-form">
                     <div className="game-prop-input">
                         <Input 
                             value={this.state.propostion} 
@@ -55,6 +56,8 @@ class GamePropositionSender extends React.Component <GamePropositionSenderProps,
                         >Send</Button>
                     </div>
                 </div>
+                }
+                
                 <div className='game-infos-zone'>
                     {this.props.hasSendProp 
                         ? 'Please wait other players send their proposition...'

@@ -1,0 +1,15 @@
+$gif_heigth: 300px;
+
+.gif {
+  width: 100%;
+  margin: 15px;
+  height: $gif_heigth;
+  max-height: $gif_heigth;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  
+  .gif-img {
+    flex: 1;
+  }
+}

@@ -19,12 +19,12 @@ export class Turn {
     }
     
     addProposition(prop: Proposition) {
-        const propIndex = this.propositions.findIndex(p => p.player.isEqual(prop.player))
-        if(propIndex === -1){
+        const propIndexOfPlayer = this.propositions.findIndex(p => p.player.isEqual(prop.player))
+        if(propIndexOfPlayer === -1){
             this.propositions = this.propositions.concat(prop)
         }
         else {
-            this.propositions[propIndex] = prop
+            this.propositions[propIndexOfPlayer] = prop
         }
     }
     

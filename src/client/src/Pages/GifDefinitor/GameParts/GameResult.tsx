@@ -3,8 +3,8 @@ import {socketConnect} from 'socket.io-react'
 import {observer, inject} from 'mobx-react';
 import { DefaultProps, injector } from '../../../mobxInjector'
 
-import Gif from '../components/Gif';
-import Proposition from '../components/Proposition';
+import Gif from '../components/Gif/Gif';
+import Proposition from '../components/Proposition/Proposition';
 import { NB_SECONDS_BEFORE_NEXT_TURN } from 'limitelimite-common/GifDefinitor/GifDefinitor';
 import Timer from 'src/components/Timer';
 

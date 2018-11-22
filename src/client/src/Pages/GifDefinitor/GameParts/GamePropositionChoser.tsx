@@ -3,10 +3,10 @@ import {socketConnect} from 'socket.io-react'
 import {observer, inject} from 'mobx-react';
 import { DefaultProps, injector } from '../../../mobxInjector'
 
-import Gif from '../components/Gif';
+import Gif from '../components/Gif/Gif';
 import { Input, Button } from '@material-ui/core';
 import { prefix } from 'limitelimite-common/GifDefinitor/GifDefinitor';
-import Proposition from '../components/Proposition';
+import Proposition from '../components/Proposition/Proposition';
 
 interface GamePropositionChoserProps extends DefaultProps {
     gifUrl: string

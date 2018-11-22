@@ -108,7 +108,7 @@
     .game-prop {
       @include fullFlex();
       flex-direction: column;
-      justify-content: space-around;
+      justify-content: space-between;
 
       .game-prop-gif {
       }
@@ -163,27 +163,4 @@
 
 .game-infos-zone {
   @include infoBox();
-}
-
-.proposition {
-  width: 200px;
-  padding: 10px;
-  border: 3px solid black;
-  border-radius: 10px;
-}
-
-.proposition-selected {
-  border-color: greenyellow;
-}
-
-$gif_heigth: 300px;
-
-.gif {
-  margin: 15px auto;
-  height: $gif_heigth;
-  max-height: $gif_heigth;
-
-  .gif-img {
-    height: 100%;
-  }
 }

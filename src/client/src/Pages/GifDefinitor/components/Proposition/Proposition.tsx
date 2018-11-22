@@ -1,5 +1,7 @@
 import * as React from 'react';
 
+import './proposition.scss'
+
 interface PropositionProps {
     content: string
     onClick?: Function
