@@ -20,7 +20,6 @@ class Proposition extends React.Component <PropositionProps, PropositionState> {
     }
 
     render() {
-        console.log('content of prop', this.props.content)
         return (
             <div className={ "proposition" 
                     + (this.props.className ? ' ' + this.props.className : '') 
