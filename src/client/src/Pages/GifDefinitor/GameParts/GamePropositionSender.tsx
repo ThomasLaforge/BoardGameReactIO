@@ -6,6 +6,7 @@ import { DefaultProps, injector } from '../../../mobxInjector'
 import Gif from '../components/Gif/Gif';
 import { Input, Button } from '@material-ui/core';
 import { prefix } from 'limitelimite-common/GifDefinitor/GifDefinitor';
+import Proposition from '../components/Proposition/Proposition';
 
 interface GamePropositionSenderProps extends DefaultProps {
     gifUrl: string
@@ -39,23 +40,28 @@ class GamePropositionSender extends React.Component <GamePropositionSenderProps,
                     <Gif url={this.props.gifUrl} />
                 </div>
                 
-                {!this.props.hasSendProp && <div className="game-prop-form">
-                    <div className="game-prop-input">
-                        <Input 
-                            value={this.state.propostion} 
-                            onChange={this.updateInput}
-                            fullWidth
-                        />
+                {!this.props.hasSendProp ? 
+                    <div className="game-prop-form">
+                        <div className="game-prop-input">
+                            <Input 
+                                value={this.state.propostion} 
+                                onChange={this.updateInput}
+                                fullWidth
+                            />
+                        </div>
+                        <div className="game-prop-send-submit">
+                            <Button 
+                                variant='raised'
+                                className="game-prop-send-btn"
+                                onClick={() => this.props.handleSendProp(this.state.propostion)}
+                                disabled={this.props.hasSendProp}
+                            >Send</Button>
+                        </div>
                     </div>
-                    <div className="game-prop-send-submit">
-                        <Button 
-                            variant='raised'
-                            className="game-prop-send-btn"
-                            onClick={() => this.props.handleSendProp(this.state.propostion)}
-                            disabled={this.props.hasSendProp}
-                        >Send</Button>
+                : 
+                    <div className="game-prop-sent">
+                        <Proposition content={this.state.propostion} />
                     </div>
-                </div>
                 }
                 
                 <div className='game-infos-zone'>

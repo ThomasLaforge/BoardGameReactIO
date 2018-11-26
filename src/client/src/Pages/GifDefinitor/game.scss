@@ -127,9 +127,12 @@
           // .game-prop-send-btn {
           //   margin: auto;
           // }
-        }
-
+        }  
       }
+
+      .game-prop-sent {
+        margin: auto; 
+        }
     }
 
     .game-vote {
@@ -140,23 +143,20 @@
       .game-vote-gif {
       }
 
-      .game-vote-form {
-        margin: auto;
-        width: 400px;
+      .game-vote-props-list {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: space-around;
 
-        .game-vote-input {
-          width: 100%;
+        .game-vote-props-list-elt {
+
         }
-
-        .game-vote-send-submit {
-          width: 20%;
-          margin: 20px auto;
-          // .game-prop-send-btn {
-          //   margin: auto;
-          // }
-        }
-
       }
+
+      .game-prop-send-btn {
+        margin: 0 auto;
+      } 
     }
   }
 }

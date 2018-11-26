@@ -39,6 +39,17 @@ class GameResult extends React.Component <GameResultProps, GameResultState> {
     }
 
     render() {
+        let winnersNamesString = ''
+        this.props.winnerPlayerNames.forEach( (name, i) => {
+            winnersNamesString += name
+            if(i === this.props.winnerPlayerNames.length - 2){
+                winnersNamesString += ' and '            
+            }
+            else if(i < this.props.winnerPlayerNames.length - 2){
+                winnersNamesString += ', '            
+            }
+        })
+
         return (
             <div className="game-result">
                 <div className="game-result-gif">
@@ -48,6 +59,9 @@ class GameResult extends React.Component <GameResultProps, GameResultState> {
                     {this.renderPropositions()}
                 </div>
                 <div className='game-infos-zone'>
+                    <div className="info-result-winners">
+                        {winnersNamesString} won this turn.
+                    </div>
                     <Timer duration={NB_SECONDS_BEFORE_NEXT_TURN}/>
                 </div>
             </div>

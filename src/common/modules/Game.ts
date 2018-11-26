@@ -23,4 +23,8 @@ export abstract class Game {
         this.startGameDate = Date.now()
     }
 
+    hasStart(){
+        return !!this.startGameDate
+    }
+
 }

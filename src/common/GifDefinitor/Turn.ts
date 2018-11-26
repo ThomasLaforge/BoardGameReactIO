@@ -92,4 +92,8 @@ export class Turn {
         return this.votes.filter(v => v.voter.isEqual(p)).length === 1
     }
 
+    getPropIndex(prop: Proposition){
+        return this.propositions.findIndex(p => p.player.isEqual(prop.player))
+    }
+
 }

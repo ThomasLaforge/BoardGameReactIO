@@ -19,9 +19,13 @@ class Gif extends React.Component <GifProps, GifState> {
     render() {
         return (
             <div className="gif">
-                <img 
+                {/* <img 
                     className='gif-img'
                     src={this.props.url} 
+                /> */}
+                <div 
+                    className='gif-img'
+                    style={{ backgroundImage: 'url(' + this.props.url + ')'}}                    
                 />
             </div>
         );

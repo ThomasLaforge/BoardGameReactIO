@@ -70,12 +70,12 @@ export const addGifDefinitorEvents = (socket: SuperSocket, GC: GameCollection) =
             // If turn is complete, wait x seconds and start the next turn
             if(gdgame.turn.allPlayerVoted()){
                 console.log('nextTurn start in ', NB_SECONDS_BEFORE_NEXT_TURN, ' seconds')            
-                setTimeout( async () => {
-                    gdgame = gdgame as GifDefinitorGame
-                    await gdgame.nextTurn()
-                    console.log('nextTurn send new turn', gdgame.players.map(p => gdgame && gdgame.getScore(p)))
-                    updateUI(socket, game as MultiplayerGame)
-                }, NB_SECONDS_BEFORE_NEXT_TURN  * 1000)
+                // setTimeout( async () => {
+                //     gdgame = gdgame as GifDefinitorGame
+                //     await gdgame.nextTurn()
+                //     console.log('nextTurn send new turn', gdgame.players.map(p => gdgame && gdgame.getScore(p)))
+                //     updateUI(socket, game as MultiplayerGame)
+                // }, NB_SECONDS_BEFORE_NEXT_TURN  * 1000)
             }
             // else {
             //     socket.emit(prefix + 'game:player.player_has_played')
@@ -143,13 +143,30 @@ function updateUI(socket: SuperSocket, game: MultiplayerGame){
                 propositions = null
             }
 
+            let results;
+            if( gdgame.turn && gdgame.turn.allPlayerVoted() ){
+                let turn = gdgame.turn
+                results = turn.getWinners().map(p => gdgame.players.findIndex(pElt => pElt.isEqual(p)))
+                results = turn.propositions.map(prop => {
+                    let propIndex = turn.getPropIndex(prop)
+                    let votersNames: string[] = turn.votes
+                        .filter(v => v.propositionIndex === propIndex)
+                        .map(v => v.voter.surname)
+                    let isWonProp = turn.isWinner(prop.player)
+                    return { prop, votersNames, isWonProp }
+                })
+            }
+            else {
+                results = null
+            }
+
             let msgObj: any = {
                 gifUrl: gdgame.currentGif && gdgame.currentGif.url,
                 // isCreator: game.players[0].isEqual(p),
                 gameStatus,
                 propositions,
-                chosenPropositionIndexes: (gdgame.turn && gdgame.turn.allPlayerVoted()) ? gdgame.turn.getWinners().map(p => gdgame.players.findIndex(pElt => pElt.isEqual(p))) : null,
-                winnerPlayerNames: (gdgame.turn && gdgame.turn.allPlayerVoted()) ? gdgame.turn.getWinners() : null,
+                results,
+                winnerPlayerNames: (gdgame.turn && gdgame.turn.allPlayerVoted()) ? gdgame.turn.getWinners().map(w => w.surname) : null,
                 myIndex: game.players.findIndex(pElt => pElt.isEqual(p))
             }
             const playerSpecificsParams = Object.keys(msgObj).map( (e: any) => msgObj[e])

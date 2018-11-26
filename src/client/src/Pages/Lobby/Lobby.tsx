@@ -32,6 +32,8 @@ class GameLobby extends React.Component <GameLobbyProps, GameLobbyState> {
 
     componentDidMount(){
         if(this.props.socket){
+            this.props.socket.emit('lobby:get_global_lobby_list')
+
             this.props.socket.on('lobby:player.enter_in_game_table', (gameType: GameType) => {
                 console.log('where to go', gameType, GameType.TarotCongolais)
                 switch (gameType) {
@@ -49,10 +51,16 @@ class GameLobby extends React.Component <GameLobbyProps, GameLobbyState> {
                         break;
                 }
             })
+
+            this.props.socket.on('lobby:player.update_list', (gameList: GameLobbyList) => {
+                this.setState({ gameList })
+            })
         }
     }
 
     renderGamesTable(){
+        console.log('lobby list', this.state.gameList)
+
         return <div className='game-lobby-table'>
             <table>
                 <thead>
@@ -82,63 +90,34 @@ class GameLobby extends React.Component <GameLobbyProps, GameLobbyState> {
     render() {
         return (
             <div className="game-lobby">
-                {/* <PlayerMiniInfo /> */}
-                <div className='game-lobby-choices'>
-                    {/* <div className='game-lobby-category game-lobby-category-chose'>
-                        <div className='lobby-category-title'>Chose a game</div>
-                        <div className='lobby-category-description'></div>
-                        <div className='lobby-category-content'>
-                            {this.renderGamesTable()}
+                {/* Main content */}
+                <div className='game-lobby-content'>
+                    <div className="lobby-type-selection">
+                        <div className="lobby-type-selection-title"></div>
+                        <div className="lobby-type-selection-list">
+                            <div className="lobby-type-selection-elt">
+                                <div className="lobby-type-selection-elt-image"></div>
+                                <div className="lobby-type-selection-elt-descriptor">
+                                    <div className="type-descriptor-title"></div>
+                                    <div className="type-descriptor-description"></div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div className='game-lobby-category game-lobby-category-create'>
-                        <div className='lobby-category-title'>Create new game</div>
-                        <div className='lobby-category-description'>
-                            Create a new game
-                        </div>
-                        <div className='lobby-category-content'>
-                            <FormControlLabel
-                                control={
-                                    <Switch
-                                        checked={this.state.switchPrivateState}
-                                        onChange={this.handleSwitchPrivate}
-                                    />
-                                }
-                                label="Private"
-                            />
-                            <Button onClick={() => this.props.socket.emit('lobby:create')}>Create a game</Button>
-                        </div>
-                    </div> */}
-                    <div className='game-lobby-category game-lobby-category-auto'>
-                        {/* <div className='lobby-category-title'>Auto</div>
-                        <div className='lobby-category-description'>
-                            Find a public game or create one
-                        </div> */}
-                        <div className='lobby-category-content'>
-                            <Button 
-                                className='lobby-btn'
-                                variant='raised'
-                                onClick={() => this.props.socket.emit('lobby:auto', GameType.LimiteLimite)}
-                            >
-                                Find a limitelimite game
-                            </Button>
-                            <Button 
-                                className='lobby-btn'
-                                variant='raised'
-                                onClick={() => this.props.socket.emit('lobby:auto', GameType.TarotCongolais)}
-                            >
-                                Find a tarotcongolais game
-                            </Button>
-                            <Button 
-                                className='lobby-btn'
-                                variant='raised'
-                                onClick={() => this.props.socket.emit('lobby:auto', GameType.GifDefinitor)}
-                            >
-                                Find a gif definitor game
-                            </Button>
+                    <div className="lobby-game-join-or-create">
+                        <div className="lobby-game-list"></div>
+                            <div className="lobby-game-list-title"></div>
+                            <div className="lobby-game-list-filters"></div>
+                            <div className="lobby-game-list-grid">
+                                <div className="lobby-game-list-elt"></div>
+                            </div>
+                        <div className="lobby-game-creator">
+                            <div className="lobby-game-creator-form"></div>
                         </div>
                     </div>
                 </div>
+
+                {/* Lobby */}
                 <div className="game-lobby-chat">
                     <Chat channel='lobby' />
                 </div>
