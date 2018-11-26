@@ -5,8 +5,8 @@ export class UIStore {
     
     @observable public router: Router;
 
-	constructor(){
-        this.router = new Router()
+	constructor(games?: any[]){
+        this.router = new Router(games)
 	}
 	
 }

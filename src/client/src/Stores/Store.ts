@@ -6,8 +6,8 @@ export class Store {
 
     @observable public uiStore: UIStore;
 
-    constructor(){
-		this.uiStore = new UIStore()
+    constructor(games?: any[]){
+		this.uiStore = new UIStore(games)
     }
     
 }

@@ -16,6 +16,8 @@ const uri = location.protocol + '//' + location.hostname + ':3027';
 // const socket = io.connect(uri, options)
 const socket = io.connect(uri)
 
+let games: any[] = []
+
 interface AppProps extends DefaultProps {}
 
 @observer
@@ -24,7 +26,7 @@ export default class App extends React.Component<AppProps, { store: Store, drawe
 	constructor(props: any){
 		super(props);
 		this.state = {
-			store: new Store(),
+			store: new Store(games),
 			drawerOpened: false
 		}
 	}

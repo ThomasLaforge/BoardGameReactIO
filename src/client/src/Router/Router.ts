@@ -14,7 +14,7 @@ export class Router {
     @observable public currentRoute: Route;
     @observable public history: any
 
-    constructor(){
+    constructor(games?: any[]){
         let routeDefs: IRoute[] = [
             {
                 path: '/',
@@ -42,7 +42,14 @@ export class Router {
                 type: RouteEnum.GifDefinitor
             }
         ]
-        this.routes = routeDefs.map(iRoute => new Route(iRoute))
+        const gamesRoutes = games.map(g => {
+            return {
+                path: g.path,
+                component: g.component,
+                type: g.type
+            }
+        })
+        this.routes = [].concat(routeDefs, gamesRoutes).map(iRoute => new Route(iRoute))
         this.switchRoute(this.routes[0].type)
         // this.switchRoute('/?test=ab')
         // console.log('getAllParams', this.getAllParams())
