@@ -1,5 +1,5 @@
 import { SuperSocket } from '../SuperSocket';
-import { GameCollection, LimiteLimiteGame, GameType, DEFAULT_IS_PRIVATE_GAME } from '../../common';
+import { GameCollection, LimiteLimiteGame, GameType, DEFAULT_IS_PRIVATE_GAME, GameLobbyListElt, GameLobbyList } from '../../common';
 import { MultiplayerGame } from '../../common/modules/MultiplayerGame';
 
 export const addLobbyEvents = (socket: SuperSocket, GC: GameCollection) => {
@@ -49,7 +49,6 @@ export const addLobbyEvents = (socket: SuperSocket, GC: GameCollection) => {
     socket.playerEnterGameRoom(game)
   })
   
-  // Lobby
   // socket.on('lobby:auto_find_game', () => {
   //   let player = new Player(socket.username, socket.id)
   //   let game = new LimiteLimiteGame(player)
@@ -58,4 +57,10 @@ export const addLobbyEvents = (socket: SuperSocket, GC: GameCollection) => {
   //   room.game = game
   //   socket.emit('lobby:player.enter_in_game_table', game.id)
   // })
+
+  socket.on('lobby:get_global_lobby_list', () => {
+    const gameList: GameLobbyList = GC.getLobbyList()
+    socket.emit('lobby:player.update_list', gameList)
+  })
+
 } 
