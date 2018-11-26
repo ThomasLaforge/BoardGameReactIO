@@ -16,6 +16,8 @@ import { Game as TarotCongolaisGame } from './TarotCongolais/Game'
 import { Game as GifDefinitor } from './GifDefinitor/Game'
 import { MultiplayerGame } from './modules/MultiplayerGame';
 import { SoloGame } from './modules/SoloGame';
+import { Client } from './Client';
+import { Server } from './Server';
 
 export enum GameType {
     LimiteLimite,
@@ -39,3 +41,9 @@ export const getGameClass = (gameType: GameType) : GameClass => {
 export type GameClass = any
 
 export type GameTypeClass = MultiplayerGame | SoloGame
+
+export interface GameModule {
+    identifier: string,
+    client: Client,
+    server: Server
+}
