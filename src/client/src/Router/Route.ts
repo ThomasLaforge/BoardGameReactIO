@@ -11,19 +11,19 @@ export enum RouteEnum {
 
 export interface IRoute {
     path: string
+    name: string
     component: React.ComponentClass
-    type: RouteEnum
 }
 
 export class Route {
 
     public path: string;
     public component: React.ComponentClass
-    public type: RouteEnum
+    public name: string
 
     constructor(route: IRoute){
         this.path = route.path
         this.component = route.component
-        this.type = route.type
+        this.name = route.name
     }
 }
