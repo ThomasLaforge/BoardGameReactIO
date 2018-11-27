@@ -1,10 +1,14 @@
 import * as React from 'react';
+import {observer, inject} from 'mobx-react';
+import { DefaultProps, injector } from 'src/mobxInjector';
 
-interface GameFormProps {
+interface GameFormProps extends DefaultProps{
 }
 interface GameFormState {
 }
 
+@inject(injector)
+@observer
 class GameForm extends React.Component <GameFormProps, GameFormState> {
 
     constructor(props: GameFormProps){
@@ -14,9 +18,12 @@ class GameForm extends React.Component <GameFormProps, GameFormState> {
     }
 
     render() {
+        // let GameFormComponent = this.props.games[0].formComponent
         return (
             <div className="lobby-game-creator">
-                <div className="lobby-game-creator-form"></div>
+                <div className="lobby-game-creator-form">
+                    {/* <GameFormComponent /> */}
+                </div>
             </div>
         );
     }

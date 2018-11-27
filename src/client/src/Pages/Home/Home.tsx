@@ -33,7 +33,7 @@ class Home extends React.Component <HomeProps, HomeState> {
         if(this.props.socket){
             this.props.socket.on('login:player.login_accepted', (username) => {
                 console.log('connected with username', username)
-                this.props.ui.router.switchRoute(RouteEnum.GameLobby)             // })
+                this.props.ui.router.switchRoute('lobby')             
             })
 
             this.props.socket.on('login:player.username_already_exists', (username) => {

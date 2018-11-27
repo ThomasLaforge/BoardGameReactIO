@@ -13,9 +13,11 @@ export interface InjectedStores {
 
 export interface DefaultProps  {
     socket?: Socket,
+    games?: any[],
     ui?: UIStore
 }
 
 export const injector = (injectContent: InjectedStores) : DefaultProps => ({
     ui: injectContent.store.uiStore as UIStore,
+    games: injectContent.store.games as any[]
 })

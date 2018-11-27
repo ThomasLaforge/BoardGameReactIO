@@ -39,6 +39,11 @@ class GameLobby extends React.Component <GameLobbyProps, GameLobbyState> {
         }
     }
 
+    handleTypeSelection = (typeIndex: number) => {
+        console.log('index selected', this.state.selectedTypeIndex)
+        this.setState({ selectedTypeIndex: typeIndex })
+    }
+
     render() {
         return (
             <div className="game-lobby">
@@ -47,6 +52,7 @@ class GameLobby extends React.Component <GameLobbyProps, GameLobbyState> {
                     {/* <div className="lobby-type-selection"> */}
                     <TypeSelector 
                         selectedTypeIndex={this.state.selectedTypeIndex}
+                        handleTypeSelection={this.handleTypeSelection}
                     /> 
                     
                     <div className="lobby-game-join-or-create">
@@ -56,9 +62,7 @@ class GameLobby extends React.Component <GameLobbyProps, GameLobbyState> {
                         <div className="join-or-create-separator" />
 
                         {/* <div className="lobby-game-creator"> */}
-                        <GameForm 
-
-                        />
+                        <GameForm />
                     </div>
                 </div>
 

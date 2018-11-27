@@ -3,9 +3,6 @@ import { observable } from "mobx";
 
 import Home from '../Pages/Home/Home'
 import GameLobby from '../Pages/Lobby/Lobby'
-import LimiteLimiteGame from "../Pages/LimiteLimite/Game";
-import TarotCongolaisGame from '../Pages/TarotCongolais/Game'
-import GifDefinitorGame from '../Pages/GifDefinitor/Game'
 
 export class Router {
     public routes: Route[]
@@ -23,31 +20,9 @@ export class Router {
                 path: '/lobby',
                 name: 'lobby',
                 component: GameLobby,
-            },
-            {
-                path: '/limitelimite',
-                name: 'limitelimite',
-                component: LimiteLimiteGame,
-            },
-            {
-                path: '/tarotcongolais',
-                name: 'tarotcongolais',
-                component: TarotCongolaisGame,
-            },
-            {
-                path: '/gifdefinitor',
-                name: 'gifdefinitor',
-                component: GifDefinitorGame,
             }
         ]
-        const gamesRoutes = games.map(g => {
-            return {
-                path: g.path,
-                component: g.component,
-                type: g.type
-            }
-        })
-        this.routes = [].concat(routeDefs, gamesRoutes).map(iRoute => new Route(iRoute))
+        this.routes = [].concat(routeDefs, games).map(iRoute => new Route(iRoute))
         this.switchRoute(this.routes[0].name)
         // this.switchRoute('/?test=ab')
         // console.log('getAllParams', this.getAllParams())

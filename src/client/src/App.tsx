@@ -9,6 +9,10 @@ import { DefaultProps } from './mobxInjector';
 
 import './App.scss';
 
+import LimiteLimiteGame from "./Pages/LimiteLimite/Game";
+import TarotCongolaisGame from './Pages/TarotCongolais/Game'
+import GifDefinitorGame from './Pages/GifDefinitor/Game'
+
 const uri = location.protocol + '//' + location.hostname + ':3027';
 // console.log('path of api', location, uri)
 
@@ -16,7 +20,23 @@ const uri = location.protocol + '//' + location.hostname + ':3027';
 // const socket = io.connect(uri, options)
 const socket = io.connect(uri)
 
-let games: any[] = []
+let games: any[] = [
+	{
+		path: '/limitelimite',
+		name: 'limitelimite',
+		component: LimiteLimiteGame
+	},
+	{
+		path: '/tarotcongolais',
+		name: 'tarotcongolais',
+		component: TarotCongolaisGame,
+	},
+	{
+		path: '/gifdefinitor',
+		name: 'gifdefinitor',
+		component: GifDefinitorGame,
+	}
+]
 
 interface AppProps extends DefaultProps {}
 
