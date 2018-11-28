@@ -2,6 +2,7 @@ import * as React from 'react';
 import {socketConnect} from 'socket.io-react'
 import { DefaultProps, injector } from '../../../mobxInjector'
 import { GameLobbyList } from 'limitelimite-common';
+import { Button } from '@material-ui/core';
 
 interface GameListProps extends DefaultProps {
 }
@@ -15,7 +16,11 @@ class GameList extends React.Component <GameListProps, GameListState> {
     constructor(props: GameListProps){
         super(props)
         this.state = {
-            gameList: []
+            gameList: [{
+                gameId: 'test-gameid',
+                nbPlayer: 4,
+                nbPlayersOnGame: 3
+            }]
         }
     }
 
@@ -24,43 +29,39 @@ class GameList extends React.Component <GameListProps, GameListState> {
             this.props.socket.emit('lobby:get_global_lobby_list')
         }
 
-        this.props.socket.on('lobby:player.update_list', (gameList: GameLobbyList) => {
-            this.setState({ gameList })
-        })
+        // this.props.socket.on('lobby:player.update_list', (gameList: GameLobbyList) => {
+        //     this.setState({ gameList })
+        // })
+    }
+
+    goToGameRoom = (gameId: string) => {
+        console.log('try to enter on game room with id', gameId)
     }
     
     renderGamesTable(){
-        console.log('lobby list', this.state.gameList)
+        console.log('game list', this.state.gameList)
+        return this.state.gameList.map( g => {
+            return (
+                <div className="lobby-game-list-elt" key={g.gameId}>
 
-        return <div className='game-lobby-table'>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Game ID</th>
-                        <th>People</th>
-                        <th>State</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {this.state.gameList.map(gInfo => (
-                        <tr>
-                            <td>{gInfo.gameId}</td>
-                            <td>{gInfo.people}</td>
-                            <td>{gInfo.isFull ? 'full' : 'free'}</td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
-        </div>
+                    <Button 
+                        variant='raised'
+                        onClick={() => this.goToGameRoom(g.gameId)}
+                    >
+                        Go !
+                    </Button>
+                </div>
+            )
+        })
     }
 
     render() {
         return (
             <div className="lobby-game-list">
-                <div className="lobby-game-list-title"></div>
-                <div className="lobby-game-list-filters"></div>
+                <div className="lobby-game-list-title">Liste des parties à rejoindre</div>
+                <div className="lobby-game-list-filters">filters:</div>
                 <div className="lobby-game-list-grid">
-                    <div className="lobby-game-list-elt"></div>
+                    {this.renderGamesTable()}                    
                 </div>
             </div>
         );

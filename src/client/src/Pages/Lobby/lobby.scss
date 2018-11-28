@@ -30,7 +30,11 @@
                 margin: auto;
 
                 .lobby-type-selection-elt {
+                    position: relative;
                     
+                    $typeImage_height: 100px;
+                    $typeImage_width: $typeImage_height;
+
                     .lobby-type-selection-elt-image {
                         width: 100px;
                         height: 100px;
@@ -44,6 +48,12 @@
                     }
 
                     .lobby-type-selection-elt-descriptor {
+                        position: absolute;
+                        background-color: white;
+                        top: 0;
+                        left: $typeImage_width;
+                        width: 200px;
+                        
                         display: none;
                     }
                 }
@@ -53,17 +63,25 @@
         .lobby-game-join-or-create {
             border: 1px blue solid;
             flex: 1;
-
+            display: flex;
+            flex-direction: row;
+            justify-content: space-evenly; 
+            
             .lobby-game-list {
-
+                flex: 1;   
+                border: 4px dotted orchid;
             }
 
             .join-or-create-separator {
-
+                margin: auto 10px;
+                height: 70%;
+                border: 3px solid;
+                border-radius: 12px;
             }
 
             .lobby-game-creator {
-
+                flex: 1;
+                border: 4px dotted orange;
             }
         }
     }

@@ -22,7 +22,7 @@ class TypeSelector extends React.Component <TypeSelectorProps, TypeSelectorState
     renderTypes(){
         console.log('selected type index', this.props.selectedTypeIndex)
         return this.props.games.map( (g, i) => 
-            <div className="lobby-type-selection-elt">
+            <div className="lobby-type-selection-elt" key={i}>
                 <div 
                     className={
                           "lobby-type-selection-elt-image"
