@@ -2,9 +2,11 @@ import * as React from 'react';
 import {observer, inject} from 'mobx-react';
 import { DefaultProps, injector } from 'src/mobxInjector';
 
-interface GameFormProps extends DefaultProps{
+interface GameFormProps extends DefaultProps {
+    
 }
 interface GameFormState {
+
 }
 
 @inject(injector)
@@ -18,11 +20,13 @@ class GameForm extends React.Component <GameFormProps, GameFormState> {
     }
 
     render() {
-        // let GameFormComponent = this.props.games[0].formComponent
+        let SpecificFormComponent = ( this.props.ui.selectedTypeIndex !== null && this.props.games[this.props.ui.selectedTypeIndex] && this.props.games[this.props.ui.selectedTypeIndex].formComponent)
+            ? this.props.games[this.props.ui.selectedTypeIndex].formComponent
+            : null
         return (
             <div className="lobby-game-creator">
                 <div className="lobby-game-creator-form">
-                    {/* <GameFormComponent /> */}
+                    {SpecificFormComponent ? <SpecificFormComponent /> : 'Select a game type to create a game'}
                 </div>
             </div>
         );

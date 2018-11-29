@@ -16,7 +16,6 @@ import TypeSelector from './parts/TypeSelector';
 interface GameLobbyProps extends DefaultProps {
 }
 interface GameLobbyState {
-    selectedTypeIndex: number
 }
 
 @inject(injector)
@@ -27,7 +26,6 @@ class GameLobby extends React.Component <GameLobbyProps, GameLobbyState> {
     constructor(props: GameLobbyProps){
         super(props)
         this.state = {
-            selectedTypeIndex: null
         }
     }
 
@@ -39,21 +37,13 @@ class GameLobby extends React.Component <GameLobbyProps, GameLobbyState> {
         }
     }
 
-    handleTypeSelection = (typeIndex: number) => {
-        console.log('index selected', this.state.selectedTypeIndex)
-        this.setState({ selectedTypeIndex: typeIndex })
-    }
-
     render() {
         return (
             <div className="game-lobby">
                 {/* Main content */}
                 <div className='game-lobby-content'>
                     {/* <div className="lobby-type-selection"> */}
-                    <TypeSelector 
-                        selectedTypeIndex={this.state.selectedTypeIndex}
-                        handleTypeSelection={this.handleTypeSelection}
-                    /> 
+                    <TypeSelector /> 
                     
                     <div className="lobby-game-join-or-create">
                         {/* <div className="lobby-game-list"> */}

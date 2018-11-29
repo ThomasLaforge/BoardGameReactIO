@@ -10,6 +10,7 @@ import { DefaultProps } from './mobxInjector';
 import './App.scss';
 
 import LimiteLimiteGame from "./Pages/LimiteLimite/Game";
+import LimiteLimiteForm from "./Pages/LimiteLimite/GameForm"
 import TarotCongolaisGame from './Pages/TarotCongolais/Game'
 import GifDefinitorGame from './Pages/GifDefinitor/Game'
 
@@ -24,7 +25,8 @@ let games: any[] = [
 	{
 		path: '/limitelimite',
 		name: 'limitelimite',
-		component: LimiteLimiteGame
+		component: LimiteLimiteGame,
+		formComponent: LimiteLimiteForm
 	},
 	{
 		path: '/tarotcongolais',

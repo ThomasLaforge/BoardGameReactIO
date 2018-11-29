@@ -3,8 +3,6 @@ import {observer, inject} from 'mobx-react';
 import { DefaultProps, injector } from 'src/mobxInjector';
 
 interface TypeSelectorProps extends DefaultProps {
-    handleTypeSelection: Function
-    selectedTypeIndex: number
 }
 interface TypeSelectorState {
 }
@@ -20,15 +18,15 @@ class TypeSelector extends React.Component <TypeSelectorProps, TypeSelectorState
     }
 
     renderTypes(){
-        console.log('selected type index', this.props.selectedTypeIndex)
+        console.log('selected type index', this.props.ui.selectedTypeIndex)
         return this.props.games.map( (g, i) => 
             <div className="lobby-type-selection-elt" key={i}>
                 <div 
                     className={
                           "lobby-type-selection-elt-image"
-                        + (this.props.selectedTypeIndex === i ? " lobby-type-selection-elt-image_selected" : '')
+                        + (this.props.ui.selectedTypeIndex === i ? " lobby-type-selection-elt-image_selected" : '')
                     }
-                    onClick={() => this.props.handleTypeSelection(i)}
+                    onClick={() => this.props.ui.handleChangeSelectedTypeIndex(i)}
                 >Image {g.name}</div>
                 <div className="lobby-type-selection-elt-descriptor">
                     <div className="type-descriptor-title">
