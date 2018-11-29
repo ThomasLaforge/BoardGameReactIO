@@ -16,11 +16,74 @@ class GameList extends React.Component <GameListProps, GameListState> {
     constructor(props: GameListProps){
         super(props)
         this.state = {
-            gameList: [{
-                gameId: 'test-gameid',
-                nbPlayer: 4,
-                nbPlayersOnGame: 3
-            }]
+            gameList: [
+                {
+                    gameId: 'test-gameid',
+                    nbPlayer: 4,
+                    nbPlayersOnGame: 3,
+                    creationDate: Date.now()
+                },
+                {
+                    gameId: 'test-gameid',
+                    nbPlayer: 4,
+                    nbPlayersOnGame: 3,
+                    creationDate: Date.now()
+                },
+                {
+                    gameId: 'test-gameid',
+                    nbPlayer: 4,
+                    nbPlayersOnGame: 3,
+                    creationDate: Date.now()
+                },
+                {
+                    gameId: 'test-gameid',
+                    nbPlayer: 4,
+                    nbPlayersOnGame: 3,
+                    creationDate: Date.now()
+                },
+                {
+                    gameId: 'test-gameid',
+                    nbPlayer: 4,
+                    nbPlayersOnGame: 3,
+                    creationDate: Date.now()
+                },
+                {
+                    gameId: 'test-gameid',
+                    nbPlayer: 4,
+                    nbPlayersOnGame: 3,
+                    creationDate: Date.now()
+                },
+                {
+                    gameId: 'test-gameid',
+                    nbPlayer: 4,
+                    nbPlayersOnGame: 3,
+                    creationDate: Date.now()
+                },
+                {
+                    gameId: 'test-gameid',
+                    nbPlayer: 4,
+                    nbPlayersOnGame: 3,
+                    creationDate: Date.now()
+                },
+                {
+                    gameId: 'test-gameid',
+                    nbPlayer: 4,
+                    nbPlayersOnGame: 3,
+                    creationDate: Date.now()
+                },
+                {
+                    gameId: 'test-gameid',
+                    nbPlayer: 4,
+                    nbPlayersOnGame: 3,
+                    creationDate: Date.now()
+                },
+                {
+                    gameId: 'test-gameid',
+                    nbPlayer: 4,
+                    nbPlayersOnGame: 3,
+                    creationDate: Date.now()
+                }
+            ]
         }
     }
 
@@ -41,14 +104,16 @@ class GameList extends React.Component <GameListProps, GameListState> {
     renderGamesTable(){
         console.log('game list', this.state.gameList)
         return this.state.gameList.map( g => {
+            let creationDate = new Date(g.creationDate)
             return (
                 <div className="lobby-game-list-elt" key={g.gameId}>
-
+                    <div className="game-cretion-date">{creationDate.getDate} / {creationDate.getMonth()} / {creationDate.getFullYear()}</div>
+                    <div className="game-population">{g.nbPlayersOnGame} / {g.nbPlayer}</div>
                     <Button 
                         variant='raised'
                         onClick={() => this.goToGameRoom(g.gameId)}
                     >
-                        Go !
+                        Join
                     </Button>
                 </div>
             )

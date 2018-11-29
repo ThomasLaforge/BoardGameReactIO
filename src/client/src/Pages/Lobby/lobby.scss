@@ -32,12 +32,12 @@
                 .lobby-type-selection-elt {
                     position: relative;
                     
-                    $typeImage_height: 100px;
+                    $typeImage_height: 150px;
                     $typeImage_width: $typeImage_height;
 
                     .lobby-type-selection-elt-image {
-                        width: 100px;
-                        height: 100px;
+                        width: $typeImage_width;
+                        height: $typeImage_height;
                         margin: 0 30px;
 
                         border: 4px lightgray solid;
@@ -70,6 +70,30 @@
             .lobby-game-list {
                 flex: 1;   
                 border: 4px dotted orchid;
+                display: flex;
+                flex-direction: column;
+
+                .lobby-game-list-grid {
+                    flex: 1;
+                    display: flex;
+                    flex-direction: column;
+                    flex-wrap: nowrap;
+                    height: auto;
+                    max-height: initial;
+
+                    overflow-y: scroll;
+                    
+                    .lobby-game-list-elt {
+                        border: 1px lightblue solid;
+                        display: flex;
+                        flex-direction: row;
+                        justify-content: space-between;
+
+                        margin-bottom: 10px;
+                        height: 100px;
+                        min-height: 100px;
+                    }
+                }
             }
 
             .join-or-create-separator {
