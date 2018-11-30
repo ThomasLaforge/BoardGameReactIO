@@ -66,9 +66,11 @@ io.on('connection', (baseSocket: ExtendedSocket) => {
     addLoginEvents(socket)
     addChatEvents(socket)
     addLobbyEvents(socket, GC)
-    addLimiteLimiteEvents(socket, GC)
-    addTarotCongolaisEvents(socket, GC)
-    addGifDefinitorEvents(socket, GC)
+
+    // add games events
+    games.forEach( (g: any) => {
+        g.addEvents(socket, GC)
+    })
 
     socket.on('reconnecting', () => {
         console.log('reconnecting...')
