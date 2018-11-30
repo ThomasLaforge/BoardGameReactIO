@@ -53,7 +53,6 @@ class Home extends React.Component <HomeProps, HomeState> {
                 <div className="home-content">
                     <div className="home-logo" />
                     <div className="home-login">
-                        test rebase
                         <TextFieldHandleEnter
                             className='home-login-input'
                             label={this.state.showAlreadyExists ? 'Username already used, change it!' : 'Chose your username'}
