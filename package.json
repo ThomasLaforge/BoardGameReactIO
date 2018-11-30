@@ -1,6 +1,6 @@
 {
-  "name": "limitelimite",
-  "version": "1.0.0",
+  "name": "boardgame-react-io",
+  "version": "0.0.1",
   "description": "��#\u0000 \u0000L\u0000i\u0000m\u0000i\u0000t\u0000e\u0000L\u0000i\u0000m\u0000i\u0000t\u0000e\u0000\r\u0000 \u0000",
   "main": "index.js",
   "dependencies": {
@@ -35,12 +35,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ThomasLaforge/LimiteLimite.git"
+    "url": "git+https://github.com/ThomasLaforge/BoardGameReactIO.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/ThomasLaforge/LimiteLimite/issues"
+    "url": "https://github.com/ThomasLaforge/BoardGameReactIO/issues"
   },
-  "homepage": "https://github.com/ThomasLaforge/LimiteLimite#readme"
+  "homepage": "https://github.com/ThomasLaforge/BoardGameReactIO#readme"
 }
