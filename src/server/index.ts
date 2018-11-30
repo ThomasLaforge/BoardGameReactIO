@@ -24,6 +24,20 @@ const app = express()
 const http = new nodeHttp.Server(app);
 const io = socketIo(http);
 let GC = new GameCollection()
+const games: any = [
+    {
+        name: 'limitelimite',
+        addEvents: addLimiteLimiteEvents
+    },
+    {
+        name: 'tarotcongolais',
+        addEvents: addTarotCongolaisEvents
+    },
+    {
+        name: 'gifdefinitor',
+        addEvents: addGifDefinitorEvents
+    }
+]
 
 let hasLoggedAllSocketEvents = false
 
