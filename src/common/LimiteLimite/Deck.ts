@@ -1,7 +1,7 @@
 import { serializable, list, object, deserialize } from 'serializr';
 import { PropositionCard } from './PropositionCard';
 import { SentenceCard } from './SentenceCard';
-import { CollectionDeckFamily } from '../LimiteLimite';
+import { CollectionDeckFamily } from './LimiteLimite';
 
 export abstract class Deck<T> {
 

@@ -1,13 +1,13 @@
-import { GameClass, GameType, getGameClass, GameTypeClass } from "..";
+import { GameClass, getGameClass, GameTypeClass } from "..";
 
 export abstract class Game {
     public id: string
-    public type: GameType
+    public type: string
     public gameInstance: any
     public creationDate: number
     public startGameDate?: number
 
-    constructor(gameType: GameType){
+    constructor(gameType: string){
         this.id = Date.now().toString()
         this.type = gameType
         this.gameInstance = null

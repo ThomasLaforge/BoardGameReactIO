@@ -1,17 +1,12 @@
 // import { serialize, deserialize } from 'serializr'
 
 import { SuperSocket } from '../SuperSocket';
-import {SocketIoDescriptor} from '../SocketIoDescriptor'
-import { 
-    GameCollection, Hand, SocketPlayer, 
-} from '../../common';
 
 import {prefix, DEFAULT_START_PV} from '../../common/TarotCongolais/TarotCongolais'
 import { MultiplayerGame } from '../../common/modules/MultiplayerGame';
 import { Game as TarotCongolaisGame } from '../../common/TarotCongolais/Game'
-import { Card } from '../../common/TarotCongolais/Card';
-import { Player as TCPlayer } from '../../common/TarotCongolais/Player';
 import { serialize } from 'serializr';
+import { GameCollection } from '../../common';
 
 export const addTarotCongolaisEvents = (socket: SuperSocket, GC: GameCollection) => {
 
@@ -84,7 +79,7 @@ function sendGameInfos(socket: SuperSocket, game: MultiplayerGame, initialCall =
     ))
 
     // console.log('game:player.ask_initial_infos', game.id, uiPlayers, game.isFirstPlayer(socket.id), initialChat)
-    socket.emit(prefix + 'game:player.ask_initial_infos', game.id, uiPlayers, game.isFirstPlayer(socket.getOrCreatePlayer().socketid), nbPlayer)
+    socket.emit(prefix + 'game:player.ask_initial_infos', game.id, uiPlayers, game.isFirstPlayer(socket.socketPlayer.socketid), nbPlayer)
     socket.baseSocket.to(game.id).broadcast.emit(prefix + 'game:players.new_player', uiPlayers)
 }
 

@@ -1,5 +1,5 @@
-import { SentenceCard } from "./modules/SentenceCard";
-import { PropositionCard } from "./modules/PropositionCard";
+import { SentenceCard } from "./SentenceCard";
+import { PropositionCard } from "./PropositionCard";
 
 const prefixSeparator = '-'
 export const prefix = 'limitelimite' + prefixSeparator
@@ -15,15 +15,6 @@ export enum GameStatus {
     Finished,
     Result
 }
-
-export interface GameLobbyListElt {
-    people: string[]
-    gameId: string
-    isFull: boolean
-}
-
-export type GameLobbyList = GameLobbyListElt[]
-
 
 export interface PropSent {
     playerIndex: number,

@@ -1,20 +1,17 @@
-import { ExtendedSocket, ExtendedNamespace } from "./LimiteLimiteServer";
+import { ExtendedSocket, ExtendedNamespace } from "./Server";
 import { SocketPlayer } from "../common/modules/SocketPlayer";
-import { Player } from "../common/modules/Player";
-import { LimiteLimiteGame } from "../common/modules/LimiteLimiteGame";
-import { DEFAULT_IS_PRIVATE_GAME, prefix } from '../common/LimiteLimite'
-import { PlayerListUI, PlayerListUIElt, GameType, getGameClass, GameClass, GameTypeClass } from "../common";
+import { DEFAULT_IS_PRIVATE_GAME } from '../common/LimiteLimite/LimiteLimite'
+import { GameTypeClass } from "../common";
 import { MultiplayerGame } from "../common/modules/MultiplayerGame";
 import { SoloGame } from "../common/modules/SoloGame";
-
-import { prefix as limitelimiteprefix } from '../common/LimiteLimite'
 
 export class SuperSocket {
 
     public baseSocket: ExtendedSocket
 
-    constructor(socket: ExtendedSocket){
+    constructor(socket: ExtendedSocket) {
         this.baseSocket = socket
+
     }
 
     on(action: string, listener: (...argsListener: any[]) => void){
@@ -47,19 +44,14 @@ export class SuperSocket {
         this.emit('lobby:player.enter_in_game_table', game.type)
     }
 
-    createNewMultiplayerGame(gameType: GameType, isPrivate = DEFAULT_IS_PRIVATE_GAME, nbPlayerToStart?: number): MultiplayerGame {
+    createNewMultiplayerGame(gameType: string, isPrivate = DEFAULT_IS_PRIVATE_GAME, nbPlayerToStart?: number): MultiplayerGame {
         let newGame = new MultiplayerGame(gameType, isPrivate, nbPlayerToStart)
-        newGame.addPlayer(this.getOrCreatePlayer())
+        newGame.addPlayer(this.socketPlayer)
         return newGame
     }
 
-    createNewSoloGame(gameType: GameType, isPrivate = DEFAULT_IS_PRIVATE_GAME): SoloGame {
-        return new SoloGame(gameType, this.getOrCreatePlayer())
-    }
-
-    getOrCreatePlayer(){
-        this.player = this.player || new Player(this.baseSocket.username, this.baseSocket.id)
-        return this.player
+    createNewSoloGame(gameType: string, isPrivate = DEFAULT_IS_PRIVATE_GAME): SoloGame {
+        return new SoloGame(gameType, this.socketPlayer)
     }
 
     get server(): SocketIO.Server { return this.baseSocket.server }
@@ -69,9 +61,6 @@ export class SuperSocket {
 
     get socketPlayer(){ return this.baseSocket.socketPlayer}
     set socketPlayer(player: SocketPlayer){ this.baseSocket.socketPlayer = player }
-
-    get player(){ return this.baseSocket.player}
-    set player(player: Player){ this.baseSocket.player = player }
 
     get id(){
         return this.baseSocket.id
