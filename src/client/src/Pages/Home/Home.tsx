@@ -2,9 +2,7 @@ import * as React from 'react';
 import {socketConnect} from 'socket.io-react'
 import {observer, inject} from 'mobx-react';
 import { DefaultProps, injector } from '../../mobxInjector'
-import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
-import { RouteEnum } from '../../Router/Route';
 import TextFieldHandleEnter from '../../components/TextFieldHandleEnter';
 
 import './home.scss'

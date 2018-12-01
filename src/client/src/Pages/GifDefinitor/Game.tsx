@@ -4,10 +4,9 @@ import {observer, inject} from 'mobx-react';
 import { DefaultProps, injector } from '../../mobxInjector'
 import {deserialize, serialize} from 'serializr'
 
-import { GameStatus } from 'limitelimite-common';
-import {PlayerListUI, PlayerListUIElt} from 'limitelimite-common/LimiteLimiteUI'
-import { ChatMessage } from 'limitelimite-common/Server';
-import { prefix } from 'limitelimite-common/GifDefinitor/GifDefinitor'
+import { GameStatus } from 'boardgamereactio-common';
+import { ChatMessage } from 'boardgamereactio-common/modules/Server';
+import { prefix } from 'boardgamereactio-common/GifDefinitor/GifDefinitor'
 
 import GameBeforeStart from './GameParts/GameBeforeStart';
 import GamePropositionSender from './GameParts/GamePropositionSender';

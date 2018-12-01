@@ -2,7 +2,7 @@ import * as React from 'react';
 import {socketConnect} from 'socket.io-react'
 import {observer, inject} from 'mobx-react';
 import { DefaultProps, injector } from '../../../mobxInjector'
-import { Card as TCCard} from 'limitelimite-common/TarotCongolais/Card';
+import { Card as TCCard} from 'boardgamereactio-common/TarotCongolais/Card';
 
 import Card from '../components/Card/Card'
 

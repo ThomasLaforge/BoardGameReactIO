@@ -1,7 +1,7 @@
 import * as React from 'react';
 
-import {EXCUSE_VALUE_HIGH, EXCUSE_VALUE_LOW} from 'limitelimite-common/TarotCongolais/TarotCongolais'
-import { Card as TarotCongolaisCard } from 'limitelimite-common/TarotCongolais/Card'
+import {EXCUSE_VALUE_HIGH, EXCUSE_VALUE_LOW} from 'boardgamereactio-common/TarotCongolais/TarotCongolais'
+import { Card as TarotCongolaisCard } from 'boardgamereactio-common/TarotCongolais/Card'
 
 import './card.scss'
 

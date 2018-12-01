@@ -2,12 +2,11 @@ import * as React from 'react';
 import {socketConnect} from 'socket.io-react'
 import {observer, inject} from 'mobx-react';
 import { DefaultProps, injector } from '../../mobxInjector'
-import {deserialize, serialize} from 'serializr'
+import {deserialize} from 'serializr'
 
-import { GameStatus, DEFAULT_IS_PRIVATE_GAME, SentenceCard, Hand, PropositionCard } from 'limitelimite-common';
-import {PlayerListUI, PlayerListUIElt} from 'limitelimite-common/LimiteLimiteUI'
-import { ChatMessage } from 'limitelimite-common/Server';
-import { prefix } from 'limitelimite-common/LimiteLimite'
+import { GameStatus, SentenceCard, Hand, PropositionCard } from 'boardgamereactio-common';
+import { ChatMessage } from 'boardgamereactio-common/modules/Server';
+import { prefix } from 'boardgamereactio-common/LimiteLimite/LimiteLimite'
 
 console.log('prefix on render', prefix)
 
@@ -26,7 +25,7 @@ interface GameState {
     isCreator: boolean
     isFirstPlayer: boolean
     gameStatus: GameStatus
-    players: PlayerListUI
+    players: any
 
     sentence?: SentenceCard
     propositions?: any
@@ -58,11 +57,11 @@ class Game extends React.Component <GameProps, GameState> {
             const socket = this.props.socket
             socket.emit(prefix + 'game:ask_initial_infos')
 
-            socket.on(prefix + 'game:player.ask_initial_infos', (gameId: string, players: PlayerListUI, isCreator: boolean, myIndex: number, initialChat: ChatMessage[]) => {
+            socket.on(prefix + 'game:player.ask_initial_infos', (gameId: string, players: any, isCreator: boolean, myIndex: number, initialChat: ChatMessage[]) => {
                 console.log('players1', gameId, players, isCreator, myIndex, initialChat)
                 this.setState({gameId, isCreator, players, myIndex })
             })
-            socket.on(prefix + 'game:players.new_player', (players: PlayerListUI) => {
+            socket.on(prefix + 'game:players.new_player', (players) => {
                 console.log('players2', players)
                 this.setState({ players })
             })
@@ -142,7 +141,7 @@ class Game extends React.Component <GameProps, GameState> {
 
     renderPlayers(){
         console.log('show players', this.state.players)
-        return this.state.players.map( (p: PlayerListUIElt, k) => 
+        return this.state.players.map( (p, k) => 
             <div 
                 key={k}
                 className={'player' 

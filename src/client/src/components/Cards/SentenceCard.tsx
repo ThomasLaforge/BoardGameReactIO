@@ -1,6 +1,6 @@
 import * as React from 'react';
 import Card from './Card'
-import {SentenceCard as SentenceCardModel} from 'limitelimite-common'
+import {SentenceCard as SentenceCardModel} from 'boardgamereactio-common'
 
 interface SentenceCardProps {
     sentenceCard: SentenceCardModel

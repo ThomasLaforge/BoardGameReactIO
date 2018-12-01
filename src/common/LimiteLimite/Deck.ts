@@ -54,7 +54,7 @@ export class PropositionDeck extends Deck<PropositionCard> {
 
     loadV2(decks: CollectionDeckFamily[] = []){
         let json = require('../../../../datas/propositions/limitelimitelimite.json')
-        let cards = deserialize(PropositionCard, json)
+        let cards: PropositionCard[] = deserialize(PropositionCard, json)
         this.cards = cards
     }
 

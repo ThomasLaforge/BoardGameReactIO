@@ -3,7 +3,7 @@ import {socketConnect} from 'socket.io-react'
 import {observer, inject} from 'mobx-react';
 import { DefaultProps, injector } from '../mobxInjector'
 import { Button } from '@material-ui/core';
-import {ChatMessage} from 'limitelimite-common/Server'
+import {ChatMessage} from 'boardgamereactio-common/modules/Server'
 import TextFieldHandleEnter from './TextFieldHandleEnter';
 
 interface ChatProps extends DefaultProps {

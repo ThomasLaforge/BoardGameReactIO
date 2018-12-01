@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {socketConnect} from 'socket.io-react'
 import { DefaultProps, injector } from '../../../mobxInjector'
-import { GameLobbyList } from 'limitelimite-common';
+import { GameLobbyList } from 'boardgamereactio-common';
 import { Button } from '@material-ui/core';
 
 interface GameListProps extends DefaultProps {
