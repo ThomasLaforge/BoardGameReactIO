@@ -11,9 +11,9 @@ import { SocketIoDescriptor } from './SocketIoDescriptor';
 // Events
 import { addLoginEvents } from './socketEvents/login'
 import { addLobbyEvents } from './socketEvents/lobby'
-import { addLimiteLimiteEvents } from './socketEvents/limitelimite'
-import { addTarotCongolaisEvents } from './socketEvents/tarotCongolais'
-import { addGifDefinitorEvents } from './socketEvents/gifDefinitor'
+import { addLimiteLimiteEvents } from './gamesEvents/limitelimite'
+import { addTarotCongolaisEvents } from './gamesEvents/tarotCongolais'
+import { addGifDefinitorEvents } from './gamesEvents/gifDefinitor'
 import { addChatEvents } from './socketEvents/chat'
 
 import { GameCollection } from '../common/modules/GameCollection';
