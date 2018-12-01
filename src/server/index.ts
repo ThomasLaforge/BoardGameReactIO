@@ -5,20 +5,20 @@ import * as path from 'path'
 
 // My socket
 import { SuperSocket } from './SuperSocket';
-import { ExtendedSocket } from './LimiteLimiteServer';
+import { ExtendedSocket } from './Server';
 import { SocketIoDescriptor } from './SocketIoDescriptor';
 
 // Events
 import { addLoginEvents } from './socketEvents/login'
 import { addLobbyEvents } from './socketEvents/lobby'
-import { addLimiteLimiteEvents } from './socketEvents/limitelimite'
-import { addTarotCongolaisEvents } from './socketEvents/tarotCongolais'
-import { addGifDefinitorEvents } from './socketEvents/gifDefinitor'
+import { addLimiteLimiteEvents } from './gamesEvents/limitelimite'
+import { addTarotCongolaisEvents } from './gamesEvents/tarotCongolais'
+import { addGifDefinitorEvents } from './gamesEvents/gifDefinitor'
 import { addChatEvents } from './socketEvents/chat'
 
 import { GameCollection } from '../common/modules/GameCollection';
 
-import { serverPort } from '../common/Server';
+import { serverPort } from '../common/modules/Server';
 
 const app = express()
 const http = new nodeHttp.Server(app);

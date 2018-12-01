@@ -1,9 +1,9 @@
 import { Player } from "./Player";
 import { PropositionDeck, SentenceDeck } from "./Deck";
-import { NB_CARD_IN_HAND, DEFAULT_IS_PRIVATE_GAME, DEFAULT_NB_TURN, ITurn, PropSent, DEFAULT_NB_PLAYER } from "../LimiteLimite";
+import { NB_CARD_IN_HAND, DEFAULT_IS_PRIVATE_GAME, DEFAULT_NB_TURN, ITurn, PropSent, DEFAULT_NB_PLAYER } from "./LimiteLimite";
 import { SentenceCard } from "./SentenceCard";
 import { PropositionCard } from "./PropositionCard";
-import { SocketPlayer } from "./SocketPlayer";
+import { SocketPlayer } from "../modules/SocketPlayer";
 
 export class LimiteLimiteGame {
     public players: Player[]

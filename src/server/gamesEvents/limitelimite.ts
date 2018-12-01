@@ -1,17 +1,14 @@
 import { serialize, deserialize } from 'serializr'
 
 import { SuperSocket } from '../SuperSocket';
-import {SocketIoDescriptor} from '../SocketIoDescriptor'
 import { 
     GameCollection, 
-    LimiteLimiteGame, 
-    PropositionCard,
     NB_SECONDS_BEFORE_NEXT_TURN,
-    PlayerListUI,
-    PlayerListUIElt
 } from '../../common';
-import { prefix } from '../../common/LimiteLimite'
+import { prefix } from '../../common/LimiteLimite/LimiteLimite'
 import { MultiplayerGame } from '../../common/modules/MultiplayerGame';
+import { LimiteLimiteGame } from '../../common/LimiteLimite/LimiteLimiteGame';
+import { PropositionCard } from '../../common/LimiteLimite/PropositionCard';
 
 console.log('prefix on limitelimite events', prefix)
 
@@ -50,7 +47,8 @@ export const addLimiteLimiteEvents = (socket: SuperSocket, GC: GameCollection) =
             let llgame = game.gameInstance as LimiteLimiteGame
             let propositionCards = deserialize(PropositionCard, propositionCardJSON)
             console.log('after send prop', propositionCardJSON, propositionCards, llgame.propsSent, llgame.canResolveTurn());
-            llgame.sendProp(propositionCards, socket.getOrCreatePlayer())
+            let player = llgame.getPlayer(socket.id)
+            llgame.sendProp(propositionCards, player)
             
             if(llgame.canResolveTurn()){
                 socket.server.in(game.id).emit(prefix + 'game:players.turn_to_resolve', llgame.propsSent.map(p => p.prop))
@@ -101,7 +99,7 @@ function sendGameInfos(socket: SuperSocket, game: MultiplayerGame){
             score: llgame ? p.score : 0,
             isFirstPlayer,
             hasPlayed: llgame && !isFirstPlayer && llgame.playerHasPlayed(p)
-        } as PlayerListUIElt
+        }
     })
     // console.log('game:player.ask_initial_infos', game.id, uiPlayers, game.isFirstPlayer(socket.id), initialChat)
     let myIndex = llgame? llgame.getPlayerIndex(llgame.getPlayer(socket.id)) : game.getPlayerIndex(game.getPlayer(socket.id))

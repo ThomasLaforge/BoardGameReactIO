@@ -32,7 +32,7 @@ export const addGifDefinitorEvents = (socket: SuperSocket, GC: GameCollection) =
         if(game && gdgame && gdgame.turn){
             // game
             gdgame.turn.addProposition({
-                player: socket.getOrCreatePlayer(), 
+                player: gdgame.getPlayer(socket.id), 
                 sentence: proposition
             })
             
@@ -51,7 +51,7 @@ export const addGifDefinitorEvents = (socket: SuperSocket, GC: GameCollection) =
         let game = GC.getGameWithUser(socket.id)
         let gdgame = game && game.gameInstance as GifDefinitorGame
         if(game && gdgame && gdgame.turn){
-            const player = socket.getOrCreatePlayer()
+            const player = gdgame.getPlayer(socket.id)
             
             // get proposition index from ui proposition index
             let propositionIndex = uiPropositionIndex

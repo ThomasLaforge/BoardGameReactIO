@@ -4,10 +4,9 @@ import {observer, inject} from 'mobx-react';
 import { DefaultProps, injector } from '../../mobxInjector'
 import {deserialize} from 'serializr'
 
-import {PlayerListUI, PlayerListUIElt} from 'limitelimite-common/LimiteLimiteUI'
-import { prefix, Bet, Play, GamePhase } from 'limitelimite-common/TarotCongolais/TarotCongolais'
-import { Hand } from 'limitelimite-common/TarotCongolais/Hand'
-import { Card as TCCard } from 'limitelimite-common/TarotCongolais/Card'
+import { prefix, Bet, Play, GamePhase } from 'boardgamereactio-common/TarotCongolais/TarotCongolais'
+import { Hand } from 'boardgamereactio-common/TarotCongolais/Hand'
+import { Card as TCCard } from 'boardgamereactio-common/TarotCongolais/Card'
 
 // console.log('prefix on render', prefix)
 
@@ -66,7 +65,7 @@ class Game extends React.Component <GameProps, GameState> {
                 this.setState({gameId, players, isCreator, nbPlayersToStart })
             })
 
-            socket.on(prefix + 'game:players.new_player', (players: PlayerListUI) => {
+            socket.on(prefix + 'game:players.new_player', (players: any) => {
                 this.setState({ players })
             })
 

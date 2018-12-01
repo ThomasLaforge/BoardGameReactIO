@@ -2,8 +2,8 @@ import * as React from 'react';
 import {socketConnect} from 'socket.io-react'
 import {observer, inject} from 'mobx-react';
 import { DefaultProps, injector } from '../../../mobxInjector'
-import { SentenceCard as SentenceCardModel, PropositionCard as PropositionCardModel, NB_SECONDS_BEFORE_NEXT_TURN } from 'limitelimite-common';
-import { prefix } from 'limitelimite-common/LimiteLimite'
+import { SentenceCard as SentenceCardModel, PropositionCard as PropositionCardModel, NB_SECONDS_BEFORE_NEXT_TURN } from 'boardgamereactio-common';
+import { prefix } from 'boardgamereactio-common/LimiteLimite/LimiteLimite'
 
 console.log('timer init', NB_SECONDS_BEFORE_NEXT_TURN)
 

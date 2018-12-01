@@ -5,7 +5,7 @@ import { DefaultProps, injector } from '../../../mobxInjector'
 
 import Gif from '../components/Gif/Gif';
 import { Input, Button } from '@material-ui/core';
-import { prefix } from 'limitelimite-common/GifDefinitor/GifDefinitor';
+import { prefix } from 'boardgamereactio-common/GifDefinitor/GifDefinitor';
 import Proposition from '../components/Proposition/Proposition';
 
 interface GamePropositionSenderProps extends DefaultProps {

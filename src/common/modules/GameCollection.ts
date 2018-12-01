@@ -1,6 +1,6 @@
-import { GameLobbyList } from '../LimiteLimite'
+import { GameLobbyList } from '../UI'
 import { Game } from './Game';
-import { GameTypeClass, GameType } from '..';
+import { GameTypeClass } from '..';
 import { MultiplayerGame } from './MultiplayerGame';
 
 export class GameCollection {
@@ -19,8 +19,8 @@ export class GameCollection {
         return this.games.find(g => g.id === gameRoomId) as Game
     }
 
-    getRandomAndNotFullGameRoomId(gameType: GameType){
-        let game = this.multiplayerGames.find(g => !g.isFull && g.type === gameType)
+    getRandomAndNotFullGameRoomId(gameName: string){
+        let game = this.multiplayerGames.find(g => !g.isFull && g.type === gameName)
         // console.log('game id', this.multiplayerGames, this.multiplayerGames.find(g => !g.isFull), this.multiplayerGames.find(g => g.type === gameType), game, game && game.id)
         return game && game.id
     }

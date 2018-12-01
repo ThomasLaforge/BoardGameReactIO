@@ -104,4 +104,8 @@ export class Game {
     getPlayerIndex(player: Player){
         return this.players.findIndex(p => p.isEqual(player))
     }
+
+    getPlayer(socketId: string){
+        return this.players.find(p => p.socketid === socketId) as Player
+    }
 }

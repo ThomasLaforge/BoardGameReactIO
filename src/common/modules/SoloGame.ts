@@ -1,12 +1,12 @@
 import { Game } from "./Game";
-import { Player } from "./Player";
 import { GameClass } from "..";
+import { SocketPlayer } from "./SocketPlayer";
 
 export class SoloGame extends Game {
 
-    public player: Player
+    public player: SocketPlayer
 
-    constructor(gameClass: GameClass, player: Player){
+    constructor(gameClass: GameClass, player: SocketPlayer){
         super(gameClass)
         this.player = player
     }

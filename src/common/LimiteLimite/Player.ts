@@ -1,6 +1,6 @@
 import { PropositionCard } from "./PropositionCard";
 import { Hand } from "./Hand";
-import { SocketPlayer } from "./SocketPlayer";
+import { SocketPlayer } from "../modules/SocketPlayer";
 import { serializable, object } from 'serializr';
 
 export class Player extends SocketPlayer {

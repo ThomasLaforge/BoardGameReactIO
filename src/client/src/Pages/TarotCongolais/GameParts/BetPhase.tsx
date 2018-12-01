@@ -2,8 +2,8 @@ import * as React from 'react';
 import {socketConnect} from 'socket.io-react'
 import {observer, inject} from 'mobx-react';
 import { DefaultProps, injector } from '../../../mobxInjector'
-import { Hand as TCHand} from 'limitelimite-common/TarotCongolais/Hand';
-import { prefix } from 'limitelimite-common/TarotCongolais/TarotCongolais'
+import { Hand as TCHand} from 'boardgamereactio-common/TarotCongolais/Hand';
+import { prefix } from 'boardgamereactio-common/TarotCongolais/TarotCongolais'
 
 import Hand from '../components/Hand/Hand'
 import { Button } from '@material-ui/core';

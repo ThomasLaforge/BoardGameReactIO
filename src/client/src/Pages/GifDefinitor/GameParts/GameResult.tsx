@@ -5,7 +5,7 @@ import { DefaultProps, injector } from '../../../mobxInjector'
 
 import Gif from '../components/Gif/Gif';
 import Proposition from '../components/Proposition/Proposition';
-import { NB_SECONDS_BEFORE_NEXT_TURN } from 'limitelimite-common/GifDefinitor/GifDefinitor';
+import { NB_SECONDS_BEFORE_NEXT_TURN } from 'boardgamereactio-common/GifDefinitor/GifDefinitor';
 import Timer from 'src/components/Timer';
 
 interface GameResultProps extends DefaultProps {

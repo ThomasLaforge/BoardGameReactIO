@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Card as TarotCongolaisCard } from 'limitelimite-common/TarotCongolais/Card'
+import { Card as TarotCongolaisCard } from 'boardgamereactio-common/TarotCongolais/Card'
 
 import Card from '../Card/Card'
 

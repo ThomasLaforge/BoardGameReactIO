@@ -1,6 +1,5 @@
 import { Game } from "./Game";
-import { DEFAULT_IS_PRIVATE_GAME, DEFAULT_NB_PLAYER } from "../LimiteLimite";
-import { GameType } from "..";
+import { DEFAULT_IS_PRIVATE_GAME, DEFAULT_NB_PLAYER } from "../LimiteLimite/LimiteLimite";
 import { SocketPlayer } from "./SocketPlayer";
 
 export class MultiplayerGame extends Game {
@@ -11,7 +10,7 @@ export class MultiplayerGame extends Game {
     public canBeForcedIsFull?: Function
     private _forcedIsFull: boolean
 
-    constructor(gameType: GameType,  isPrivate = DEFAULT_IS_PRIVATE_GAME, nbPlayer?: number, canBeForcedIsFull?: Function){
+    constructor(gameType: string,  isPrivate = DEFAULT_IS_PRIVATE_GAME, nbPlayer?: number, canBeForcedIsFull?: Function){
         super(gameType)
         this.isPrivate = isPrivate
         this.players = []
@@ -20,11 +19,11 @@ export class MultiplayerGame extends Game {
 
         if(!nbPlayer){
             switch (gameType) {
-                case GameType.LimiteLimite:
+                case 'limitelimite':
                     nbPlayer = 0; break;
-                case GameType.GifDefinitor:
+                case 'gifdefinitor':
                     nbPlayer = 0; break;
-                case GameType.TarotCongolais:
+                case 'tarotcongolais':
                     nbPlayer = 2; break;
                 default:
                     nbPlayer = DEFAULT_NB_PLAYER; break;

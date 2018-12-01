@@ -1,7 +1,7 @@
 import * as React from 'react';
 
-import { Trick as TarotCongolaisTrick } from 'limitelimite-common/TarotCongolais/Trick'
-import { Card as TCCard } from 'limitelimite-common/TarotCongolais/Card'
+import { Trick as TarotCongolaisTrick } from 'boardgamereactio-common/TarotCongolais/Trick'
+import { Card as TCCard } from 'boardgamereactio-common/TarotCongolais/Card'
 import Card from '../Card/Card';
 
 import './trick.scss'
