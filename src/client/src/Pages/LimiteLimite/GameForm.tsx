@@ -2,6 +2,7 @@ import * as React from 'react';
 import {socketConnect} from 'socket.io-react'
 import {observer, inject} from 'mobx-react';
 import { DefaultProps, injector } from '../../mobxInjector'
+import { Button } from '@material-ui/core';
 
 interface GameFormProps extends DefaultProps {
 }
@@ -20,10 +21,17 @@ class GameForm extends React.Component <GameFormProps, GameFormState> {
         }
     }
 
+    onClickCreateGame = () => {
+        this.props.socket.emit('lobby:create', 'limitelimite')
+    }
+
     render() {
         return (
             <div className='limitelimite-creation-form'>
-                Limite Limite Form
+                <Button 
+                    variant="raised"
+                    onClick={this.onClickCreateGame}
+                >Create a game</Button>
             </div> 
         );
     }

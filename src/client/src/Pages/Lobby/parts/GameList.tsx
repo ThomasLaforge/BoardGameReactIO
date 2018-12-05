@@ -16,12 +16,13 @@ class GameList extends React.Component <GameListProps, GameListState> {
     constructor(props: GameListProps){
         super(props)
         this.state = {
-            gameList: new Array(10).fill({
-                gameId: 'test-gameid',
-                nbPlayer: 4,
-                nbPlayersOnGame: 3,
-                creationDate: Date.now()
-            })
+            // gameList: new Array(10).fill({
+            //     gameId: 'test-gameid',
+            //     nbPlayer: 4,
+            //     nbPlayersOnGame: 3,
+            //     creationDate: Date.now()
+            // })
+            gameList: []
         }
     }
 
@@ -30,13 +31,14 @@ class GameList extends React.Component <GameListProps, GameListState> {
             this.props.socket.emit('lobby:get_global_lobby_list')
         }
 
-        // this.props.socket.on('lobby:player.update_list', (gameList: GameLobbyList) => {
-        //     this.setState({ gameList })
-        // })
+        this.props.socket.on('lobby:player.update_list', (gameList: GameLobbyList) => {
+            this.setState({ gameList })
+        })
     }
 
     goToGameRoom = (gameId: string) => {
         console.log('try to enter on game room with id', gameId)
+        this.props.socket.emit('lobby:join', gameId)
     }
     
     renderGamesTable(){
