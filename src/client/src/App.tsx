@@ -12,6 +12,7 @@ import './App.scss';
 import LimiteLimiteGame from "./Pages/LimiteLimite/Game";
 import LimiteLimiteForm from "./Pages/LimiteLimite/GameForm"
 import TarotCongolaisGame from './Pages/TarotCongolais/Game'
+import TarotCongolaisForm from "./Pages/TarotCongolais/GameForm"
 import GifDefinitorGame from './Pages/GifDefinitor/Game'
 
 const uri = location.protocol + '//' + location.hostname + ':3027';
@@ -32,6 +33,7 @@ let games: any[] = [
 		path: '/tarotcongolais',
 		name: 'tarotcongolais',
 		component: TarotCongolaisGame,
+		formComponent: TarotCongolaisForm
 	},
 	{
 		path: '/gifdefinitor',
