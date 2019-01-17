@@ -7,8 +7,8 @@ import { prefix } from 'boardgamereactio-common/LimiteLimite/LimiteLimite'
 
 console.log('timer init', NB_SECONDS_BEFORE_NEXT_TURN)
 
-import SentenceCard from '../../../components/Cards/SentenceCard'
-import PropositionCard from '../../../components/Cards/PropositionCard'
+import SentenceCard from '../components/Cards/SentenceCard'
+import PropositionCard from '../components/Cards/PropositionCard'
 import Timer from '../../../components/Timer';
 
 interface GameResultProps extends DefaultProps {
