@@ -2,8 +2,8 @@ import * as React from 'react';
 import {socketConnect} from 'socket.io-react'
 import {observer, inject} from 'mobx-react';
 import { DefaultProps, injector } from '../../../mobxInjector'
-import SentenceCard from '../../../components/Cards/SentenceCard';
-import PropositionCard from '../../../components/Cards/PropositionCard';
+import SentenceCard from '../components/Cards/SentenceCard';
+import PropositionCard from '../components/Cards/PropositionCard';
 import { SentenceCard as SentenceCardModel, PropositionCard as PropositionCardmodel, Hand } from 'boardgamereactio-common';
 import { serialize } from 'serializr';
 import { Button } from '@material-ui/core';

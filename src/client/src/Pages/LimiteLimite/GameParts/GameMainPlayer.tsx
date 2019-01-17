@@ -2,7 +2,7 @@ import * as React from 'react';
 import {socketConnect} from 'socket.io-react'
 import {observer, inject} from 'mobx-react';
 import { DefaultProps, injector } from '../../../mobxInjector'
-import SentenceCard from '../../../components/Cards/SentenceCard';
+import SentenceCard from '../components/Cards/SentenceCard';
 
 interface GameMainPlayerProps extends DefaultProps {
     sentence: any
