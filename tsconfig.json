@@ -3,11 +3,13 @@
   "compilerOptions": {
     "rootDir": ".",
     "outDir": "build",
-    "experimentalDecorators": true
+    "experimentalDecorators": true,
+    "resolveJsonModule": true
   },
   "include": [
     "src/*.ts",
     "src/common/**/*.ts",
     "src/server/*.ts",
+    "src/**/*.json"
   ]
 }
