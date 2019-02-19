@@ -1,4 +1,4 @@
-import { GameLobbyList } from '../UI'
+import { GameLobbyList, GameLobbyListElt } from '../UI'
 import { Game } from './Game';
 import { GameTypeClass } from '..';
 import { MultiplayerGame } from './MultiplayerGame';
@@ -43,8 +43,11 @@ export class GameCollection {
             .map(game => ({
                 gameId: game.id,
                 people: game.playersNames,
-                isFull: game.isFull
-            }))
+                isFull: game.isFull,
+                gameType: game.type,
+                nbPlayer: game.nbPlayer,
+                creationDate: game.creationDate
+            } as GameLobbyListElt))
     }
 
     get multiplayerGames(): MultiplayerGame[] {

@@ -49,10 +49,12 @@ class GameList extends React.Component <GameListProps, GameListState> {
         console.log('game list', this.state.gameList)
         return this.state.gameList.map( (g, i) => {
             let creationDate = new Date(g.creationDate)
+            console.log('creation date', creationDate)
             return (
                 <div className="lobby-game-list-elt" key={i}>
-                    <div className="game-cretion-date">{creationDate.getDate()} / {creationDate.getMonth()} / {creationDate.getFullYear()}</div>
-                    <div className="game-population">{g.nbPlayersOnGame} / {g.nbPlayer}</div>
+                    <div className="game-type">{g.gameType}</div>
+                    <div className="game-creation-date">{creationDate.getDate()} / {creationDate.getMonth()} / {creationDate.getFullYear()}</div>
+                    <div className="game-population">{g.people.length} / {g.nbPlayer}</div>
                     <Button 
                         variant='raised'
                         onClick={() => this.goToGameRoom(g.gameId)}

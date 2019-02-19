@@ -102,7 +102,7 @@ function sendGameInfos(socket: SuperSocket, game: MultiplayerGame){
         }
     })
     // console.log('game:player.ask_initial_infos', game.id, uiPlayers, game.isFirstPlayer(socket.id), initialChat)
-    let myIndex = llgame? llgame.getPlayerIndex(llgame.getPlayer(socket.id)) : game.getPlayerIndex(game.getPlayer(socket.id))
+    let myIndex = llgame ? llgame.getPlayerIndex(llgame.getPlayer(socket.id)) : game.getPlayerIndex(game.getPlayer(socket.id))
     console.log('prefix on super socket', prefix)
     socket.emit(prefix + 'game:player.ask_initial_infos', game.id, uiPlayers, llgame ? llgame.isFirstPlayer(socket.id) : game.isFirstPlayer(socket.id), myIndex)
     socket.baseSocket.to(game.id).broadcast.emit(prefix + 'game:players.new_player', uiPlayers)
