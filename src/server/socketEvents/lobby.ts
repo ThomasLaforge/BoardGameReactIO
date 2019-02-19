@@ -46,6 +46,7 @@ export const addLobbyEvents = (socket: SuperSocket, GC: GameCollection) => {
     let game = socket.createNewMultiplayerGame(gameType, isPrivate, nbPlayerToStart)
     console.log('lobby-create : ' + game.id + ', ' + socket.socketPlayer.surname)
     GC.addGame(game);
+    socket.baseSocket.to('lobby').emit('lobby:player.new_game');
     socket.playerEnterGameRoom(game)
   })
   

@@ -29,11 +29,15 @@ class GameList extends React.Component <GameListProps, GameListState> {
     componentDidMount(){
         if(this.props.socket){
             this.props.socket.emit('lobby:get_global_lobby_list')
+            
+            this.props.socket.on('lobby:player.new_game', () => {
+                this.props.socket.emit('lobby:get_global_lobby_list')
+            })
+            
+            this.props.socket.on('lobby:player.update_list', (gameList: GameLobbyList) => {
+                this.setState({ gameList })
+            })
         }
-
-        this.props.socket.on('lobby:player.update_list', (gameList: GameLobbyList) => {
-            this.setState({ gameList })
-        })
     }
 
     goToGameRoom = (gameId: string) => {
