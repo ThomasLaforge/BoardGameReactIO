@@ -64,6 +64,7 @@ export class Game {
 	}
 
 	nextTurn(){
+		console.log('Game:nextTurn', this.turn.arrTrick)
 		this.players.forEach(p => {
 			const playerHasLost = this.turn.getLosers().findIndex(loser => loser.isEqual(p)) !== -1
 			if(playerHasLost){
@@ -87,6 +88,7 @@ export class Game {
 					player:p
 				})
 			})
+			this.addTrick()
 		}
 	}
 
@@ -173,12 +175,18 @@ export class Game {
 	}
 
 	getNbCardForTurn(turnindex = this.getTurnIndex()){
-		let nbPlayers = this.getNbPlayer()
-		let nbCards = new Deck().length
-		let nbTurnByPlayer = Math.floor(nbCards / nbPlayers)
+		const nbPlayers = this.getNbPlayer()
+		const nbCards = new Deck().length
+		const nbTurnByPlayer = Math.floor(nbCards / nbPlayers)
+		const nbCardForTurn = nbTurnByPlayer - turnindex
 
-		// return nbTurnByPlayer - turnindex
-		return 1
+		// To test little turns with 2 people
+		// return nbCardForTurn >= 5 ? 5 : nbCardForTurn
+		
+		// To test turn with one card
+		// return 1
+		
+		return nbTurnByPlayer - turnindex
 	}
 
 	// Get players with First player Point Of Vue

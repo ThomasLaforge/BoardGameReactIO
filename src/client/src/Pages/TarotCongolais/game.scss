@@ -64,6 +64,10 @@
   .game-content {
     flex: 1;
 
+    .game-info {
+      @include infoBox();
+    }
+
     .game-part-bet {
       @include fullFlex();
       flex-direction: column;
@@ -102,9 +106,30 @@
         }
 
       }
+    }
 
-      .bet-hand {
-        
+    .game-part-trick {
+      @include fullFlex();
+      flex-direction: column;
+      justify-content: space-around;
+
+      .played-cards {
+        padding-bottom: 45px;
+        border-bottom: solid $blue 4px;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+      }
+
+      .play-zone {
+        .play-zone-hand {
+          margin-bottom: 35px;
+        }
+
+        .play-zone-action {
+          display: flex;
+          justify-content: center;
+        }
       }
     }
   }

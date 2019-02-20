@@ -31,7 +31,7 @@
     "dev": "npm run dev:client && npm watch:server",
     "dev:server": "node build/src/server/index.js",
     "dev:client": "cd src/client && npm start",
-    "link": "npm run compile && cp src/common/package.json build/src/common && cd build/src/common && npm link && cd ../../../src/client && npm link boardgamereactio-common"
+    "link": "npm run compile && shx cp src/common/package.json build/src/common && cd build/src/common && npm link && cd ../../../src/client && npm link boardgamereactio-common"
   },
   "repository": {
     "type": "git",

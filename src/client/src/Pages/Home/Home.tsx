@@ -6,6 +6,8 @@ import Button from '@material-ui/core/Button';
 import TextFieldHandleEnter from '../../components/TextFieldHandleEnter';
 
 import './home.scss'
+import { Game } from 'boardgamereactio-common/TarotCongolais/Game';
+import { SocketPlayer } from 'boardgamereactio-common';
 
 interface HomeProps extends DefaultProps {
 }
@@ -13,6 +15,28 @@ interface HomeState {
     usernameInput: string,
     showAlreadyExists: boolean
 }
+
+function renderPV(g){
+    console.log('playersPV', g.players.map(p => ({
+        name: p.username,
+        pv: p.pv
+    })))
+}
+
+let socketPlayer = [
+    new SocketPlayer('Thomas', '1'),
+    new SocketPlayer('Ju', '2')
+]
+
+let tcGame = new Game(socketPlayer)
+renderPV(tcGame)
+tcGame.start()
+renderPV(tcGame)
+console.log('turn', tcGame.actualTrick)
+tcGame.nextTurn()
+renderPV(tcGame)
+
+
 
 @inject(injector)
 @observer

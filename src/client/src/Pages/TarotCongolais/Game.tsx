@@ -165,6 +165,8 @@ class Game extends React.Component <GameProps, GameState> {
             hand
         } = this.state
 
+        console.log('plays', this.state.plays)
+
         return (
             <div className='game'>
                 <div className="game-infos">

@@ -4,7 +4,7 @@ import {observer, inject} from 'mobx-react';
 import { DefaultProps, injector } from '../../mobxInjector'
 import {deserialize, serialize} from 'serializr'
 
-import { GameStatus } from 'boardgamereactio-common';
+import { GameStatus } from 'boardgamereactio-common/index';
 import { ChatMessage } from 'boardgamereactio-common/modules/Server';
 import { prefix } from 'boardgamereactio-common/GifDefinitor/GifDefinitor'
 

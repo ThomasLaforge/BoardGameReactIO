@@ -39,7 +39,7 @@ class Hand extends React.Component <HandProps, HandState> {
 
     render() {
         return (
-            <div className="hand">
+            <div className="tc-hand">
                 {this.renderCards()}
             </div>
         );

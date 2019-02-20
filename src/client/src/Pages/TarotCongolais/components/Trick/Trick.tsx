@@ -24,7 +24,7 @@ class Trick extends React.Component <TrickProps, TrickState> {
 
     render() {
         return (
-            <div className="trick">
+            <div className="tc-trick">
                 <div className="trick-value">
                     <Card card={this.props.card} />
                 </div>

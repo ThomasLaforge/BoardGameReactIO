@@ -37,7 +37,7 @@ class Card extends React.Component <CardProps, CardState> {
         const card = this.props.card
         console.log('card value', this.props.card.value)
         return (
-            <div className={"card" + (this.props.selected ? ' card-selected': '')}>
+            <div className={"tc-card" + (this.props.selected ? ' tc-card-selected': '')}>
                 <div 
                     className="card-value"
                     onClick={() => this.props.onClick && this.props.onClick(this.props.card.value)}

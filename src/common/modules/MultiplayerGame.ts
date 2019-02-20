@@ -24,7 +24,7 @@ export class MultiplayerGame extends Game {
                 case 'gifdefinitor':
                     nbPlayer = 0; break;
                 case 'tarotcongolais':
-                    nbPlayer = 2; break;
+                    nbPlayer = 4; break;
                 default:
                     nbPlayer = DEFAULT_NB_PLAYER; break;
             }

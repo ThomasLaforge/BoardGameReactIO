@@ -33,7 +33,7 @@ class TrickPhase extends React.Component <TrickPhaseProps, TrickPhaseState> {
 
     renderTricks(){
         return this.props.otherPlayersTricks.map(t => 
-            <Trick card={new TCCard(t.card._value)} playerName={t.playerName} />
+            <Trick card={new TCCard(t.card._value)} playerName={t.player._username} />
         )
     }
 
@@ -73,7 +73,7 @@ class TrickPhase extends React.Component <TrickPhaseProps, TrickPhaseState> {
                         </Button>
                     </div>
                 </div>
-                <div className="game-part-infos">
+                <div className="game-info">
                     { this.props.isPlayerToPlay
                         ? 'Select a card on play it'
                         : 'wait for current player to play. You can select a card.'
