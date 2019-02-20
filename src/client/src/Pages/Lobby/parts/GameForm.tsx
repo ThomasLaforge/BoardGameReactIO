@@ -25,9 +25,12 @@ class GameForm extends React.Component <GameFormProps, GameFormState> {
             : null
         return (
             <div className="lobby-game-creator">
-                <div className="lobby-game-creator-form">
-                    {SpecificFormComponent ? <SpecificFormComponent /> : 'Select a game type to create a game'}
-                </div>
+                {SpecificFormComponent 
+                    ? <SpecificFormComponent /> 
+                    : <div className="lobby-game-default-creator-form">
+                        Select a game type to create a game
+                    </div>
+                }
             </div>
         );
     }

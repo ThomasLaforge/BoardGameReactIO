@@ -53,9 +53,10 @@ class GameList extends React.Component <GameListProps, GameListState> {
             return (
                 <div className="lobby-game-list-elt" key={i}>
                     <div className="game-type">{g.gameType}</div>
-                    <div className="game-creation-date">{creationDate.getDate()} / {creationDate.getMonth()} / {creationDate.getFullYear()}</div>
+                    <div className="game-creation-date">{creationDate.getDate()}/{creationDate.getMonth()}/{creationDate.getFullYear()}</div>
                     <div className="game-population">{g.people.length} / {g.nbPlayer}</div>
                     <Button 
+                        className='game-join-btn'
                         variant='raised'
                         onClick={() => this.goToGameRoom(g.gameId)}
                     >
@@ -70,7 +71,7 @@ class GameList extends React.Component <GameListProps, GameListState> {
         return (
             <div className="lobby-game-list">
                 <div className="lobby-game-list-title">Liste des parties à rejoindre</div>
-                <div className="lobby-game-list-filters">filters:</div>
+                {/* <div className="lobby-game-list-filters">filters:</div> */}
                 <div className="lobby-game-list-grid">
                     {this.renderGamesTable()}                    
                 </div>
