@@ -45,9 +45,27 @@
 
                         border: 4px lightgray solid;
                         border-radius: 8px;
+                        background-repeat:no-repeat;
+                        background-position: center;
+                        background-size: 100% auto;
                     }
+                    .lobby-limitelimite {
+                        background-image: url(../LimiteLimite/resources/logo-jeu-limitelimite.png);
+                    }
+                    .lobby-tarotcongolais {
+                        background-image: url(../TarotCongolais/resources/logo.png);
+                    }
+                    .lobby-gifdefinitor {
+                        background-image: url(../GifDefinitor/resources/logo.gif);
+                    }
+
                     .lobby-type-selection-elt-image_selected {
                         border-color: lightgreen;
+                    }
+
+                    .lobby-type-selection-elt-name {
+                        text-align: center;
+                        font-size: 15px;
                     }
 
                     .lobby-type-selection-elt-descriptor {

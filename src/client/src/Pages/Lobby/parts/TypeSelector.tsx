@@ -2,6 +2,8 @@ import * as React from 'react';
 import {observer, inject} from 'mobx-react';
 import { DefaultProps, injector } from 'src/mobxInjector';
 
+import limitelimiteImg from '../../LimiteLimite/resources/logo-jeu-limitelimite.png'
+
 interface TypeSelectorProps extends DefaultProps {
 }
 interface TypeSelectorState {
@@ -23,11 +25,15 @@ class TypeSelector extends React.Component <TypeSelectorProps, TypeSelectorState
             <div className="lobby-type-selection-elt" key={i}>
                 <div 
                     className={
-                          "lobby-type-selection-elt-image"
+                          'lobby-type-selection-elt-image '
+                        + 'lobby-' + g.name + ' '
                         + (this.props.ui.selectedTypeIndex === i ? " lobby-type-selection-elt-image_selected" : '')
                     }
                     onClick={() => this.props.ui.handleChangeSelectedTypeIndex(i)}
-                >Image {g.name}</div>
+                />
+                <div className="lobby-type-selection-elt-name">
+                    {g.name}
+                </div>
                 <div className="lobby-type-selection-elt-descriptor">
                     <div className="type-descriptor-title">
                         {g.name}

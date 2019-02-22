@@ -54,7 +54,11 @@ class GameList extends React.Component <GameListProps, GameListState> {
                 <div className="lobby-game-list-elt" key={i}>
                     <div className="game-type">{g.gameType}</div>
                     <div className="game-creation-date">{creationDate.getDate()}/{creationDate.getMonth()}/{creationDate.getFullYear()}</div>
-                    <div className="game-population">{g.people.length} / {g.nbPlayer}</div>
+                    <div className="game-population"
+                        title={g.people.reduce( (nameList, p) => nameList + p + "\n", '')}
+                    >
+                        {g.people.length} / {g.nbPlayer}
+                    </div>
                     <Button 
                         className='game-join-btn'
                         variant='raised'
