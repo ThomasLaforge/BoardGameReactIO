@@ -44,7 +44,7 @@ export class Game {
         let gifUrl: string;
 
         try {
-            let gifData = await fetch('https://api.giphy.com/v1/gifs/random?api_key=wrxBKkmJ1o4LqGeNg7TueyumUzagodPR&rating=r')
+            let gifData = await fetch('https://api.giphy.com/v1/gifs/random?api_key=' + this.gifApiKey + '&rating=r')
             let gifDataJson = await gifData.json()
             gifUrl = gifDataJson.data.images.original.url
         }

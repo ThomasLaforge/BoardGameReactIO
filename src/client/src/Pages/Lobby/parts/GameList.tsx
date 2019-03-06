@@ -16,12 +16,6 @@ class GameList extends React.Component <GameListProps, GameListState> {
     constructor(props: GameListProps){
         super(props)
         this.state = {
-            // gameList: new Array(10).fill({
-            //     gameId: 'test-gameid',
-            //     nbPlayer: 4,
-            //     nbPlayersOnGame: 3,
-            //     creationDate: Date.now()
-            // })
             gameList: []
         }
     }
