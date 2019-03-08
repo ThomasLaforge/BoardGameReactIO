@@ -5,14 +5,16 @@ import { Concept } from "./Concept";
 export class Turn {
 
     public master: Player
+    public sentence: string
     public winner?: Player
     public startDate: Date
     public endDate?: Date
     public duration: number
     public conceptList: Concept[]
 
-    constructor(master: Player, conceptList: Concept[] = [], duration = DEFAULT_TURN_DURATION, startDate = new Date()){
+    constructor(master: Player, sentence: string, conceptList: Concept[] = [], duration = DEFAULT_TURN_DURATION, startDate = new Date()){
         this.master = master
+        this.sentence = sentence
         this.startDate = startDate
         this.duration = duration
         this.conceptList = conceptList
