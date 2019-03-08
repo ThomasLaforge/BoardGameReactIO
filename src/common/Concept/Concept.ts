@@ -15,5 +15,7 @@ export class Concept {
         this.color = color
     }
 
-    
+    isMainConcept(){
+        return this.color === ConceptColor.MainColor
+    }
 }

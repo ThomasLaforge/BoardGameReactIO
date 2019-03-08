@@ -3,6 +3,7 @@ import { observable } from "mobx";
 
 import Home from '../Pages/Home/Home'
 import GameLobby from '../Pages/Lobby/Lobby'
+import ConceptGame from '../Pages/Concept/Game'
 
 export class Router {
     public routes: Route[]
@@ -14,7 +15,7 @@ export class Router {
             {
                 path: '/',
                 name: 'home',
-                component: Home,
+                component: ConceptGame,
             },
             {
                 path: '/lobby',

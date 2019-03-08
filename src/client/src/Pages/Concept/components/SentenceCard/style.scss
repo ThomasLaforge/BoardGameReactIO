@@ -1,0 +1,83 @@
+.concept-sentence-card {
+    height: 400px;
+    width: 300px;
+    padding: 15px;
+    border-radius: 25px;
+    background-color: white;
+    
+    display: flex;
+    flex-direction: column;
+
+    .sentence-groups {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        flex: 1;
+
+        .sentence-group-0 { border-color: lightblue; }
+        .sentence-group-1 { border-color: lightcoral; }
+        .sentence-group-2 { border-color: black; }
+        .sentence-groups-elt {
+            position: relative;
+            height: 30%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            border-width: 5px;
+            border-style: solid;
+            border-radius: 25px 0;
+            padding: 15px;
+
+            .sentence-groups-icon {
+                position: relative;
+                top: -40px;
+                left: 100%;
+                width: 40px;
+                min-height: 40px;
+                border-radius: 40px;
+
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+            } 
+            .sentence-groups-icon-0 { background-color: lightblue; }
+            .sentence-groups-icon-1 { background-color: lightcoral; }
+            .sentence-groups-icon-2 { background-color: black; }
+            
+            .sentence-groups-content {
+                flex: 1;
+                position: absolute;
+                left: -15 / 2 * 1px;
+                right: 0;
+
+                .sentence-elt {
+                    flex: 1;
+                    display: flex;
+                    flex-direction: row;
+
+                    .sentence-elt-number {
+                        border: 2px solid black;
+                        width: 20px;
+                        text-align: center;
+                        border-radius: 20px;
+                    }
+                    .sentence-elt-number-0 {}
+                    .sentence-elt-number-1 {}
+                    .sentence-elt-number-2 {}
+
+                    .sentence-elt-text {
+                        width: 100%;
+                        text-align: center;
+                    }
+                }
+                .sentence-separator {
+                    padding: 2px; 
+                    height: 5px;
+                    width: 67%;
+                    border-bottom: 5px dotted gray;
+                    margin: 0 auto;
+                }
+            }
+        }
+    }
+}
