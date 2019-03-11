@@ -1,3 +1,4 @@
+
 .concept-sentence-card {
     height: 400px;
     width: 300px;
@@ -14,9 +15,6 @@
         justify-content: space-between;
         flex: 1;
 
-        .sentence-group-0 { border-color: lightblue; }
-        .sentence-group-1 { border-color: lightcoral; }
-        .sentence-group-2 { border-color: black; }
         .sentence-groups-elt {
             position: relative;
             height: 30%;
@@ -40,10 +38,7 @@
                 flex-direction: column;
                 justify-content: center;
             } 
-            .sentence-groups-icon-0 { background-color: lightblue; }
-            .sentence-groups-icon-1 { background-color: lightcoral; }
-            .sentence-groups-icon-2 { background-color: black; }
-            
+
             .sentence-groups-content {
                 flex: 1;
                 position: absolute;
@@ -61,10 +56,6 @@
                         text-align: center;
                         border-radius: 20px;
                     }
-                    .sentence-elt-number-0 {}
-                    .sentence-elt-number-1 {}
-                    .sentence-elt-number-2 {}
-
                     .sentence-elt-text {
                         width: 100%;
                         text-align: center;
@@ -79,5 +70,37 @@
                 }
             }
         }
+
+    }
+    // .sentence-group-0 { 
+    //     border-color: lightblue;
+    //     .sentence-groups-icon { background-color: lightblue; }
+    //     .sentence-elt-number { background-color: lightblue; }
+    // }
+    // .sentence-group-1 { 
+    //     border-color: lightcoral;
+    //     .sentence-groups-icon { background-color: lightcoral; }
+    //     .sentence-elt-number { background-color: lightcoral; }
+    // }
+    // .sentence-group-2 { 
+    //     border-color: black; 
+    //     .sentence-groups-icon { background-color: black; }
+    //     .sentence-elt-number { background-color: black; }
+    // }
+    $colors: lightblue lightcoral black;
+
+    @mixin create_sentence_group($index, $color) {
+        .sentence-group-#{$index} { 
+            border-color: $color; 
+            .sentence-groups-icon { background-color: $color; }
+            .sentence-elt-number { 
+                background-color: rgba($color, .3);
+                border-color: $color !important; 
+            }
+        }
+    }
+
+    @for $i from 0 through 2 {
+        @include create_sentence_group($i, nth($colors, $i + 1))
     }
 }
