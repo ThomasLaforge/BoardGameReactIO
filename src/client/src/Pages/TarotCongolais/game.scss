@@ -132,5 +132,38 @@
         }
       }
     }
+
+    .game-part-solo-card {
+      @include fullFlex();
+      flex-direction: column;
+      justify-content: space-evenly;
+
+      .other-player-cards {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+        flex-wrap: wrap;
+      }
+      .prediction-choice {
+        display: flex;
+        flex-direction: column;
+
+        .prediction-choice-description {
+          text-align: center;
+          font-size: 25px;
+        }
+        .prediction-choice-choices {
+          margin: 30px auto 0 auto;
+          
+          button {
+            margin: 0 30px;
+          }
+        }
+      }
+      .waiting-prediction {
+        text-align: center;
+        font-size: 25px;
+      }
+    }
   }
 }
