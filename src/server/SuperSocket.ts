@@ -45,6 +45,7 @@ export class SuperSocket {
             game.addPlayer(this.socketPlayer)
         }
         this.emit('lobby:player.enter_in_game_table', game.type)
+        this.baseSocket.to('lobby').emit('lobby:player.new_game');
     }
 
     createNewMultiplayerGame(gameType: string, isPrivate = DEFAULT_IS_PRIVATE_GAME, nbPlayerToStart?: number): MultiplayerGame {
