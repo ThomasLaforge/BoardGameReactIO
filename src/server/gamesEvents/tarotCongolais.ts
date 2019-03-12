@@ -45,17 +45,18 @@ export const addTarotCongolaisEvents = (socket: SuperSocket, GC: GameCollection)
         }
     })
 
-    socket.on(prefix + 'player_play', (cardIndex: number) => {
-        console.log('player_play', cardIndex)
+    socket.on(prefix + 'player_play', (cardIndex: number, value: number) => {
         let g = GC.getGameWithUser(socket.id);
         if(g){
             try {
                 let tcgame = g.gameInstance as TarotCongolaisGame 
                 let player = tcgame.getPlayer(socket.id)
-                tcgame.addPlay({
-                    player,
-                    card: player.hand.cards[cardIndex]
-                })
+                let card = player.hand.cards[cardIndex]
+                if(card.isExcuse()){
+                    card.choseExcuseValue(value)
+                }
+                console.log('player_play', cardIndex, player.hand.cards[cardIndex])
+                tcgame.addPlay({ player, card })
                 updateUI(socket, g)
             } catch (error) {
                 console.log('player already played')
@@ -99,8 +100,8 @@ function updateUI(socket: SuperSocket, game: MultiplayerGame){
 
         tcgame.players.forEach( p => {
             // let nextPlayer: TCPlayer = tcgame.players[tcgame.getNextPlayerIndex()]
-            console.log('isFirst bet, play', tcgame.isPlayerToBet(p), tcgame.isPlayerToPlay(p), p.socketid)
-            console.log('hand', p.hand.cards[0])
+            // console.log('isFirst bet, play', tcgame.isPlayerToBet(p), tcgame.isPlayerToPlay(p), p.socketid)
+            // console.log('hand', p.hand.cards[0])
             let otherPlayers = tcgame.players.filter(op => !op.isEqual(p))
             let playerSpecificsParams = params.slice()
             playerSpecificsParams.push(

@@ -156,7 +156,7 @@ class Game extends React.Component <GameProps, GameState> {
 
     handlePlay = (cardIndex: number) => {
         console.log('play', cardIndex)
-        this.props.socket.emit(prefix + 'player_play', cardIndex)
+        this.props.socket.emit(prefix + 'player_play', cardIndex, this.state.hand.cards[cardIndex].value)
     }
 
     render() {
@@ -200,11 +200,11 @@ class Game extends React.Component <GameProps, GameState> {
 
                     { this.state.gamePhase && this.state.gamePhase === GamePhase.Play && nbTurnCards > 1 &&  
                         <TrickPhase
-                        hand={hand}
-                        onPlay={this.handlePlay}
-                        otherPlayersTricks={this.state.plays}
-                        isPlayerToPlay={isPlayerToPlay}
-                        onChangeExcuseValue={this.handleChangeExcuseValue}
+                            hand={hand}
+                            onPlay={this.handlePlay}
+                            otherPlayersTricks={this.state.plays}
+                            isPlayerToPlay={isPlayerToPlay}
+                            onChangeExcuseValue={this.handleChangeExcuseValue}
                         />
                     }
                     
