@@ -15,7 +15,7 @@ export class Router {
             {
                 path: '/',
                 name: 'home',
-                component: ConceptGame,
+                component: Home,
             },
             {
                 path: '/lobby',
