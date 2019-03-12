@@ -82,11 +82,11 @@ export class Game {
 	}
 
 	// Play
-	addPlay(play: Play){
+	addPlay(play: Play, autoEndTrick = true){
 		// Action
 		play.player.playCard(play.card)
 		let trickWinner = this.actualTrick.addPlay( play );
-		if(trickWinner){
+		if(trickWinner && autoEndTrick){
 			this.addTrick();
 		}
 	}
