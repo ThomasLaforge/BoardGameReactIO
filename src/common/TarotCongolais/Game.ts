@@ -79,17 +79,6 @@ export class Game {
 
 		this.deck = new Deck()
 		this.dealCards()
-
-		// Auto play cards for turn with only one card
-		if(this.getNbCardForTurn() === 1){
-			this.playersFPOV.forEach(p => {
-				this.addPlay({
-					card: p.hand.cards[0], 
-					player:p
-				})
-			})
-			this.addTrick()
-		}
 	}
 
 	// Play
@@ -97,7 +86,7 @@ export class Game {
 		// Action
 		play.player.playCard(play.card)
 		let trickWinner = this.actualTrick.addPlay( play );
-		if(this.getNbCardForTurn() !== 1 && trickWinner){
+		if(trickWinner){
 			this.addTrick();
 		}
 	}
@@ -107,8 +96,11 @@ export class Game {
 		this.turn.addbet(bet)
 
 		// solo card turn
-		if(this.turn.isComplete()){
-			this.nextTurn()
+		if(this.turn.allPlayersBet() && this.turn.nbCards === 1){
+			this.players.forEach(player => { 
+				let card = player.hand.cards[0]
+				this.addPlay({ player, card }) 
+			})
 		}
 	}
 
@@ -186,6 +178,9 @@ export class Game {
 		// To test turn with one card
 		// return 1
 		
+		// turns 2 and 1
+		// return (nbTurnByPlayer - turnindex) % 2 + 1
+
 		return nbTurnByPlayer - turnindex
 	}
 
