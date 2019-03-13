@@ -23,7 +23,7 @@
     "clean": "shx rm -r build",
     "compile": "tsc -p .",
     "watch:server": "tsc -w",
-    "cp-client": "shx cp -r src/client/build build/client",
+    "cp-client": "shx cp -r src/client/build build/src/client",
     "build": "npm run build:server && npm run build:client && shx cp -r src/client/build build/src/client",
     "publish": "scp -r datas build package.json nastomju@192.168.1.23:/var/services/web/www/testScp",
     "build:server": "npm run compile",
