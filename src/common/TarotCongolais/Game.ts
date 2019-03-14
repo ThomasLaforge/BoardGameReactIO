@@ -65,6 +65,7 @@ export class Game {
 
 	nextTurn(){
 		console.log('Game:nextTurn', this.turn.arrTrick)
+		// 
 		this.players.forEach(p => {
 			const playerHasLost = this.turn.getLosers().findIndex(loser => loser.isEqual(p)) !== -1
 			if(playerHasLost){
@@ -74,8 +75,8 @@ export class Game {
 
 		this.history.push(this.turn)
 		// resets
-		this.actualTrick = new Trick(this.players);
-		this.turn = new Turn(this.getNbCardForTurn(), this.players);
+		this.actualTrick = new Trick(this.playersFPOV);
+		this.turn = new Turn(this.getNbCardForTurn(), this.playersFPOV);
 
 		this.deck = new Deck()
 		this.dealCards()
@@ -179,9 +180,9 @@ export class Game {
 		// return 1
 		
 		// turns 2 and 1
-		// return (nbTurnByPlayer - turnindex) % 2 + 1
+		return (nbTurnByPlayer - turnindex) % 2 + 1
 
-		return nbTurnByPlayer - turnindex
+		// return nbTurnByPlayer - turnindex
 	}
 
 	// Get players with First player Point Of Vue
