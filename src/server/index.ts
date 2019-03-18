@@ -14,6 +14,7 @@ import { addLobbyEvents } from './socketEvents/lobby'
 import { addLimiteLimiteEvents } from './gamesEvents/limitelimite'
 import { addTarotCongolaisEvents } from './gamesEvents/tarotCongolais'
 import { addGifDefinitorEvents } from './gamesEvents/gifDefinitor'
+import { addSetEvents } from './gamesEvents/set'
 import { addChatEvents } from './socketEvents/chat'
 
 import { GameCollection } from '../common/modules/GameCollection';
@@ -32,6 +33,10 @@ const games: any = [
     {
         name: 'gifdefinitor',
         addEvents: addGifDefinitorEvents
+    },
+    {
+        name: 'set',
+        addEvents: addSetEvents
     }
 ]
 

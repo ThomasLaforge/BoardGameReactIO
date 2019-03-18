@@ -4,12 +4,15 @@ import {observer, inject} from 'mobx-react';
 import { DefaultProps, injector } from '../../mobxInjector'
 import {deserialize} from 'serializr'
 
-import { GameStatus, SentenceCard, Hand, PropositionCard } from 'boardgamereactio-common';
-import { ChatMessage } from 'boardgamereactio-common/modules/Server';
-import { prefix } from 'boardgamereactio-common/LimiteLimite/LimiteLimite'
+import { Game as SetGame } from 'boardgamereactio-common/Set/Game'
+import { Field as SetField } from 'boardgamereactio-common/Set/Field';
 
-console.log('prefix on render', prefix)
+import Field from "./components/Field/Field";
+
+import { prefix } from 'boardgamereactio-common/LimiteLimite/LimiteLimite'
 import Chat from '../../components/Chat';
+import { ChatMessage } from 'boardgamereactio-common/modules/Server';
+import { GameStatus } from 'boardgamereactio-common';
 
 import './game.scss'
 
@@ -22,7 +25,7 @@ interface GameState {
     gameStatus: GameStatus
     players: any
 
-    field?: any
+    field?: SetField
 }
 
 @inject(injector)
@@ -32,12 +35,16 @@ class Game extends React.Component <GameProps, GameState> {
 
     constructor(props: GameProps){
         super(props)
+        const game = new SetGame([])
+        const demoField = game.field
+        console.log('field', demoField)
         this.state = {
             gameId: '',
             isCreator: false,
             isFirstPlayer: false,
             gameStatus: GameStatus.Preparing,
-            players: []
+            players: [],
+            field: demoField
         }
     }
 
@@ -76,29 +83,13 @@ class Game extends React.Component <GameProps, GameState> {
     }
 
     renderPlayers(){
-        console.log('show players', this.state.players)
         return this.state.players.map( (p, k) => 
             <div 
                 key={k}
-                className={'player' 
-                    // red color for first player  
-                    // + (this.state.gameStatus !== GameStatus.Preparing && p.isFirstPlayer ? ' first-player' : '')
-                    + (k === this.state.myIndex ? ' player-me' : '')
-                }  
+                className='player'
             >
-                <div className="player-score">{p.score}</div>
                 <div className="player-name">{p.name}</div>
-                <div className="player-status">
-                    { p.isFirstPlayer && 
-                        <div className="player-status-is-boss">Boss</div>
-                    }
-                    { this.state.gameStatus === GameStatus.InGame && !p.isFirstPlayer && p.hasPlayed && 
-                        <div className="player-status-has-played">&#x2714;</div>
-                    }
-                    { this.state.gameStatus === GameStatus.InGame && !p.isFirstPlayer && !p.hasPlayed &&
-                    <div className="player-status-choosing">...</div>
-                    }
-                </div>   
+                <div className="player-score">{p.score}</div>
             </div>
         )
     }
@@ -115,7 +106,9 @@ class Game extends React.Component <GameProps, GameState> {
                     </div>
                 </div>
                 <div className="game-content">
-                    
+                    <Field 
+                        cards={this.state.field.cards}
+                    />
                 </div>
             </div>
         );

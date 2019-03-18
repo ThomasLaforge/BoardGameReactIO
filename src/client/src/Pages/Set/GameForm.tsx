@@ -4,7 +4,7 @@ import {observer, inject} from 'mobx-react';
 import { DefaultProps, injector } from '../../mobxInjector'
 import { Button } from '@material-ui/core';
 
-import { prefix } from 'boardgamereactio-common/LimiteLimite/LimiteLimite';
+import { prefix } from 'boardgamereactio-common/Set/definitions';
 
 interface GameFormProps extends DefaultProps {
 }
@@ -29,7 +29,7 @@ class GameForm extends React.Component <GameFormProps, GameFormState> {
 
     render() {
         return (
-            <div className='limitelimite-creation-form'>
+            <div className={prefix + '-creation-form'}>
                 <Button 
                     variant="raised"
                     onClick={this.onClickCreateGame}

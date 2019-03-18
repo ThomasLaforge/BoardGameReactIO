@@ -2,8 +2,6 @@ import * as React from 'react';
 import {observer, inject} from 'mobx-react';
 import { DefaultProps, injector } from 'src/mobxInjector';
 
-import limitelimiteImg from '../../LimiteLimite/resources/logo-jeu-limitelimite.png'
-
 interface TypeSelectorProps extends DefaultProps {
 }
 interface TypeSelectorState {

@@ -14,6 +14,8 @@ import LimiteLimiteForm from "./Pages/LimiteLimite/GameForm"
 import TarotCongolaisGame from './Pages/TarotCongolais/Game'
 import TarotCongolaisForm from "./Pages/TarotCongolais/GameForm"
 import GifDefinitorGame from './Pages/GifDefinitor/Game'
+import SetGame from './Pages/Set/Game'
+import SetForm from "./Pages/Set/GameForm"
 
 const uri = location.protocol + '//' + location.hostname + ':3027';
 // console.log('path of api', location, uri)
@@ -39,6 +41,12 @@ let games: any[] = [
 		path: '/gifdefinitor',
 		name: 'gifdefinitor',
 		component: GifDefinitorGame,
+	},
+	{
+		path: '/set',
+		name: 'set',
+		component: SetGame,
+		formComponent: SetForm
 	}
 ]
 

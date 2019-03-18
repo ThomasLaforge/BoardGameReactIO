@@ -17,6 +17,10 @@ export class Game {
 		this.players          = players.map(p => new Player(p.surname, p.socketid))
 		this.deck             = new Deck();
         this.field            = new Field([])
+        this.initField()
+        while( !this.field.hasSolution() && !this.isGameOver()) {
+            this.nextTurn()
+        }
     }
 
     nextTurn(){
@@ -41,7 +45,7 @@ export class Game {
 
     getWinners(){
         let winnerScore = 0
-        let winners = []
+        let winners: Player[] = []
         this.players.forEach(p => {
             let score = this.getPlayerScore(p)
             if(score > winnerScore){
@@ -52,11 +56,15 @@ export class Game {
                 winners.push(p)
             }
         })
-        return this.players.
+        return winners
     }
 
     isGameOver(){
         return this.deck.length === 0 && !this.field.hasSolution()
+    }
+
+    get nbPlayer(){
+        return this.players.length
     }
     
 }
