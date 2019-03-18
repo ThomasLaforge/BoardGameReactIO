@@ -31,7 +31,8 @@ class Home extends React.Component <HomeProps, HomeState> {
 
     componentDidMount(){
         if(this.props.socket){
-            this.tryToLogin()
+            // debug autolog
+            // this.tryToLogin()
 
             this.props.socket.on('login:player.login_accepted', (username) => {
                 console.log('connected with username', username)

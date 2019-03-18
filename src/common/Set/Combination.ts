@@ -1,6 +1,6 @@
 import { Card } from "./Card";
 import { uniq } from 'lodash'
-import { CardProperty } from "./definitions";
+import { CardProperty, NB_CARDS_FOR_COMBINATION } from "./definitions";
 
 export class Combination {
 
@@ -19,7 +19,7 @@ export class Combination {
     }
 
     isComplete(){
-        return this.cards.length === 3
+        return this.cards.length === NB_CARDS_FOR_COMBINATION
     }
 
     sameOrAllDifferentColor(){

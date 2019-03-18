@@ -4,15 +4,15 @@ import { Combination } from "../Combination";
 
 describe('combination', () => {
     const cardsWithAllDifferentsProperties = [
-        new Card(Shape.Diamond, 1, Color.Blue, Filling.Empty),
+        new Card(Shape.Diamond, 1, Color.Purple, Filling.Empty),
         new Card(Shape.Line, 2, Color.Green, Filling.Full),
         new Card(Shape.Wave, 3, Color.Red, Filling.Striped)
     ]
 
     const cardsWithAllSameProperties = [
-        new Card(Shape.Diamond, 1, Color.Blue, Filling.Empty),
-        new Card(Shape.Diamond, 1, Color.Blue, Filling.Empty),
-        new Card(Shape.Diamond, 1, Color.Blue, Filling.Empty)
+        new Card(Shape.Diamond, 1, Color.Purple, Filling.Empty),
+        new Card(Shape.Diamond, 1, Color.Purple, Filling.Empty),
+        new Card(Shape.Diamond, 1, Color.Purple, Filling.Empty)
     ]
 
     describe('has all different properties', () => {
