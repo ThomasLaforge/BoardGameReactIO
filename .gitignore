@@ -1,3 +1,4 @@
 /build
 /node_modules
 .vscode/symbols.json
+out/
