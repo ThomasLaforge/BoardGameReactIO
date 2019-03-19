@@ -1,14 +1,12 @@
 .set-shape {
     margin: 0 10px;
     border: 3px solid black;
-
-    .set-shape-content {
-    }
-
     
-    .shape-filling-empty { opacity: 0; } 
-    .shape-filling-striped { opacity: 0.4; } 
-    .shape-filling-full { font-size: 1; }
+    .set-shape-content { 
+        min-height: 100%; 
+        min-width: 100%;
+        border-radius: inherit;
+    }
     
 }
 
@@ -27,16 +25,23 @@
     border-radius: 60px/100px;
 }
 
-.shape-color-green { 
-    background-color: green;
-    border-color: green;
-} 
-.shape-color-purple { 
-    background-color: purple; 
-    border-color: purple;
 
-} 
-.shape-color-red { 
-    background-color: red;
-    border-color: red;
+@mixin ShapeColorized($colorName, $color){
+    .shape-color-#{$colorName} {
+        border-color: $color;
+        .shape-filling-empty { } 
+        .shape-filling-striped { background-image: repeating-linear-gradient(
+            90deg,
+            white,
+            white 5px,
+            $color 5px,
+            $color 10px /* determines size */
+            );  
+        } 
+        .shape-filling-full { background-color: $color; }
+    }
 }
+
+@include ShapeColorized('red', red);
+@include ShapeColorized('green', green);
+@include ShapeColorized('purple', purple);
