@@ -2,7 +2,7 @@ import { SentenceCard } from "./SentenceCard";
 import { PropositionCard } from "./PropositionCard";
 
 export const prefixSeparator = '-'
-export const prefix = 'limitelimite' + prefixSeparator
+export const prefix = 'limitelimite'
 
 export const DEFAULT_IS_PRIVATE_GAME = false
 export const DEFAULT_NB_PLAYER = 0

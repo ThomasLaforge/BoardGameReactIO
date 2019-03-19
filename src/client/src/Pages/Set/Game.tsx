@@ -9,26 +9,28 @@ import { Field as SetField } from 'boardgamereactio-common/Set/Field';
 
 import Field from "./components/Field/Field";
 
-import { prefix } from 'boardgamereactio-common/LimiteLimite/LimiteLimite'
+import { prefix } from 'boardgamereactio-common/Set/definitions'
 import Chat from '../../components/Chat';
 import { ChatMessage } from 'boardgamereactio-common/modules/Server';
 import { GameStatus } from 'boardgamereactio-common';
 
 import './game.scss'
 import { Button } from '@material-ui/core';
+import GameResult from './GameParts/GameResult';
+import BeforeGameStart from './GameParts/BeforeGameStart';
 
 interface GameProps extends DefaultProps {
 }
 interface GameState {
     gameId: string
     isCreator: boolean
-    isFirstPlayer: boolean
     gameStatus: GameStatus
     players: any
 
-    field?: SetField
+    field: SetField
     selectedCardsIndex: number[]
     hasAlreadyPlayed: boolean
+    isGameOver: boolean
 }
 
 @inject(injector)
@@ -44,12 +46,12 @@ class Game extends React.Component <GameProps, GameState> {
         this.state = {
             gameId: '',
             isCreator: false,
-            isFirstPlayer: false,
             gameStatus: GameStatus.Preparing,
             players: [],
-            field: demoField,
+            field: null,
             selectedCardsIndex: [],
-            hasAlreadyPlayed: false
+            hasAlreadyPlayed: false,
+            isGameOver: false
         }
     }
 
@@ -121,14 +123,30 @@ class Game extends React.Component <GameProps, GameState> {
                     </div>
                 </div>
                 <div className="game-content">
-                    <Field 
-                        cards={this.state.field.cards}
-                        selectedCardsIndex={this.state.selectedCardsIndex}
-                        handleClick={this.handleClick}
-                        hasAlreadyPlayed={this.state.hasAlreadyPlayed}
-                    />
+                    {this.state.isGameOver && 
+                        <GameResult />
+                    }
+                    {!this.state.isGameOver && this.state.gameStatus === GameStatus.InGame && 
+                    [
+                        <Field
+                            cards={this.state.field.cards}
+                            selectedCardsIndex={this.state.selectedCardsIndex}
+                            handleClick={this.handleClick}
+                            hasAlreadyPlayed={this.state.hasAlreadyPlayed}
+                        />,
+                        <Button className='' 
+                            variant='raised'
+                        >Send</Button>
+                    ]}
+                    {this.state.gameStatus === GameStatus.Preparing && 
+                        <BeforeGameStart 
+                            isCreator={this.state.isCreator}
+                            gameId={this.state.gameId}
+                            startGame={this.startGame}
+                            nbPlayers={this.state.players.length}
+                        />
+                    }
                 </div>
-                <Button variant='raised'>Send</Button>
             </div>
         );
     }

@@ -24,6 +24,17 @@ export const addSetEvents = (socket: SuperSocket, GC: GameCollection) => {
             updateUI(socket, game)
         }
     })
+
+    socket.on(prefix + 'game:play', (cards: any[]) => {
+        console.log('cards', cards)
+        let game = GC.getGameWithUser(socket.id)
+        let setgame = game && game.gameInstance as SetGame | undefined
+        let p = setgame && setgame.players.find(p => p.socketid === socket.socketPlayer.socketid)
+        if(game && setgame && p){
+            setgame.tryToAddPlay(p, cards)
+            updateUI(socket, game)
+        }
+    })
 }
 
 function sendGameInfos(socket: SuperSocket, game: MultiplayerGame, initialCall = false){
@@ -50,14 +61,15 @@ function updateUI(socket: SuperSocket, game: MultiplayerGame){
     let tcgame = game.gameInstance as SetGame
     if(tcgame){
         let params: any[] = [
-            tcgame.isGameOver()
+            tcgame.isGameOver(),
+            tcgame.field && tcgame.field.cards,
+            tcgame.deck.length
         ]
 
         tcgame.players.forEach( p => {
             // let nextPlayer: TCPlayer = tcgame.players[tcgame.getNextPlayerIndex()]
             // console.log('isFirst bet, play', tcgame.isPlayerToBet(p), tcgame.isPlayerToPlay(p), p.socketid)
             // console.log('hand', p.hand.cards[0])
-            let otherPlayers = tcgame.players.filter(op => !op.isEqual(p))
             let playerSpecificsParams = params.slice()
             playerSpecificsParams.push()
 

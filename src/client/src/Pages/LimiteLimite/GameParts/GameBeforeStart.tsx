@@ -33,7 +33,6 @@ class GameBeforeStart extends React.Component <GameBeforeStartProps, GameBeforeS
     render() {
         console.log('canStartGame', this.props.isCreator, this.props.nbPlayers > 1);
         
-        const canStartGame = this.props.isCreator && this.props.nbPlayers > 1
         return (
             <div className="game-before-start">
                 <div className="game-before-start-infos">

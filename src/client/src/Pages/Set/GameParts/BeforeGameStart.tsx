@@ -9,7 +9,6 @@ interface GameBeforeStartProps extends DefaultProps {
     gameId: string
     nbPlayers: number
     startGame: Function
-    nbPlayersToStart: number
 }
 interface GameBeforeStartState {
 }
@@ -34,30 +33,29 @@ class GameBeforeStart extends React.Component <GameBeforeStartProps, GameBeforeS
     render() {
         console.log('canStartGame', this.props.isCreator, this.props.nbPlayers > 1);
         
-        const canStartGame = this.props.isCreator && this.props.nbPlayers > 1
         return (
             <div className="game-before-start">
                 <div className="game-before-start-infos">
                     {!this.props.isCreator 
-                        ? [
-                            'Game creator will start the game when every player have joined ( ' + this.props.nbPlayers + ' / ' + this.props.nbPlayersToStart + ' )',
-                            <br />,
-                            'Please, Wait a moment ...'
-                        ]
-                        : this.props.nbPlayers === this.props.nbPlayersToStart
-                            ? [ 
-                                'You are ' + this.props.nbPlayers + ' players in the game.',
-                                <br />,
-                                'You can now start to play',
+                        ? <div>
+                            Game creator will start the game when every player have joined.
+                            <br />
+                            Please, Wait a moment ...
+                        </div>
+                        : this.props.nbPlayers === 1 
+                            ? 'Waiting for more players ...'
+                            : <div>
+                                You are {this.props.nbPlayers} players in the game.
+                                <br />
+                                You can now start to play, or wait for new players.
                                 <Button 
                                     variant='raised'
                                     className='start-game-btn'
                                     onClick={() => {this.props.startGame()}}
                                 >
-                                        Start
-                                    </Button>
-                                ]
-                            : 'Waiting for more players ...'
+                                    Start
+                                </Button>
+                            </div>
                     }
                 </div>
             </div>
