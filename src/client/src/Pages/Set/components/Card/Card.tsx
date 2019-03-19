@@ -8,6 +8,8 @@ import './style.scss'
 
 interface CardProps {
     card: SetCard
+    selected: boolean
+    onClick: Function
 }
 interface CardState {
 }
@@ -34,10 +36,17 @@ export class Card extends React.Component<CardProps, CardState> {
             )
     }
 
+    handleClickOnCard = () => {
+        this.props.onClick()
+    }
+
     render() {
         console.log('card to render', this.props.card)
         return (
-            <div className='set-card'>
+            <div
+                className={'set-card' + (this.props.selected ? ' set-card-selected' : '')}
+                onClick={this.handleClickOnCard}
+            >
                 {this.renderShapes()}
             </div>
         )

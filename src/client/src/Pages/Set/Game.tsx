@@ -15,6 +15,7 @@ import { ChatMessage } from 'boardgamereactio-common/modules/Server';
 import { GameStatus } from 'boardgamereactio-common';
 
 import './game.scss'
+import { Button } from '@material-ui/core';
 
 interface GameProps extends DefaultProps {
 }
@@ -26,6 +27,8 @@ interface GameState {
     players: any
 
     field?: SetField
+    selectedCardsIndex: number[]
+    hasAlreadyPlayed: boolean
 }
 
 @inject(injector)
@@ -44,7 +47,9 @@ class Game extends React.Component <GameProps, GameState> {
             isFirstPlayer: false,
             gameStatus: GameStatus.Preparing,
             players: [],
-            field: demoField
+            field: demoField,
+            selectedCardsIndex: [],
+            hasAlreadyPlayed: false
         }
     }
 
@@ -94,6 +99,16 @@ class Game extends React.Component <GameProps, GameState> {
         )
     }
 
+    handleClick = (k) => {
+        if(!this.state.hasAlreadyPlayed) {
+            this.setState({ selectedCardsIndex: 
+                this.state.selectedCardsIndex.indexOf(k) === -1
+                ? this.state.selectedCardsIndex.concat(k)
+                : this.state.selectedCardsIndex.filter(key => key !== k)
+            })
+        }
+    }
+
     render() {
         return (
             <div className='game'>
@@ -108,8 +123,12 @@ class Game extends React.Component <GameProps, GameState> {
                 <div className="game-content">
                     <Field 
                         cards={this.state.field.cards}
+                        selectedCardsIndex={this.state.selectedCardsIndex}
+                        handleClick={this.handleClick}
+                        hasAlreadyPlayed={this.state.hasAlreadyPlayed}
                     />
                 </div>
+                <Button variant='raised'>Send</Button>
             </div>
         );
     }

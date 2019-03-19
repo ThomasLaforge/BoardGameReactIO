@@ -35,11 +35,19 @@ export class Shape extends React.Component<ShapeProps, ShapeState> {
         }
     }
 
+    getClassType(){
+        switch (this.props.type) {
+            case SetShape.Diamond: return 'shape-type-diamond' 
+            case SetShape.Line: return 'shape-type-line' 
+            case SetShape.Wave: return 'shape-type-wave'         
+        }
+    }
+
     render() {
         const { type } = this.props
         return (
-            <div className={'set-shape' + ' ' +  this.getClassColor() + ' ' + this.getClassFilling()}>
-                {type}
+            <div className={'set-shape' + ' ' + this.getClassColor() + ' ' + this.getClassType()}>
+                <div className={'set-shape-content' + ' ' + this.getClassFilling() }/>
             </div>
         )
     }

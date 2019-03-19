@@ -18,9 +18,6 @@ export class Game {
 		this.deck             = new Deck();
         this.field            = new Field([])
         this.initField()
-        while( !this.field.hasSolution() && !this.isGameOver()) {
-            this.nextTurn()
-        }
     }
 
     nextTurn(){
@@ -36,6 +33,9 @@ export class Game {
     initField(){
         const cards = this.deck.drawCards(NB_DEFAULT_CARDS_ON_FIELD)
         this.field.addCards(cards)
+        while( !this.field.hasSolution() && !this.isGameOver()) {
+            this.nextTurn()
+        }
     }
 
     // Scores

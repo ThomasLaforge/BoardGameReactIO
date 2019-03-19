@@ -1,12 +1,42 @@
 .set-shape {
-    width: 1/4*100%;
-    text-align: center;
+    margin: 0 10px;
+    border: 3px solid black;
+
+    .set-shape-content {
+    }
+
+    
+    .shape-filling-empty { opacity: 0; } 
+    .shape-filling-striped { opacity: 0.4; } 
+    .shape-filling-full { font-size: 1; }
+    
 }
 
-.shape-color-green { color: green; } 
-.shape-color-purple { color: purple; } 
-.shape-color-red { color: red; }
+.shape-type-diamond {
+    width: 60px;
+    height: 60px;
+    border-radius: 100%;
+}
+.shape-type-line {
+    width: 60px;
+    height: 60px;
+}
+.shape-type-wave {
+    width: 60px;
+    height: 100px;
+    border-radius: 60px/100px;
+}
 
-.shape-filling-empty { font-size: 18px; } 
-.shape-filling-striped { font-size: 35p; } 
-.shape-filling-full { font-size: 65px; }
+.shape-color-green { 
+    background-color: green;
+    border-color: green;
+} 
+.shape-color-purple { 
+    background-color: purple; 
+    border-color: purple;
+
+} 
+.shape-color-red { 
+    background-color: red;
+    border-color: red;
+}
