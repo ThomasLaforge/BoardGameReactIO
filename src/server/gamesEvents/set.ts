@@ -58,20 +58,19 @@ function updateUI(socket: SuperSocket, game: MultiplayerGame){
     // Return array
     // socket.on(prefix + 'game:players.update', (isGameOver: boolean, nbTurnCards: number, gamePhase: GamePhase, bets: Bet[], plays: Play[], isPlayerToBet: boolean, isPlayerToPlay: boolean, hand: Hand, otherPlayersSoloCards: TCCard[]) => {
     
-    let tcgame = game.gameInstance as SetGame
-    if(tcgame){
+    let setgame = game.gameInstance as SetGame
+    if(setgame){
         let params: any[] = [
-            tcgame.isGameOver(),
-            tcgame.field && tcgame.field.cards,
-            tcgame.deck.length
+            setgame.isGameOver(),
+            setgame.field && setgame.field.cards,
+            setgame.deck.length
         ]
 
-        tcgame.players.forEach( p => {
-            // let nextPlayer: TCPlayer = tcgame.players[tcgame.getNextPlayerIndex()]
-            // console.log('isFirst bet, play', tcgame.isPlayerToBet(p), tcgame.isPlayerToPlay(p), p.socketid)
-            // console.log('hand', p.hand.cards[0])
+        setgame.players.forEach( p => {
             let playerSpecificsParams = params.slice()
-            playerSpecificsParams.push()
+            playerSpecificsParams.push(
+                setgame.playerHasAnError(p)
+            )
 
             socket.server.to(p.socketid).emit(prefix + 'game:players.update', ...playerSpecificsParams)
         })

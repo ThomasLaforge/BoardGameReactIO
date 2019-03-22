@@ -36,7 +36,7 @@ export class Game {
     }
 
     tryToAddPlay(player: Player, cards: Card[]){
-        if(cards.length === NB_CARDS_FOR_COMBINATION){
+        if(cards.length === NB_CARDS_FOR_COMBINATION && !this.playerHasAnError(player)){
             let combination = new Combination(cards)
             if( combination.isValid() ){
                 const newTurn = new Turn(player, combination, this.turnErrors)
@@ -81,6 +81,10 @@ export class Game {
             }
         })
         return winners
+    }
+
+    playerHasAnError(player: Player){
+        return !!this.turnErrors.find(p => p.isEqual(player))
     }
 
     isGameOver(){
