@@ -19,10 +19,6 @@ export class MultiplayerGame extends Game {
 
         if(!nbPlayer){
             switch (gameType) {
-                case 'limitelimite':
-                    nbPlayer = 0; break;
-                case 'gifdefinitor':
-                    nbPlayer = 0; break;
                 case 'tarotcongolais':
                     nbPlayer = 4; break;
                 default:

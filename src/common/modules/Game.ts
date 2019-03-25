@@ -17,10 +17,12 @@ export abstract class Game {
     }
 
     start(...options: any[]){
-        let gameClass = getGameClass(this.type)
-        this.gameInstance = new gameClass(...options)
-        console.log('Game start', options, this.gameInstance)
-        this.startGameDate = Date.now()
+        if(!this.hasStart()){
+            let gameClass = getGameClass(this.type)
+            this.gameInstance = new gameClass(...options)
+            console.log('Game start', options, this.gameInstance)
+            this.startGameDate = Date.now()
+        }
     }
 
     hasStart(){

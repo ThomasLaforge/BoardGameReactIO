@@ -69,16 +69,6 @@
           text-align: left;
           padding-left: 10px;
         }
-        .player-status {
-          width: 15%;
-
-          .player-status-is-boss {
-
-          }
-          .waiting-player {
-
-          }
-        }
       }
     
       .player-me, 
@@ -110,6 +100,13 @@
 
   .game-content {
     flex: 1;
+
+    .player-action {
+      display: flex;
+      justify-content: center;
+      .send-combination-btn {
+      }
+    }
 
     .game-before-start {
       @include fullFlex();

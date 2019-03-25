@@ -30,7 +30,7 @@ interface GameState {
     field: SetField
     selectedCardsIndex: number[]
     hasAlreadyPlayed: boolean
-    isGameOver: boolean
+    deckSize?: number
 }
 
 @inject(injector)
@@ -50,8 +50,7 @@ class Game extends React.Component <GameProps, GameState> {
             players: [],
             field: null,
             selectedCardsIndex: [],
-            hasAlreadyPlayed: false,
-            isGameOver: false
+            hasAlreadyPlayed: false
         }
     }
 
@@ -69,17 +68,14 @@ class Game extends React.Component <GameProps, GameState> {
                 this.setState({ players })
             })
 
-            socket.on(prefix + 'game:mp.start', (sentenceJSON) => {
-                console.log('game:mp.start', sentenceJSON)
+            socket.on(prefix + 'game:players.update', (isGameOver, fieldJSON, deckSize, hasError) => {
+                console.log('game:players.update', isGameOver, fieldJSON, deckSize, hasError)
+                const field = deserialize(SetField, fieldJSON)
                 this.setState({
-                    gameStatus: GameStatus.InGame,
-                })
-            })
-            
-            socket.on(prefix + 'game:op.start', (sentenceJSON, handJSON) => {
-                console.log('game:op.start', sentenceJSON, handJSON)
-                this.setState({
-                    gameStatus: GameStatus.InGame
+                    field,
+                    deckSize,
+                    gameStatus: isGameOver ? GameStatus.Finished : GameStatus.InGame,
+                    hasAlreadyPlayed: hasError
                 })
             })
         }
@@ -97,11 +93,12 @@ class Game extends React.Component <GameProps, GameState> {
             >
                 <div className="player-name">{p.name}</div>
                 <div className="player-score">{p.score}</div>
+                <div className="player-has-error">{p.hasError && 'X'}</div>
             </div>
         )
     }
 
-    handleClick = (k) => {
+    handleClickOnCard = (k) => {
         if(!this.state.hasAlreadyPlayed) {
             this.setState({ selectedCardsIndex: 
                 this.state.selectedCardsIndex.indexOf(k) === -1
@@ -111,7 +108,19 @@ class Game extends React.Component <GameProps, GameState> {
         }
     }
 
+    getSelectedCards(){
+        return this.state.selectedCardsIndex.map(index => this.state.field.cards[index])
+    }
+
+    sendCombination = () => {
+        this.setState({
+            selectedCardsIndex: []
+        })
+        this.props.socket.emit(prefix + 'game:play', this.getSelectedCards())
+    }
+
     render() {
+        console.log('test state before render', this.state)
         return (
             <div className='game'>
                 <div className="game-infos">
@@ -123,20 +132,24 @@ class Game extends React.Component <GameProps, GameState> {
                     </div>
                 </div>
                 <div className="game-content">
-                    {this.state.isGameOver && 
+                    {this.state.gameStatus === GameStatus.Finished && 
                         <GameResult />
                     }
-                    {!this.state.isGameOver && this.state.gameStatus === GameStatus.InGame && 
+                    {this.state.gameStatus === GameStatus.InGame && 
                     [
                         <Field
                             cards={this.state.field.cards}
                             selectedCardsIndex={this.state.selectedCardsIndex}
-                            handleClick={this.handleClick}
+                            handleClick={this.handleClickOnCard}
                             hasAlreadyPlayed={this.state.hasAlreadyPlayed}
                         />,
-                        <Button className='' 
-                            variant='raised'
-                        >Send</Button>
+                        <div className="player-action">
+                            <Button className='send-combination-btn'
+                                onClick={this.sendCombination}
+                                variant='raised'
+                                disabled={this.state.hasAlreadyPlayed || this.state.selectedCardsIndex.length !== 3}
+                            >Send</Button>
+                        </div>
                     ]}
                     {this.state.gameStatus === GameStatus.Preparing && 
                         <BeforeGameStart 

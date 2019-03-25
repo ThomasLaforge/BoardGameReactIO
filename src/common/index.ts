@@ -14,7 +14,7 @@ export * from './UI'
 import { LimiteLimiteGame } from './LimiteLimite/LimiteLimiteGame' 
 import { Game as TarotCongolaisGame } from './TarotCongolais/Game'
 import { Game as GifDefinitor } from './GifDefinitor/Game'
-import { Game as SetGame } from './GifDefinitor/Game'
+import { Game as SetGame } from './Set/Game'
 import { MultiplayerGame } from './modules/MultiplayerGame';
 import { SoloGame } from './modules/SoloGame';
 import { Client } from './modules/Client';

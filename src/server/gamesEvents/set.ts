@@ -20,16 +20,17 @@ export const addSetEvents = (socket: SuperSocket, GC: GameCollection) => {
     socket.on(prefix + 'game:start', () => {
         let game = GC.getGameWithUser(socket.id)
         if(game){
-            game.start()            
+            game.start()
+            console.log('game start ok')
             updateUI(socket, game)
         }
     })
 
     socket.on(prefix + 'game:play', (cards: any[]) => {
-        console.log('cards', cards)
         let game = GC.getGameWithUser(socket.id)
         let setgame = game && game.gameInstance as SetGame | undefined
         let p = setgame && setgame.players.find(p => p.socketid === socket.socketPlayer.socketid)
+        console.log('cards', cards, game && setgame && p)
         if(game && setgame && p){
             setgame.tryToAddPlay(p, cards)
             updateUI(socket, game)
@@ -45,7 +46,8 @@ function sendGameInfos(socket: SuperSocket, game: MultiplayerGame, initialCall =
     const uiPlayers = players.map( (p: any) => (
         {
             name: setgame ? p.username : p.surname,
-            score: setgame ? setgame.getPlayerScore(p) : 0
+            score: setgame ? setgame.getPlayerScore(p) : 0,
+            hasError: setgame && setgame.playerHasAnError(p)
         }
     ))
 
@@ -55,14 +57,11 @@ function sendGameInfos(socket: SuperSocket, game: MultiplayerGame, initialCall =
 }
 
 function updateUI(socket: SuperSocket, game: MultiplayerGame){
-    // Return array
-    // socket.on(prefix + 'game:players.update', (isGameOver: boolean, nbTurnCards: number, gamePhase: GamePhase, bets: Bet[], plays: Play[], isPlayerToBet: boolean, isPlayerToPlay: boolean, hand: Hand, otherPlayersSoloCards: TCCard[]) => {
-    
     let setgame = game.gameInstance as SetGame
     if(setgame){
         let params: any[] = [
             setgame.isGameOver(),
-            setgame.field && setgame.field.cards,
+            setgame.field && serialize(setgame.field),
             setgame.deck.length
         ]
 

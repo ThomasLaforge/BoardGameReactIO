@@ -1,11 +1,12 @@
 import { Shape, Color, Filling } from "./definitions";
+import { serializable } from "serializr";
 
 export class Card {
     
-    public shape: Shape
-    public number: number
-    public color: Color
-    public filling: Filling
+    @serializable public shape: Shape
+    @serializable public number: number
+    @serializable public color: Color
+    @serializable public filling: Filling
 
     constructor(shape: Shape, number: number, color: Color, filling: Filling){
         this.shape = shape

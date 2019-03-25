@@ -39,6 +39,7 @@ export class Game {
         if(cards.length === NB_CARDS_FOR_COMBINATION && !this.playerHasAnError(player)){
             let combination = new Combination(cards)
             if( combination.isValid() ){
+                this.field.removeCards(cards)
                 const newTurn = new Turn(player, combination, this.turnErrors)
                 this.history = this.history.concat(newTurn)
                 this.nextTurn()
@@ -51,6 +52,10 @@ export class Game {
 
     addError(player: Player){
         this.turnErrors = this.turnErrors.concat(player)
+        // Si tous les joueurs ont échoués, ils peuvent réessayer
+        if(this.turnErrors.length === this.nbPlayer){
+            this.turnErrors = []
+        }
     }
 
     // Field

@@ -1,9 +1,10 @@
 import { Card } from "./Card";
 import { Combination } from "./Combination";
+import { serializable, list, object } from "serializr";
 
 export class Field {
 
-    public cards: Card[] // 12 cards or 3 more until a solution is possible
+    @serializable(list(object(Card))) public cards: Card[] // 12 cards or 3 more until a solution is possible
     
     constructor(initialCards: Card[]){
         this.cards = initialCards
@@ -41,5 +42,11 @@ export class Field {
 
     needMoreCards(){
         return !this.hasSolution()
+    }
+
+    removeCards(cards: Card[]){
+        this.cards = this.cards.filter(
+            c => cards.findIndex(cardToRemove => c.isEqual(cardToRemove)) === -1
+        )
     }
 }
