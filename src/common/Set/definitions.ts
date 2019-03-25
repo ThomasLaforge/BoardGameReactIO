@@ -5,6 +5,7 @@ export const prefix = 'set'
 export const NB_DEFAULT_CARDS_ON_FIELD = 12
 export const NB_CARDS_TO_ADD_ON_FIELD = 3
 export const NB_CARDS_FOR_COMBINATION = NB_CARDS_TO_ADD_ON_FIELD
+export const NEXT_TURN_DELAY = 7 * 1000
 
 export enum Shape {
     Diamond,

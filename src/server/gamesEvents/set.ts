@@ -2,7 +2,7 @@
 
 import { SuperSocket } from '../SuperSocket';
 
-import {prefix} from '../../common/Set/definitions'
+import {prefix, NEXT_TURN_DELAY} from '../../common/Set/definitions'
 import { MultiplayerGame } from '../../common/modules/MultiplayerGame';
 import { Game as SetGame } from '../../common/Set/Game'
 import { serialize } from 'serializr';
@@ -21,7 +21,6 @@ export const addSetEvents = (socket: SuperSocket, GC: GameCollection) => {
         let game = GC.getGameWithUser(socket.id)
         if(game){
             game.start()
-            console.log('game start ok')
             updateUI(socket, game)
         }
     })
@@ -32,8 +31,13 @@ export const addSetEvents = (socket: SuperSocket, GC: GameCollection) => {
         let p = setgame && setgame.players.find(p => p.socketid === socket.socketPlayer.socketid)
         console.log('cards', cards, game && setgame && p)
         if(game && setgame && p){
-            setgame.tryToAddPlay(p, cards)
-            updateUI(socket, game)
+            const isValid = setgame.tryToAddPlay(p, cards)
+            if(isValid){
+                const lastPlay = setgame.getLastPlay()
+                sendGameInfos(socket, game)
+                socket.baseSocket.to(game.id).emit(prefix + 'game:new_play', serialize(lastPlay.combination), game.getPlayer(socket.id).surname);
+                setTimeout(() => { updateUI(socket, game as MultiplayerGame) }, NEXT_TURN_DELAY)
+            }
         }
     })
 }

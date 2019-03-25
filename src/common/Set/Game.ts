@@ -36,9 +36,11 @@ export class Game {
     }
 
     tryToAddPlay(player: Player, cards: Card[]){
+        let isValid = false
         if(cards.length === NB_CARDS_FOR_COMBINATION && !this.playerHasAnError(player)){
             let combination = new Combination(cards)
             if( combination.isValid() ){
+                isValid = true
                 this.field.removeCards(cards)
                 const newTurn = new Turn(player, combination, this.turnErrors)
                 this.history = this.history.concat(newTurn)
@@ -48,6 +50,8 @@ export class Game {
                 this.addError(player)
             }
         }
+
+        return isValid
     }
 
     addError(player: Player){
@@ -90,6 +94,10 @@ export class Game {
 
     playerHasAnError(player: Player){
         return !!this.turnErrors.find(p => p.isEqual(player))
+    }
+
+    getLastPlay(){
+        return this.history[this.history.length - 1]
     }
 
     isGameOver(){

@@ -1,10 +1,11 @@
 import { Card } from "./Card";
 import { uniq } from 'lodash'
 import { CardProperty, NB_CARDS_FOR_COMBINATION } from "./definitions";
+import { serializable, list, object } from "serializr";
 
 export class Combination {
 
-    public cards: Card[]
+    @serializable(list(object(Card))) public cards: Card[]
 
     constructor(cards: Card[]){
         this.cards = cards
