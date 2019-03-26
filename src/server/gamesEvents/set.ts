@@ -34,9 +34,12 @@ export const addSetEvents = (socket: SuperSocket, GC: GameCollection) => {
             const isValid = setgame.tryToAddPlay(p, cards)
             if(isValid){
                 const lastPlay = setgame.getLastPlay()
-                sendGameInfos(socket, game)
-                socket.baseSocket.to(game.id).emit(prefix + 'game:new_play', serialize(lastPlay.combination), game.getPlayer(socket.id).surname);
+                socket.baseSocket.to(game.id).emit(prefix + 'game:new_play', serialize(lastPlay.combination), socket.id);
                 setTimeout(() => { updateUI(socket, game as MultiplayerGame) }, NEXT_TURN_DELAY)
+            }
+            else {
+                socket.emit(prefix + 'game:p.error')
+                socket.baseSocket.to(game.id).broadcast.emit(prefix + 'game:op.error', socket.id)
             }
         }
     })

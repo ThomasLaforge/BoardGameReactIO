@@ -18,6 +18,7 @@ import './game.scss'
 import { Button } from '@material-ui/core';
 import GameResult from './GameParts/GameResult';
 import BeforeGameStart from './GameParts/BeforeGameStart';
+import { Combination as SetCombination } from 'boardgamereactio-common/Set/Combination';
 
 interface GameProps extends DefaultProps {
 }
@@ -31,6 +32,7 @@ interface GameState {
     selectedCardsIndex: number[]
     hasAlreadyPlayed: boolean
     deckSize?: number
+    combination?: SetCombination
 }
 
 @inject(injector)
@@ -78,6 +80,10 @@ class Game extends React.Component <GameProps, GameState> {
                     hasAlreadyPlayed: hasError
                 })
             })
+
+            // game:new_play combination + socketId
+            // game:p.error 
+            // game:op.error + socketId
         }
     }
 
@@ -142,15 +148,17 @@ class Game extends React.Component <GameProps, GameState> {
                             selectedCardsIndex={this.state.selectedCardsIndex}
                             handleClick={this.handleClickOnCard}
                             hasAlreadyPlayed={this.state.hasAlreadyPlayed}
+                            combination={this.state.combination}
                         />,
-                        <div className="player-action">
-                            <Button className='send-combination-btn'
-                                onClick={this.sendCombination}
-                                variant='raised'
-                                disabled={this.state.hasAlreadyPlayed || this.state.selectedCardsIndex.length !== 3}
-                            >Send</Button>
-                        </div>
+                        // <div className="player-action">
+                        //     <Button className='send-combination-btn'
+                        //         onClick={this.sendCombination}
+                        //         variant='raised'
+                        //         disabled={this.state.hasAlreadyPlayed || this.state.selectedCardsIndex.length !== 3}
+                        //     >Send</Button>
+                        // </div>
                     ]}
+
                     {this.state.gameStatus === GameStatus.Preparing && 
                         <BeforeGameStart 
                             isCreator={this.state.isCreator}
