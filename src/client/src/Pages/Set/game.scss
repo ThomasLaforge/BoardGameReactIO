@@ -1,0 +1,19 @@
+@import '../../styles/mixins';
+
+.set-game {
+    .player-has-error {
+        // text-align: center;
+        // width: 100%;
+    }
+
+    .game-content {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+
+        .infos-zone {
+            @include infoBox();
+        }
+    }
+
+}

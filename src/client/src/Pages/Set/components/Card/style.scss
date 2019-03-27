@@ -4,13 +4,27 @@
     border: 3px solid black;
     border-radius: 15px;
     background-color: white;
-    margin: 20px;
+    margin: 5px 20px;
 
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
+.set-card-solution {
+    border-color: red;
+}
+
 .set-card-selected {
     border-color: greenyellow;
+}
+
+.set-card-combination {
+    border-color: orange;
+}
+
+@media screen and (max-width: 1640px) {
+    .set-card {
+        margin: 5px;
+    }
 }

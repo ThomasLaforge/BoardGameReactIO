@@ -25,13 +25,15 @@ export class Game {
         this.initField()
     }
 
-    nextTurn(){
-        this.turnErrors = []
-        const cards = this.deck.drawCards(NB_CARDS_TO_ADD_ON_FIELD)
-        this.field.addCards(cards)
-
-        while( !this.field.hasSolution() && !this.isGameOver()) {
-            this.nextTurn()
+    nextTurn(force = false){
+        if(force || !this.field.hasSolution() || this.field.cards.length < 12){
+            this.turnErrors = []
+            const cards = this.deck.drawCards(NB_CARDS_TO_ADD_ON_FIELD)
+            this.field.addCards(cards)
+    
+            while( !this.field.hasSolution() && !this.isGameOver()) {
+                this.nextTurn()
+            }
         }
     }
 

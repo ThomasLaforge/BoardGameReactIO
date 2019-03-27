@@ -27,12 +27,14 @@ interface GameState {
     isCreator: boolean
     gameStatus: GameStatus
     players: any
+    showSolution: boolean
 
     field: SetField
     selectedCardsIndex: number[]
     hasAlreadyPlayed: boolean
     deckSize?: number
     combination?: SetCombination
+    winner?: string
 }
 
 @inject(injector)
@@ -52,13 +54,15 @@ class Game extends React.Component <GameProps, GameState> {
             players: [],
             field: null,
             selectedCardsIndex: [],
-            hasAlreadyPlayed: false
+            hasAlreadyPlayed: false,
+            showSolution: false
         }
     }
 
     componentDidMount(){
         if(this.props.socket){
             const socket = this.props.socket
+
             socket.emit(prefix + 'game:ask_initial_infos')
 
             socket.on(prefix + 'game:player.ask_initial_infos', (gameId: string, players: any, isCreator: boolean, myIndex: number, initialChat: ChatMessage[]) => {
@@ -77,13 +81,21 @@ class Game extends React.Component <GameProps, GameState> {
                     field,
                     deckSize,
                     gameStatus: isGameOver ? GameStatus.Finished : GameStatus.InGame,
-                    hasAlreadyPlayed: hasError
+                    hasAlreadyPlayed: hasError,
+                    combination: null
                 })
             })
 
-            // game:new_play combination + socketId
-            // game:p.error 
-            // game:op.error + socketId
+            socket.on(prefix + 'game:new_play', (combination, socketId) => {
+                console.log('game:new_play', combination, socketId)
+
+                this.setState({
+                    winner: socketId,
+                    combination: deserialize(SetCombination, combination),
+                    showSolution: false,
+                    selectedCardsIndex: []
+                })
+            })
         }
     }
 
@@ -110,6 +122,11 @@ class Game extends React.Component <GameProps, GameState> {
                 this.state.selectedCardsIndex.indexOf(k) === -1
                 ? this.state.selectedCardsIndex.concat(k)
                 : this.state.selectedCardsIndex.filter(key => key !== k)
+            },
+            () => {
+                if(this.state.selectedCardsIndex.length === 3){
+                    this.sendCombination()
+                }
             })
         }
     }
@@ -119,16 +136,26 @@ class Game extends React.Component <GameProps, GameState> {
     }
 
     sendCombination = () => {
-        this.setState({
-            selectedCardsIndex: []
-        })
-        this.props.socket.emit(prefix + 'game:play', this.getSelectedCards())
+        if(this.state.selectedCardsIndex.length === 3 && !this.state.hasAlreadyPlayed){
+            this.props.socket.emit(prefix + 'game:play', this.getSelectedCards())
+            this.setState({
+                selectedCardsIndex: []
+            })
+        }
+    }
+
+    // MASTER MODE
+    addCards = () => {
+        this.props.socket.emit(prefix + 'game:add-cards')
+    }
+    showSolution = () => {
+        this.setState({showSolution: true})
     }
 
     render() {
-        console.log('test state before render', this.state)
+        console.log('test state before render', this.state.combination)
         return (
-            <div className='game'>
+            <div className='game set-game'>
                 <div className="game-infos">
                     <div className="game-players">
                         {this.renderPlayers()}
@@ -149,14 +176,40 @@ class Game extends React.Component <GameProps, GameState> {
                             handleClick={this.handleClickOnCard}
                             hasAlreadyPlayed={this.state.hasAlreadyPlayed}
                             combination={this.state.combination}
+                            showSolution={this.state.showSolution}
                         />,
-                        // <div className="player-action">
-                        //     <Button className='send-combination-btn'
-                        //         onClick={this.sendCombination}
-                        //         variant='raised'
-                        //         disabled={this.state.hasAlreadyPlayed || this.state.selectedCardsIndex.length !== 3}
-                        //     >Send</Button>
-                        // </div>
+                        <div className="player-action">
+                            {this.props.ui.username === 'MASTER' && 
+                                <Button variant="raised"
+                                    onClick={this.addCards}
+                                >
+                                    Add Cards
+                                </Button>
+                            }
+                            {this.props.ui.username === 'MASTER' && 
+                                <Button variant="raised"
+                                    onClick={this.showSolution}
+                                >
+                                    Show solution
+                                </Button>
+                            }
+                            {/*
+                            //     <Button className='send-combination-btn'
+                            //         onClick={this.sendCombination}
+                            //         variant='raised'
+                            //         disabled={this.state.hasAlreadyPlayed || this.state.selectedCardsIndex.length !== 3}
+                            //     >Send</Button>
+                            */}
+                        </div>
+                        ,
+                        <div className="infos-zone">
+                            {this.state.hasAlreadyPlayed ? 
+                                'You did an error, you will be able to play on next turn...'
+                            : (this.state.combination ?
+                                (this.state.winner === this.props.socket.id ? 'You' : 'Someone') + ' found the solution. You can see it on field. Wait a moment, the next turn will start shortly!'
+                                : 'You have to found a combination of three cards with same or all different shapes, with same or all different filling, with same or all different color, with same or all different number'
+                            )}
+                        </div>
                     ]}
 
                     {this.state.gameStatus === GameStatus.Preparing && 
@@ -167,6 +220,7 @@ class Game extends React.Component <GameProps, GameState> {
                             nbPlayers={this.state.players.length}
                         />
                     }
+
                 </div>
             </div>
         );

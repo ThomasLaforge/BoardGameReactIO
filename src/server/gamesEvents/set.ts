@@ -34,14 +34,23 @@ export const addSetEvents = (socket: SuperSocket, GC: GameCollection) => {
             const isValid = setgame.tryToAddPlay(p, cards)
             if(isValid){
                 const lastPlay = setgame.getLastPlay()
-                socket.baseSocket.to(game.id).emit(prefix + 'game:new_play', serialize(lastPlay.combination), socket.id);
+                socket.server.in(game.id).emit(prefix + 'game:new_play', serialize(lastPlay.combination), socket.id);
                 setTimeout(() => { updateUI(socket, game as MultiplayerGame) }, NEXT_TURN_DELAY)
             }
             else {
-                socket.emit(prefix + 'game:p.error')
-                socket.baseSocket.to(game.id).broadcast.emit(prefix + 'game:op.error', socket.id)
-            }
+                updateUI(socket, game)
+            } 
         }
+    })
+
+    socket.on(prefix + 'game:add-cards', () => {
+        let game = GC.getGameWithUser(socket.id)
+        let setgame = game && game.gameInstance as SetGame | undefined
+        if(setgame) {
+            setgame.nextTurn(true)
+            updateUI(socket, game as MultiplayerGame)
+        }
+
     })
 }
 
@@ -53,6 +62,7 @@ function sendGameInfos(socket: SuperSocket, game: MultiplayerGame, initialCall =
     const uiPlayers = players.map( (p: any) => (
         {
             name: setgame ? p.username : p.surname,
+            socketid: p.socketid,
             score: setgame ? setgame.getPlayerScore(p) : 0,
             hasError: setgame && setgame.playerHasAnError(p)
         }
@@ -66,6 +76,7 @@ function sendGameInfos(socket: SuperSocket, game: MultiplayerGame, initialCall =
 function updateUI(socket: SuperSocket, game: MultiplayerGame){
     let setgame = game.gameInstance as SetGame
     if(setgame){
+        // console.log('updateUI', setgame)
         let params: any[] = [
             setgame.isGameOver(),
             setgame.field && serialize(setgame.field),

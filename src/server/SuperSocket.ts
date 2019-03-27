@@ -11,7 +11,6 @@ export class SuperSocket {
 
     constructor(socket: ExtendedSocket) {
         this.baseSocket = socket
-
     }
 
     on(action: string, listener: (...argsListener: any[]) => void){

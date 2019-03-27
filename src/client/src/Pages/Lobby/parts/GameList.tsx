@@ -51,7 +51,7 @@ class GameList extends React.Component <GameListProps, GameListState> {
                     <div className="game-population"
                         title={g.people.reduce( (nameList, p) => nameList + p + "\n", '')}
                     >
-                        {g.people.length} / {g.nbPlayer}
+                        {g.people.length} / {(g.nbPlayer || '\u221e')}
                     </div>
                     <Button 
                         className='game-join-btn'

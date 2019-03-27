@@ -36,6 +36,7 @@ class Home extends React.Component <HomeProps, HomeState> {
 
             this.props.socket.on('login:player.login_accepted', (username) => {
                 console.log('connected with username', username)
+                this.props.ui.username = username
                 this.props.ui.router.switchRoute('lobby')             
             })
 

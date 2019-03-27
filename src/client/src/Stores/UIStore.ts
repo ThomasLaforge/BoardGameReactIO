@@ -5,6 +5,7 @@ export class UIStore {
     
     @observable public router: Router;
     @observable public selectedTypeIndex: number
+    @observable public username: string
 
 	constructor(games?: any[]){
         this.router = new Router(games)
