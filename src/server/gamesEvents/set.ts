@@ -35,7 +35,11 @@ export const addSetEvents = (socket: SuperSocket, GC: GameCollection) => {
             if(isValid){
                 const lastPlay = setgame.getLastPlay()
                 socket.server.in(game.id).emit(prefix + 'game:new_play', serialize(lastPlay.combination), socket.id);
-                setTimeout(() => { updateUI(socket, game as MultiplayerGame) }, NEXT_TURN_DELAY)
+                setTimeout(() => { 
+                    (setgame as SetGame).resetTurn()
+                    updateUI(socket, game as MultiplayerGame) }, 
+                    NEXT_TURN_DELAY
+                )
             }
             else {
                 updateUI(socket, game)

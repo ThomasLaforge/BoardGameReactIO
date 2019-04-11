@@ -56,6 +56,10 @@ export class Game {
         return isValid
     }
 
+    resetTurn(){
+        this.turnErrors = []
+    }
+
     addError(player: Player){
         this.turnErrors = this.turnErrors.concat(player)
         // Si tous les joueurs ont échoués, ils peuvent réessayer

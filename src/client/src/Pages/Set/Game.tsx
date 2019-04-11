@@ -117,7 +117,7 @@ class Game extends React.Component <GameProps, GameState> {
     }
 
     handleClickOnCard = (k) => {
-        if(!this.state.hasAlreadyPlayed) {
+        if(!this.state.hasAlreadyPlayed && !this.state.combination) {
             this.setState({ selectedCardsIndex: 
                 this.state.selectedCardsIndex.indexOf(k) === -1
                 ? this.state.selectedCardsIndex.concat(k)
