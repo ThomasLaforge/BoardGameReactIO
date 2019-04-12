@@ -96,10 +96,12 @@ export class BoardGameServer {
             })
     
             socket.on('disconnect', () => {
+                console.log('disconnecting ...', socket.id)
                 let game = GC.getGameWithUser(socket.id)
                 if (game) {
                     let gameHasStarted = game.startGameDate
                     if (gameHasStarted) {
+                        console.log('was in game', game.id)
                         // delete the game
                         // GC.removeGame(game.id)
                     }
