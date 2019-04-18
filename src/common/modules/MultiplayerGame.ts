@@ -1,6 +1,6 @@
 import { Game } from "./Game";
 import { DEFAULT_IS_PRIVATE_GAME, DEFAULT_NB_PLAYER } from "../LimiteLimite/LimiteLimite";
-import { DEFAULT_NB_PLAYER as DEFAULT_NB_PLAYER_TC } from "../tarotcongolais/tarotcongolais";
+import { DEFAULT_NB_PLAYER as DEFAULT_NB_PLAYER_TC } from "../TarotCongolais/TarotCongolais";
 import { SocketPlayer } from "./SocketPlayer";
 
 export class MultiplayerGame extends Game {
