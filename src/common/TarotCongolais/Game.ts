@@ -174,13 +174,13 @@ export class Game {
 		const nbCardForTurn = nbTurnByPlayer - turnindex
 
 		// To test little turns with 2 people
-		// return nbCardForTurn >= 5 ? 5 : nbCardForTurn
+		return nbCardForTurn >= 5 ? 5 : nbCardForTurn
 		
 		// To test turn with one card
 		// return 1
 		
 		// turns 2 and 1
-		return (nbTurnByPlayer - turnindex) % 2 + 1
+		// return (nbTurnByPlayer - turnindex) % 2 + 1
 
 		// return nbTurnByPlayer - turnindex
 	}
