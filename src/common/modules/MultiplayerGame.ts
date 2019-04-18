@@ -21,11 +21,7 @@ export class MultiplayerGame extends Game {
         if(!nbPlayer){
             switch (gameType) {
                 case 'tarotcongolais':
-<<<<<<< HEAD
                     nbPlayer = DEFAULT_NB_PLAYER_TC; break;
-=======
-                    nbPlayer = 5; break;
->>>>>>> c6a78bf562fb966fd8068e0e232457b4e8cc3e56
                 default:
                     nbPlayer = DEFAULT_NB_PLAYER; break;
             }
