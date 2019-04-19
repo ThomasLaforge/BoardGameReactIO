@@ -202,11 +202,13 @@ class Game extends React.Component <GameProps, GameState> {
                             */}
                         </div>
                         ,
-                        !this.state.combination &&
+                        this.state.combination && 
                             <div className="infos-zone">
-                                {this.state.hasAlreadyPlayed ? 
+                                {!this.state.combination && this.state.hasAlreadyPlayed && 
                                     'You did an error, you will be able to play on next turn...'
-                                    : (this.state.winner === this.props.socket.id ? 'You' : 'Someone') + ' found the solution. You can see it on field. Wait a moment, the next turn will start shortly!'
+                                }
+                                {this.state.combination &&
+                                    (this.state.winner === this.props.socket.id ? 'You' : 'Someone') + ' found the solution. You can see it on field. Wait a moment, the next turn will start shortly!'
                                     //'You have to found a combination of three cards with same or all different shapes, with same or all different filling, with same or all different color, with same or all different number'
                                 }
                             </div>
