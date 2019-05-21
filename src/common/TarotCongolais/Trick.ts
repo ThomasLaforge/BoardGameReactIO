@@ -14,13 +14,8 @@ export class Trick {
 
     addPlay(play:Play){
         let player = play.player;
-        if( this.isPlayerToPlay(player) ) {
-            this.arrPlay.push(play);
-            return this.getWinner()
-        }
-        else{
-            throw new Error('Not good player to play');
-        }
+        this.arrPlay.push(play);
+        return this.getWinner()
     }
 
     isWinner(p: Player){

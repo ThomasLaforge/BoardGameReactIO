@@ -18,8 +18,8 @@ export class Game {
 		this.history 		  = []
 		this.players          = players.map(socketPlayer => new Player(socketPlayer.surname, socketPlayer.socketid));
 		this.deck             = new Deck();
-		this.actualTrick 	  = new Trick(this.players);
-		this.turn 			  = new Turn(this.getNbCardForTurn(), this.players);
+		this.actualTrick 	  = new Trick(this.playersFPOV);
+		this.turn 			  = new Turn(this.getNbCardForTurn(), this.playersFPOV);
 		
 		shufflePlayers && this.shufflePlayers()
 	}
@@ -114,16 +114,18 @@ export class Game {
 		let play = this.actualTrick.arrPlay.filter(play => { return play.player.username === p.username })[0]
 		return play && play.card
 	}
-	isPlayerToPlay(p: Player){
-		let firstPlayerIndex
-		if( this.turn.arrTrick.length === 0 ){
-			firstPlayerIndex = this.firstPlayerIndex 
-		}
-		else {
-			const lastTrickWinner = this.turn.getLastTrick().getWinner()
-			// firstPlayerIndex = this.
-		}
-		return this.areAllPlayersBet() && this.isPlayerToPlay(p)
+	isPlayerToPlay(player: Player){
+		const players = this.playersFPOV
+		const arrTrick = this.turn.arrTrick
+		const lastTrick = arrTrick.length > 0 && arrTrick[arrTrick.length - 1]
+		
+		const firstPlayerToPlay = lastTrick ? lastTrick.getWinner() : players[0]
+        const playerIndex = players.findIndex(p => p.isEqual(player))
+        const firstPlayerToPlayIndex = players.findIndex(p => p.isEqual(firstPlayerToPlay as Player))
+        const playerToPlayIndex = (firstPlayerToPlayIndex + this.actualTrick.arrPlay.length) % this.getNbPlayer()
+		const isPlayerToPlay = playerIndex === playerToPlayIndex
+		
+		return this.areAllPlayersBet() && isPlayerToPlay
 	}
 
 	// Turn
