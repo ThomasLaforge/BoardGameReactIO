@@ -14,14 +14,14 @@ export class Game {
 	public actualTrick: Trick;
 	public history: Turn[];
 
-    constructor(players: SocketPlayer[]){
+    constructor(players: SocketPlayer[], shufflePlayers = true){
 		this.history 		  = []
 		this.players          = players.map(socketPlayer => new Player(socketPlayer.surname, socketPlayer.socketid));
 		this.deck             = new Deck();
 		this.actualTrick 	  = new Trick(this.players);
 		this.turn 			  = new Turn(this.getNbCardForTurn(), this.players);
 		
-		this.shufflePlayers()
+		shufflePlayers && this.shufflePlayers()
 	}
 
 	/**
@@ -115,7 +115,15 @@ export class Game {
 		return play && play.card
 	}
 	isPlayerToPlay(p: Player){
-		return this.areAllPlayersBet() && this.actualTrick.isPlayerToPlay(p)
+		let firstPlayerIndex
+		if( this.turn.arrTrick.length === 0 ){
+			firstPlayerIndex = this.firstPlayerIndex 
+		}
+		else {
+			const lastTrickWinner = this.turn.getLastTrick().getWinner()
+			// firstPlayerIndex = this.
+		}
+		return this.areAllPlayersBet() && this.isPlayerToPlay(p)
 	}
 
 	// Turn

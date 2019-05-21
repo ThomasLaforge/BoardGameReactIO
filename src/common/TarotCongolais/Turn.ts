@@ -97,6 +97,13 @@ export class Turn {
         return sum;
     }
 
+    getLastTrick(){
+        if(this.arrTrick.length === 0){
+            throw 'try to access last trick of empty array'
+        }
+        return this.arrTrick[this.arrTrick.length - 1]
+    }
+
     allPlayersPlay(){
         return this.arrTrick.length === this.nbCards
     }
