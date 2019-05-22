@@ -17,20 +17,20 @@ describe('tc-play-order', () => {
         expect(getPlayersIds(tcgame.players)).toEqual([0,1,2,3])
     })
 
-    test('after first trick', () => {
-        let tcgame = new Game(initPlayers, false)
-        tcgame.start()
-        const players = tcgame.players
-        players.forEach(p => {
-            tcgame.addBet({ bet: 0, player: p })
-        })
-        players.forEach(p => {
-            tcgame.addPlay({ card: p.hand.cards[0], player: p })
-        })
-        const lastWinnerPlayerId = (tcgame.turn.arrTrick[0].getWinner() as Player).socketid
-        const firstPlayerId = players[tcgame.firstPlayerIndex].socketid
-        console.log('playerId', firstPlayerId)
-        expect(firstPlayerId).toBe(lastWinnerPlayerId)
-    })
+    // test('after first trick', () => {
+    //     let tcgame = new Game(initPlayers, false)
+    //     tcgame.start()
+    //     const players = tcgame.players
+    //     players.forEach(p => {
+    //         tcgame.addBet({ bet: 0, player: p })
+    //     })
+    //     players.forEach( (p, i) => {
+    //         tcgame.addPlay({ card: p.hand.cards[0], player: p })
+    //     })
+    //     const lastWinnerPlayerId = (tcgame.turn.arrTrick[0].getWinner() as Player).socketid
+    //     const firstPlayerId = 
+    //     console.log('playerId', firstPlayerId)
+    //     expect(firstPlayerId).toBe(lastWinnerPlayerId)
+    // })
     
 })
