@@ -4,18 +4,18 @@ export class Deck {
 
     public arrayDeck: Card[];
 
-    constructor(arrayDeck?: Card[]) {
+    constructor(arrayDeck?: Card[], shuffle = true) {
         this.arrayDeck = []
 
         if(arrayDeck){
             this.arrayDeck = arrayDeck
         }
         else {
-            this.initDeck();
+            this.initDeck(shuffle)
         }
     }
 
-    initDeck():void {
+    initDeck(shuffle = true):void {
         this.arrayDeck = [];
         // add excuse
         this.addCard( -1 );
@@ -23,10 +23,10 @@ export class Deck {
         for (let value = 1; value <= 21; value++) {
             this.addCard( value );
         }
-        this.shuffle();
+        shuffle && this.shuffle()
     }
     reset() {
-        this.initDeck();
+        this.initDeck()
     }
 
     // States of arrays : deck and discard
