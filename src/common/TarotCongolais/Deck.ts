@@ -11,6 +11,7 @@ export class Deck {
             this.arrayDeck = arrayDeck
         }
         else {
+            console.log('shuffle', shuffle)
             this.initDeck(shuffle)
         }
     }

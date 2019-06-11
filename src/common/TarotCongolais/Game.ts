@@ -14,7 +14,7 @@ export class Game {
 	public actualTrick: Trick;
 	public history: Turn[];
 
-    constructor(players: SocketPlayer[], shufflePlayers = true, deck = new Deck()){
+    constructor(players: SocketPlayer[], shufflePlayers = true, deck = new Deck(undefined, false)){
 		this.history 		  = []
 		this.players          = players.map(socketPlayer => new Player(socketPlayer.surname, socketPlayer.socketid));
 		this.deck             = deck
