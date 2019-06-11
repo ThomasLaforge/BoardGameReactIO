@@ -1,0 +1,38 @@
+Règle du Flip
+regle pouilleux
+ 
+
+Le « FLIP » est un jeu de rapidité et d’observation qui se joue à 2 joueurs.
+
+Le but du jeu est de se débarrasser de ses cartes le plus vite possible en réalisant des suites de cartes.
+
+ 
+
+Pour jouer au Flip, il vous faut :
+2 jeux de cartes de 54 cartes
+Être 2 joueurs
+Commencer une partie de Flip :
+Au début du jeu, on mélange les cartes et on les répartis aux 2 joueurs. Chaque joueur prend son paquet face cachée.
+
+On pose chacun 4 cartes devant soi et on met en plus une au milieu (côte à côte), toutes face cachée.
+
+Au décompte de 3,2,1, on retourne en même temps toutes les cartes en terminant par celle du milieu. Chacun des joueurs essaye de poser le plus vite possible ses cartes sur l’une des cartes du milieu (peu importe qui l’a posé au début du jeu). Les joueurs jouent en même temps, il n’y a pas de tour.
+
+Important:
+On doit toujours avoir 4 cartes posées devant soi. Dès que l’une des cartes est jouée, il faut en reposer une à son emplacement.
+
+Les cartes du milieu seront ainsi recouvertes au fur et à mesure du jeu par des cartes supérieures ou inférieurs.
+Exemple:
+Un valet sera recouvert par une dame ou par un 10 (peu importe la couleur).
+Un as sera recouvert par un roi ou un 2 (peu importe la couleur).
+
+Règle essentielle: 
+Si les cartes du milieu se retrouvent identiques,  le premier joueur à poser sa main sur les 2 cartes du milieu en disant « FLIP » oblige le joueur adverse à prendre toutes les cartes du milieu.
+Ensuite, chacun pose une nouvelle carte au milieu pour reprendre la suite de la partie.
+
+Il arrive des situations où aucune des 4 cartes posées des 2 joueurs ne permettent de jouer. Dans ce cas, les cartes sont défaussées en même temps et remise par les joueurs sous leur paquet. De nouvelles cartes seront mises à leur place.
+
+Comment gagner une partie de Flip :
+Le gagnant est celui qui n’a plus de carte.
+
+NB.: Les paquets devront rester posés sur la table et les joueurs n’utiliseront pour les plus habiles qu’une seule main pour manipuler les cartes.
