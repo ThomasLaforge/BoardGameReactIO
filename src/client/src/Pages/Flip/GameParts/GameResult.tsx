@@ -23,7 +23,7 @@ class GameResult extends React.Component <GameResultProps, GameResultState> {
 
     render() {
         return (
-            <div className="game-over">
+            <div className="game-part-before">
                 Game Over !
             </div>
         );
