@@ -1,0 +1,15 @@
+@import '../../styles/mixins';
+
+.flip-game {
+
+    .game-content {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+
+        .infos-zone {
+            @include infoBox();
+        }
+    }
+
+}
