@@ -16,6 +16,8 @@ import TarotCongolaisForm from "./Pages/TarotCongolais/GameForm"
 import GifDefinitorGame from './Pages/GifDefinitor/Game'
 import SetGame from './Pages/Set/Game'
 import SetForm from "./Pages/Set/GameForm"
+import FlipGame from './Pages/Flip/Game'
+import FlipForm from "./Pages/Flip/GameForm"
 
 const uri = location.protocol + '//' + location.hostname + ':3027';
 // console.log('path of api', location, uri)
@@ -24,7 +26,14 @@ const uri = location.protocol + '//' + location.hostname + ':3027';
 // const socket = io.connect(uri, options)
 const socket = io.connect(uri)
 
-let games: any[] = [
+interface GameModule {
+	path: string,
+	name: string,
+	component: any,
+	formComponent?: any
+}
+
+let games: GameModule[] = [
 	{
 		path: '/limitelimite',
 		name: 'limitelimite',
@@ -47,6 +56,12 @@ let games: any[] = [
 		name: 'set',
 		component: SetGame,
 		formComponent: SetForm
+	},
+	{
+		path: '/flip',
+		name: 'flip',
+		component: FlipGame,
+		formComponent: FlipForm
 	}
 ]
 

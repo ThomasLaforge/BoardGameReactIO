@@ -6,7 +6,8 @@ export enum RouteEnum {
     GameLobby,
     LimiteLimite,
     TarotCongolais,
-    GifDefinitor
+    GifDefinitor,
+    Flip
 }
 
 export interface IRoute {
