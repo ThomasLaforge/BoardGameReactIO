@@ -31,7 +31,7 @@ class GameBeforeStart extends React.Component <GameBeforeStartProps, GameBeforeS
     }
 
     render() {
-        console.log('canStartGame', this.props.isCreator, this.props.nbPlayers > 1);
+        console.log('canStartGame', this.props.isCreator, this.props.nbPlayers);
         
         return (
             <div className="game-before-start">
@@ -42,7 +42,7 @@ class GameBeforeStart extends React.Component <GameBeforeStartProps, GameBeforeS
                             <br />
                             Please, Wait a moment ...
                         </div>
-                        : this.props.nbPlayers === 1 
+                        : this.props.nbPlayers < 2
                             ? 'Waiting for more players ...'
                             : <div>
                                 You are {this.props.nbPlayers} players in the game.

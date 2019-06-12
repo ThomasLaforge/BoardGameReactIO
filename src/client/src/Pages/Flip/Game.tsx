@@ -8,11 +8,15 @@ import Chat from '../../components/Chat';
 import { ChatMessage } from 'boardgamereactio-common/modules/Server';
 import { GameStatus } from 'boardgamereactio-common';
 import { prefix } from 'boardgamereactio-common/Flip/defs'
+import { Card as CardModel } from 'boardgamereactio-common/Flip/Card';
 
-import './game.scss'
 import { Button } from '@material-ui/core';
 import GameResult from './GameParts/GameResult';
 import BeforeGameStart from './GameParts/BeforeGameStart';
+import Player from './components/Player/Player';
+import Stack from './components/Stack/Stack';
+
+import './game.scss'
 
 interface GameProps extends DefaultProps {
 }
@@ -22,7 +26,8 @@ interface GameState {
     gameStatus: GameStatus
     players: any
 
-    selectedCardsIndex: number[]
+    selectedCardsIndex: number
+    stackValues: number[]
     deckSize?: number
     winner?: string
 }
@@ -39,7 +44,8 @@ class Game extends React.Component <GameProps, GameState> {
             isCreator: false,
             gameStatus: GameStatus.Preparing,
             players: [],
-            selectedCardsIndex: []
+            selectedCardsIndex: null,
+            stackValues: [null, null]
         }
     }
 
@@ -69,10 +75,10 @@ class Game extends React.Component <GameProps, GameState> {
             socket.on(prefix + 'game:new_play', (combination, socketId) => {
                 console.log('game:new_play', combination, socketId)
 
-                this.setState({
-                    winner: socketId,
-                    selectedCardsIndex: []
-                })
+                // this.setState({
+                //     winner: socketId,
+                //     selectedCardsIndex: []
+                // })
             })
         }
     }
@@ -94,10 +100,23 @@ class Game extends React.Component <GameProps, GameState> {
         )
     }
 
-    handleClickOnCard = (k) => {
+    handleStress = () => {
+        this.props.socket.emit('stress')
+    }
+
+    selectCard = (index: number) => {
+        this.setState({
+            selectedCardsIndex: this.state.selectedCardsIndex === index ? undefined : index
+        })
     }
 
     getSelectedCards(){
+    }
+
+    renderStacks(){
+        return this.state.stackValues.map(v => {
+            <Stack value={v} />
+        })
     }
 
     render() {
@@ -116,7 +135,37 @@ class Game extends React.Component <GameProps, GameState> {
                         <GameResult />
                     }
                     {this.state.gameStatus === GameStatus.InGame && 
-                        <div className="in-game">In game</div>
+                        <div className="ingame">
+                        <div className="opponent">
+                            <Player
+                                isPlayer={false}
+                                cards={[ new CardModel(1, 1)]}
+                                deckCount={0}                                
+                            />
+                        </div>
+                        
+                        <div className="stacks">
+                            {this.renderStacks()}
+                        </div>
+
+                        <Button 
+                            className={'stress-btn'}
+                            variant='raised'
+                            onClick={this.handleStress}
+                        >
+                            STRESS !!!
+                        </Button>
+
+                        <div className="me">
+                            <Player
+                                isPlayer={false}
+                                cards={[ new CardModel(3, 1)]}
+                                deckCount={5}
+                                onSelectCard={this.selectCard}
+                                selectedCardIndex={this.state.selectedCardsIndex}
+                            />
+                        </div>
+                    </div>
                     }
                     {this.state.gameStatus === GameStatus.Preparing && 
                         <BeforeGameStart 
