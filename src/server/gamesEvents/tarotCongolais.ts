@@ -69,7 +69,8 @@ function sendGameInfos(socket: SuperSocket, game: MultiplayerGame, initialCall =
     let tcgame = game.gameInstance as TarotCongolaisGame | undefined
     let players: any = tcgame ? tcgame.playersFPOV : game.players
     let nbPlayer = tcgame ? tcgame.getNbPlayer() : game.nbPlayer
-    
+    const isFirstPlayer = game.isFirstPlayer(socket.socketPlayer.socketid)
+
     const uiPlayers = players.map( (p: any) => (
         {
             name: tcgame ? p.username : p.surname,
@@ -80,7 +81,7 @@ function sendGameInfos(socket: SuperSocket, game: MultiplayerGame, initialCall =
     ))
 
     // console.log('game:player.ask_initial_infos', game.id, uiPlayers, game.isFirstPlayer(socket.id), initialChat)
-    socket.emit(prefix + 'game:player.ask_initial_infos', game.id, uiPlayers, game.isFirstPlayer(socket.socketPlayer.socketid), nbPlayer)
+    socket.emit(prefix + 'game:player.ask_initial_infos', game.id, uiPlayers, isFirstPlayer, nbPlayer)
     socket.baseSocket.to(game.id).broadcast.emit(prefix + 'game:players.new_player', uiPlayers)
 }
 

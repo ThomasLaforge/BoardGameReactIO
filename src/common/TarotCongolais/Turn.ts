@@ -9,8 +9,8 @@ export class Turn {
     public arrTrick:Trick[];
     public arrBet:Bet[];
 
-	constructor(nbCards: number, players: Player[], arrTrick: Trick[] = [], arrBet: Bet[] = []) {
-        this.players = players;
+	constructor(nbCards: number, fpovPlayers: Player[], arrTrick: Trick[] = [], arrBet: Bet[] = []) {
+        this.players = fpovPlayers;
         this.nbCards = nbCards;
 		this.arrTrick = arrTrick;
 		this.arrBet = arrBet;
@@ -66,7 +66,7 @@ export class Turn {
         let player = bet.player;
         if( this.isPlayerToBet(player) ) {
             this.arrBet.push(bet);
-            console.log('arr bet after bet', this.arrBet)
+            // console.log('arr bet after bet', this.arrBet)
         }
         else{
             throw new Error('Not good player to bet');
@@ -95,6 +95,13 @@ export class Turn {
             }
         })
         return sum;
+    }
+
+    getLastTrick(){
+        if(this.arrTrick.length === 0){
+            throw 'try to access last trick of empty array'
+        }
+        return this.arrTrick[this.arrTrick.length - 1]
     }
 
     allPlayersPlay(){

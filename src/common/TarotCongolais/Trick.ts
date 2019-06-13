@@ -14,13 +14,8 @@ export class Trick {
 
     addPlay(play:Play){
         let player = play.player;
-        if( this.isPlayerToPlay(player) ) {
-            this.arrPlay.push(play);
-            return this.getWinner()
-        }
-        else{
-            throw new Error('Not good player to play');
-        }
+        this.arrPlay.push(play);
+        return this.getWinner()
     }
 
     isWinner(p: Player){
@@ -32,7 +27,7 @@ export class Trick {
         }
     }
 
-    getWinner(): Player | null {
+    getWinner(): Player | null{
         if(this.isComplete()){
             let res: Player = this.arrPlay[0] && this.arrPlay[0].player;
             let maxValueCard:number = -1;
@@ -59,13 +54,6 @@ export class Trick {
             }
         })
         return res;
-    }
-
-    // TODO
-    isPlayerToPlay(player: Player){
-        const playerIndex = this.players.findIndex(p => p.isEqual(player))
-        const nbTricksPlayed = this.arrPlay.length
-        return playerIndex === nbTricksPlayed
     }
 
     getListOfPlayerHavingPlayed(){
