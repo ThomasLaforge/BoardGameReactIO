@@ -2,13 +2,15 @@
 
 import { SuperSocket } from '../SuperSocket';
 
-import {prefix, DEFAULT_START_PV} from '../../common/TarotCongolais/TarotCongolais'
+import {prefix, DEFAULT_START_PV, DELAY_BETWEEN_TWO_TRICKS} from '../../common/TarotCongolais/TarotCongolais'
 import { MultiplayerGame } from '../../common/modules/MultiplayerGame';
 import { Game as TarotCongolaisGame } from '../../common/TarotCongolais/Game'
 import { serialize } from 'serializr';
 import { GameCollection } from '../../common';
 
 export const addTarotCongolaisEvents = (socket: SuperSocket, GC: GameCollection) => {
+
+    let waitingNextTurn = false
 
     socket.on(prefix + 'game:ask_initial_infos', () => {
         let game = GC.getGameWithUser(socket.id)
@@ -30,7 +32,7 @@ export const addTarotCongolaisEvents = (socket: SuperSocket, GC: GameCollection)
 
     socket.on(prefix + 'player_bet', (playerBet: number) => {
         let g = GC.getGameWithUser(socket.id)
-        if(g){
+        if(g && !waitingNextTurn){
             let tcgame = g.gameInstance as TarotCongolaisGame 
             try {
                 console.log('player betting')
@@ -47,7 +49,7 @@ export const addTarotCongolaisEvents = (socket: SuperSocket, GC: GameCollection)
 
     socket.on(prefix + 'player_play', (cardIndex: number, value: number) => {
         let g = GC.getGameWithUser(socket.id);
-        if(g){
+        if(g && !waitingNextTurn){
             try {
                 let tcgame = g.gameInstance as TarotCongolaisGame 
                 let player = tcgame.getPlayer(socket.id)
@@ -58,6 +60,14 @@ export const addTarotCongolaisEvents = (socket: SuperSocket, GC: GameCollection)
                 console.log('player_play', cardIndex, player.hand.cards[cardIndex])
                 tcgame.addPlay({ player, card })
                 updateUI(socket, g)
+                if(tcgame.actualTrick.isComplete()){
+                    waitingNextTurn = true
+                    setTimeout(() => {
+                        tcgame.addTrick()
+                        waitingNextTurn = false
+                        updateUI(socket, g as MultiplayerGame)
+                    }, DELAY_BETWEEN_TWO_TRICKS)
+                }
             } catch (error) {
                 console.log('player already played')
             }            

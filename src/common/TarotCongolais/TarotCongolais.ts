@@ -46,3 +46,5 @@ export enum GamePhase {
     Bet = 1,
     Play = 2
 }
+
+export const DELAY_BETWEEN_TWO_TRICKS = 3000

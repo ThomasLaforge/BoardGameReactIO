@@ -82,7 +82,7 @@ export class Game {
 	}
 
 	// Play
-	addPlay(play: Play, autoEndTrick = true){
+	addPlay(play: Play, autoEndTrick = false){
 		// Action
 		play.player.playCard(play.card)
 		let trickWinner = this.actualTrick.addPlay( play );
@@ -99,7 +99,7 @@ export class Game {
 		if(this.turn.allPlayersBet() && this.turn.nbCards === 1){
 			this.players.forEach(player => { 
 				let card = player.hand.cards[0]
-				this.addPlay({ player, card }) 
+				this.addPlay({ player, card }, true) 
 			})
 		}
 	}
