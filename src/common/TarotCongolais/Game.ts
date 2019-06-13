@@ -14,14 +14,13 @@ export class Game {
 	public actualTrick: Trick;
 	public history: Turn[];
 
-    constructor(players: SocketPlayer[], shufflePlayers = true, deck = new Deck(undefined, false)){
+    constructor(players: SocketPlayer[], shufflePlayers = true, deck = new Deck()){
 		this.history 		  = []
 		this.players          = players.map(socketPlayer => new Player(socketPlayer.surname, socketPlayer.socketid));
+		shufflePlayers && this.shufflePlayers()
 		this.deck             = deck
 		this.actualTrick 	  = new Trick(this.playersFPOV);
 		this.turn 			  = new Turn(this.getNbCardForTurn(), this.playersFPOV);
-		
-		shufflePlayers && this.shufflePlayers()
 	}
 
 	/**
