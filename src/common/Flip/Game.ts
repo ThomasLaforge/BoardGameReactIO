@@ -66,9 +66,9 @@ export class Game {
     }
 
     isGameOver(){
-        return this.players.filter(p => p.deck.length === 0).length > 0
+        return this.players.filter(p => p.deck && p.deck.length === 0).length > 0
     }
     getWinner(){
-        return this.players.find(p => p.deck.length === 0)
+        return this.players.find(p => p.deck && p.deck.length === 0)
     }
 }
