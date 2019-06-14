@@ -24,9 +24,11 @@ export class Card extends Component<CardProps, CardState> {
     const {value, color} = this.props
 
     return (
-        <div className={`flip-card card-${value}_${color}` + this.props.selected ? ' flip-card-selected' : ''} 
+        <div className={'flip-card ' + (this.props.selected ? ' flip-card-selected' : '')} 
             onClick={() => this.props.onClick && this.props.onClick()}
-        />
+        >
+            <div className={`card-img card-${value}_${color}`}></div>
+        </div>
     )
   }
 }

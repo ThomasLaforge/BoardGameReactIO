@@ -4,7 +4,6 @@ import Card from '../Card/Card';
 
 interface PlayerProps {
     cards: CardModel[]
-    deckCount: number
     isPlayer: boolean
     selectedCardIndex?: number
     onSelectCard?: Function
@@ -21,6 +20,7 @@ export class Player extends Component<PlayerProps, PlayerState> {
     }
 
     renderCards(){
+        console.log('cards to render', this.props.cards)
         return this.props.cards.map( (c, i) => 
             <Card 
                 value={c.value} 
@@ -33,12 +33,9 @@ export class Player extends Component<PlayerProps, PlayerState> {
 
     render() {
         return (
-            <div className={'player ' + this.props.isPlayer ? 'main-player' : 'opponent-player'}>
+            <div className={'player ' + (this.props.isPlayer ? 'main-player' : 'opponent-player')}>
                 <div className="cards">
                     {this.renderCards()}
-                </div>
-                <div className="deck-count">
-                    {this.props.deckCount}
                 </div>
             </div>
         )
