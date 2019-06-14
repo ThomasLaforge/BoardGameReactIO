@@ -15,6 +15,7 @@ import { LimiteLimiteGame } from './LimiteLimite/LimiteLimiteGame'
 import { Game as TarotCongolaisGame } from './TarotCongolais/Game'
 import { Game as GifDefinitor } from './GifDefinitor/Game'
 import { Game as SetGame } from './Set/Game'
+import { Game as FlipGame } from './Flip/Game'
 import { MultiplayerGame } from './modules/MultiplayerGame';
 import { SoloGame } from './modules/SoloGame';
 import { Client } from './modules/Client';
@@ -30,6 +31,8 @@ export const getGameClass = (gameName: string) : GameClass => {
             return GifDefinitor
         case 'set':
             return SetGame
+        case 'flip':
+            return FlipGame
         default:
             throw Error('try to get class of game type who doesn\'t exist')
     }
