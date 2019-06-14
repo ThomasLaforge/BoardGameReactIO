@@ -3,22 +3,26 @@ import { Deck } from "./Deck";
 import { NB_PLAYER } from "./defs";
 import { Stack } from "./Stack";
 import { Card } from "./Card";
+import { SocketPlayer } from "../modules/SocketPlayer";
 
 export class Game {
 
+    public players: Player[]
+
     constructor(
-        public players: Player[],
+        players: SocketPlayer[],
         public deck = new Deck(),
         public stacks = [new Stack([deck.drawOneCard()]), new Stack([deck.drawOneCard()])]
     ) {    
-    }
-
-    start(){
+        this.players = players.map(p => new Player(p.surname, p.socketid))
         const nbCardsToDraw = Math.floor(this.deck.length / (NB_PLAYER))
         this.players.forEach( (p, i) => {
             const cards = this.deck.drawCards(nbCardsToDraw)
             p.deck.addCards(cards)
         })
+    }
+
+    start(){
     }
 
     callStress(player: Player){
