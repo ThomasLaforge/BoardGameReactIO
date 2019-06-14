@@ -24,11 +24,13 @@ interface GameState {
     gameId: string
     isCreator: boolean
     gameStatus: GameStatus
-    players: any
+    players: any[]
+    nbPlayers: number
 
     selectedCardsIndex: number
     stackValues: number[]
-    deckSize?: number
+    opponentCards: CardModel[]
+    cards: CardModel[]
     winner?: string
 }
 
@@ -45,30 +47,36 @@ class Game extends React.Component <GameProps, GameState> {
             gameStatus: GameStatus.Preparing,
             players: [],
             selectedCardsIndex: null,
-            stackValues: [null, null]
+            stackValues: [null, null],
+            nbPlayers: 0,
+            cards: [],
+            opponentCards: []
         }
     }
 
     componentDidMount(){
         if(this.props.socket){
+
             const socket = this.props.socket
 
             socket.emit(prefix + 'game:ask_initial_infos')
 
-            socket.on(prefix + 'game:player.ask_initial_infos', (gameId: string, players: any, isCreator: boolean, myIndex: number, initialChat: ChatMessage[]) => {
-                console.log('players1', gameId, players, isCreator, myIndex, initialChat)
-                this.setState({gameId, isCreator, players })
+            socket.on(prefix + 'game:player.ask_initial_infos', (gameId: string, players: any, isCreator: boolean, nbPlayers: number) => {
+                console.log('players1', gameId, players, isCreator, nbPlayers)
+                this.setState({gameId, isCreator, players, nbPlayers })
             })
             socket.on(prefix + 'game:players.new_player', (players) => {
                 console.log('players2', players)
                 this.setState({ players })
             })
 
-            socket.on(prefix + 'game:players.update', (isGameOver, fieldJSON, deckSize, hasError) => {
-                console.log('game:players.update', isGameOver, fieldJSON, deckSize, hasError)
+            socket.on(prefix + 'game:players.update', (isGameOver, myCards, opponentCards, stackValues) => {
+                console.log('game:players.update', isGameOver, myCards, opponentCards, stackValues)
                 this.setState({
-                    deckSize,
-                    gameStatus: isGameOver ? GameStatus.Finished : GameStatus.InGame
+                    gameStatus: isGameOver ? GameStatus.Finished : GameStatus.InGame,
+                    cards: myCards,
+                    opponentCards,
+                    stackValues
                 })
             })
 
@@ -94,29 +102,38 @@ class Game extends React.Component <GameProps, GameState> {
                 className='player'
             >
                 <div className="player-name">{p.name}</div>
-                <div className="player-score">{p.score}</div>
-                <div className="player-has-error">{p.hasError && 'X'}</div>
+                <div className="player-nb-cards">{p.nbCards}</div>
             </div>
         )
     }
 
     handleStress = () => {
-        this.props.socket.emit('stress')
+        this.props.socket.emit(prefix + 'game:stress')
     }
 
     selectCard = (index: number) => {
+        console.log('click on card', index)
         this.setState({
             selectedCardsIndex: this.state.selectedCardsIndex === index ? undefined : index
         })
     }
 
-    getSelectedCards(){
+    handleStackClick = (stackIndex: number) => {
+        console.log('click on stack', stackIndex, this.state.selectedCardsIndex)
+        if(this.state.selectedCardsIndex || this.state.selectedCardsIndex === 0){
+            this.props.socket.emit(prefix + 'game:add-card', this.state.selectedCardsIndex, stackIndex)
+        }
+        else {
+            console.log('select a card before click on stack')
+        }
     }
 
     renderStacks(){
-        return this.state.stackValues.map(v => {
-            <Stack value={v} />
-        })
+        console.log('stacks to render', this.state.stackValues);
+        
+        return this.state.stackValues.map((v, i) => (
+            <Stack key={i} value={v} onClick={() => this.handleStackClick(i)}/>
+        ))
     }
 
     render() {
@@ -135,12 +152,11 @@ class Game extends React.Component <GameProps, GameState> {
                         <GameResult />
                     }
                     {this.state.gameStatus === GameStatus.InGame && 
-                        <div className="ingame">
+                    <div className="ingame">
                         <div className="opponent">
                             <Player
                                 isPlayer={false}
-                                cards={[ new CardModel(1, 1)]}
-                                deckCount={0}                                
+                                cards={this.state.opponentCards}
                             />
                         </div>
                         
@@ -159,8 +175,7 @@ class Game extends React.Component <GameProps, GameState> {
                         <div className="me">
                             <Player
                                 isPlayer={false}
-                                cards={[ new CardModel(3, 1)]}
-                                deckCount={5}
+                                cards={this.state.cards}
                                 onSelectCard={this.selectCard}
                                 selectedCardIndex={this.state.selectedCardsIndex}
                             />
