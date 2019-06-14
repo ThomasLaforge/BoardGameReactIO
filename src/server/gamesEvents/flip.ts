@@ -2,13 +2,14 @@
 
 import { SuperSocket } from '../SuperSocket';
 
-import {prefix} from '../../common/Flip/defs'
+import {prefix, NB_PLAYER} from '../../common/Flip/defs'
 import { MultiplayerGame } from '../../common/modules/MultiplayerGame';
 import { Game as FlipGame } from '../../common/Flip/Game'
 import { serialize } from 'serializr';
-import { GameCollection } from '../../common';
+import { GameCollection, SocketPlayer } from '../../common';
+import { Player } from '../../common/Flip/Player';
 
-export const addSetEvents = (socket: SuperSocket, GC: GameCollection) => {
+export const addFlipEvents = (socket: SuperSocket, GC: GameCollection) => {
 
     socket.on(prefix + 'game:ask_initial_infos', () => {
         let game = GC.getGameWithUser(socket.id)
@@ -25,36 +26,20 @@ export const addSetEvents = (socket: SuperSocket, GC: GameCollection) => {
         }
     })
 
-    socket.on(prefix + 'game:play', (cards: any[]) => {
-        let game = GC.getGameWithUser(socket.id)
-        let flipGame = game && game.gameInstance as FlipGame | undefined
-        let p = flipGame && flipGame.players.find(p => p.socketid === socket.socketPlayer.socketid)
-        console.log('cards', cards, game && flipGame && p)
-        if(game && flipGame && p){
-            // const isValid = flipGame.tryToAddPlay(p, cards)
-            // if(isValid){
-                // const lastPlay = flipGame.getLastPlay()
-                // socket.server.in(game.id).emit(prefix + 'game:new_play', serialize(lastPlay.combination), socket.id);
-                // setTimeout(() => { 
-                //     (flipGame as flipGame).resetTurn()
-                //     updateUI(socket, game as MultiplayerGame) }, 
-                //     NEXT_TURN_DELAY
-                // )
-            // }
-            // else {
-                // updateUI(socket, game)
-            // } 
-        }
-    })
-
-    socket.on(prefix + 'game:add-cards', () => {
+    socket.on(prefix + 'game:add-card', (cardIndex: number, stackIndex: number) => {
         let game = GC.getGameWithUser(socket.id)
         let flipGame = game && game.gameInstance as FlipGame | undefined
         if(flipGame) {
-            // flipGame.nextTurn(true)
             updateUI(socket, game as MultiplayerGame)
         }
+    })
 
+    socket.on(prefix + 'game:stress', () => {
+        let game = GC.getGameWithUser(socket.id)
+        let flipGame = game && game.gameInstance as FlipGame | undefined
+        if(flipGame) {
+            updateUI(socket, game as MultiplayerGame)
+        }
     })
 }
 
@@ -62,33 +47,45 @@ function sendGameInfos(socket: SuperSocket, game: MultiplayerGame, initialCall =
     let flipGame = game.gameInstance as FlipGame | undefined
     let players: any = flipGame ? flipGame.players : game.players
     
-    const uiPlayers = players.map( (p: any) => (
-        {
-            name: flipGame ? p.username : p.surname,
-            socketid: p.socketid,
-            // score: flipGame ? flipGame.getPlayerScore(p) : 0,
-            // hasError: flipGame && flipGame.playerHasAnError(p)
+    const uiPlayers = players.map( (p: Player | SocketPlayer) => {
+        if(flipGame){
+            p = p as Player
+            return {
+                name: p.username,
+                socketid: p.socketid,
+                nbCards: p.deck && p.deck.length
+            }
         }
-    ))
+        else {
+            p = p as SocketPlayer
+            return {
+                name: p.surname,
+                socketid: p.socketid,
+                nbCards: null
+            }
+        }
+    })
 
     // console.log('game:player.ask_initial_infos', game.id, uiPlayers, game.isFirstPlayer(socket.id), initialChat)
-    socket.emit(prefix + 'game:player.ask_initial_infos', game.id, uiPlayers, game.isFirstPlayer(socket.socketPlayer.socketid), nbPlayer)
+    socket.emit(prefix + 'game:player.ask_initial_infos', game.id, uiPlayers, game.isFirstPlayer(socket.socketPlayer.socketid), NB_PLAYER)
     socket.baseSocket.to(game.id).broadcast.emit(prefix + 'game:players.new_player', uiPlayers)
 }
 
 function updateUI(socket: SuperSocket, game: MultiplayerGame){
     let flipGame = game.gameInstance as FlipGame
     if(flipGame){
-        // console.log('updateUI', flipGame)
         let params: any[] = [
             flipGame.isGameOver()
         ]
 
         flipGame.players.forEach( p => {
+            console.log('flip player', p)
             let playerSpecificsParams = params.slice()
-            // playerSpecificsParams.push(
-                // flipGame.playerHasAnError(p)
-            // )
+            playerSpecificsParams.push(
+                p.getPlayableCards(),
+                flipGame.getOpponent(p).getPlayableCards(),
+                flipGame.stacks.map(s =>  s.topCard && s.topCard.value )
+            )
 
             socket.server.to(p.socketid).emit(prefix + 'game:players.update', ...playerSpecificsParams)
         })
