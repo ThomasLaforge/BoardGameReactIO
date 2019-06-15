@@ -1,6 +1,6 @@
 import { Player } from "./Player";
 import { Deck } from "./Deck";
-import { NB_PLAYER } from "./defs";
+import { NB_PLAYER, NB_CARDS_PLAYABLE } from "./defs";
 import { Stack } from "./Stack";
 import { Card } from "./Card";
 import { SocketPlayer } from "../modules/SocketPlayer";
@@ -8,25 +8,37 @@ import { SocketPlayer } from "../modules/SocketPlayer";
 export class Game {
 
     public players: Player[]
+    public stacks: Stack[]
 
     constructor(
         players: SocketPlayer[],
-        public deck = new Deck(),
-        public stacks = [new Stack([deck.drawOneCard()]), new Stack([deck.drawOneCard()])]
+        public deck = new Deck()
     ) {    
         this.players = players.map(p => new Player(p.surname, p.socketid))
-        const nbCardsToDraw = Math.floor(this.deck.length / (NB_PLAYER))
+        const nbCardsToDraw = Math.floor(this.deck.length / NB_PLAYER)
         this.players.forEach( (p, i) => {
             const cards = this.deck.drawCards(nbCardsToDraw)
             p.deck.addCards(cards)
         })
+        this.stacks = []
+        this.initStacks()
     }
-
+    
     start(){
     }
+    
+    initStacks(){
+        this.stacks = this.players.map(p => new Stack([p.deck.drawOneCard()])) 
+    }
+    resetStacks = this.initStacks
 
     callStress(player: Player){
-        if(this.stacks[0].topCard === this.stacks[1].topCard){
+
+        if(
+            this.stacks[0].topCard &&
+            this.stacks[1].topCard && 
+            this.stacks[0].topCard.value === this.stacks[1].topCard.value
+        ){
             // Opponent take cards on field
             const opponent = this.getOpponent(player)
             const allStackCards = this.stacks.reduce(
@@ -36,8 +48,17 @@ export class Game {
             opponent.deck.addCards(allStackCards)
             
             // shuffle players decks
-            this.players.forEach(p => p.shuffleDeck())
+            this.players.forEach(p => {
+                p.shuffleDeck()
+            })
+            this.resetStacks()
         }
+    }
+
+    resetDecks(){
+        this.players.forEach(p => {
+            p.shuffleDeck()
+        })
     }
 
     putCard(player: Player, cardIndex: number, stackIndex: number){
@@ -63,6 +84,32 @@ export class Game {
     }
     getPlayerIndex(player: Player){
         return this.players.findIndex(p => p.isEqual(player))
+    }
+    getPlayer(socketId: string){
+        return this.players.find(p => p.socketid === socketId)
+    }
+    getNbPlayer(){
+        return this.players.length
+    }
+
+    playersCanAddOnStack(p: Player, s: Stack){
+        return p.getPlayableCards().findIndex(c => !!s.topCard && c.isStackable(s.topCard)) !== -1
+    }
+    playersCanAdd(p: Player){
+        return this.stacks.findIndex(s => this.playersCanAddOnStack(p, s)) !== -1
+    }
+
+    canAddCards(){
+        let pIndex = 0
+
+        while(pIndex < this.getNbPlayer() && !this.playersCanAdd(this.players[pIndex])){
+            pIndex++
+        }
+ 
+        return pIndex < this.getNbPlayer()
+    }
+    cantAddCards(){
+        return !this.canAddCards()
     }
 
     isGameOver(){

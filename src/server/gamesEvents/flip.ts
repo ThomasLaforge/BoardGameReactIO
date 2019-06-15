@@ -2,12 +2,13 @@
 
 import { SuperSocket } from '../SuperSocket';
 
-import {prefix, NB_PLAYER} from '../../common/Flip/defs'
+import {prefix, NB_PLAYER, DELAY_AFTER_RESET} from '../../common/Flip/defs'
 import { MultiplayerGame } from '../../common/modules/MultiplayerGame';
 import { Game as FlipGame } from '../../common/Flip/Game'
 import { serialize } from 'serializr';
 import { GameCollection, SocketPlayer } from '../../common';
 import { Player } from '../../common/Flip/Player';
+import { Game } from '../../common/modules/Game';
 
 export const addFlipEvents = (socket: SuperSocket, GC: GameCollection) => {
 
@@ -27,18 +28,42 @@ export const addFlipEvents = (socket: SuperSocket, GC: GameCollection) => {
     })
 
     socket.on(prefix + 'game:add-card', (cardIndex: number, stackIndex: number) => {
+        console.log('game:add-card', cardIndex, stackIndex);
         let game = GC.getGameWithUser(socket.id)
         let flipGame = game && game.gameInstance as FlipGame | undefined
         if(flipGame) {
-            updateUI(socket, game as MultiplayerGame)
+            let p = flipGame.getPlayer(socket.id)
+            if(p){
+                flipGame.putCard(p, cardIndex, stackIndex)
+                updateUI(socket, game as MultiplayerGame)
+                if(flipGame.cantAddCards()){
+                    console.log('cant add cards !')
+                    flipGame.resetDecks()
+                    setTimeout(() => {
+                        updateUI(socket, game as MultiplayerGame)
+                    }, DELAY_AFTER_RESET)
+                }
+            }
+            else {
+                console.error('unknown player call stress', socket.id, (game as Game).id)
+            }
         }
     })
 
     socket.on(prefix + 'game:stress', () => {
         let game = GC.getGameWithUser(socket.id)
         let flipGame = game && game.gameInstance as FlipGame | undefined
+        console.log('game:stress');
         if(flipGame) {
-            updateUI(socket, game as MultiplayerGame)
+            let p = flipGame.getPlayer(socket.id)
+            if(p){
+                console.log('game:stress in');
+                flipGame.callStress(p)
+                updateUI(socket, game as MultiplayerGame)
+            }
+            else {
+                console.error('unknown player call stress', socket.id, (game as Game).id)
+            }
         }
     })
 }
@@ -75,16 +100,16 @@ function updateUI(socket: SuperSocket, game: MultiplayerGame){
     let flipGame = game.gameInstance as FlipGame
     if(flipGame){
         let params: any[] = [
-            flipGame.isGameOver()
+            flipGame.isGameOver(),
+            flipGame.canAddCards()
         ]
-
+        
         flipGame.players.forEach( p => {
-            console.log('flip player', p)
             let playerSpecificsParams = params.slice()
             playerSpecificsParams.push(
                 p.getPlayableCards(),
                 flipGame.getOpponent(p).getPlayableCards(),
-                flipGame.stacks.map(s =>  s.topCard && s.topCard.value )
+                flipGame.stacks.map(s =>  serialize(s.topCard))
             )
 
             socket.server.to(p.socketid).emit(prefix + 'game:players.update', ...playerSpecificsParams)

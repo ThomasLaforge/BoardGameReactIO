@@ -7,7 +7,7 @@ import {deserialize} from 'serializr'
 import Chat from '../../components/Chat';
 import { ChatMessage } from 'boardgamereactio-common/modules/Server';
 import { GameStatus } from 'boardgamereactio-common';
-import { prefix } from 'boardgamereactio-common/Flip/defs'
+import { prefix, DELAY_AFTER_RESET } from 'boardgamereactio-common/Flip/defs'
 import { Card as CardModel } from 'boardgamereactio-common/Flip/Card';
 
 import { Button } from '@material-ui/core';
@@ -17,6 +17,7 @@ import Player from './components/Player/Player';
 import Stack from './components/Stack/Stack';
 
 import './game.scss'
+import Timer from 'src/components/Timer';
 
 interface GameProps extends DefaultProps {
 }
@@ -28,9 +29,10 @@ interface GameState {
     nbPlayers: number
 
     selectedCardsIndex: number
-    stackValues: number[]
+    stackCards: CardModel[]
     opponentCards: CardModel[]
     cards: CardModel[]
+    canAddCards: boolean
     winner?: string
 }
 
@@ -47,9 +49,10 @@ class Game extends React.Component <GameProps, GameState> {
             gameStatus: GameStatus.Preparing,
             players: [],
             selectedCardsIndex: null,
-            stackValues: [null, null],
+            stackCards: [null, null],
             nbPlayers: 0,
             cards: [],
+            canAddCards: true,
             opponentCards: []
         }
     }
@@ -70,13 +73,15 @@ class Game extends React.Component <GameProps, GameState> {
                 this.setState({ players })
             })
 
-            socket.on(prefix + 'game:players.update', (isGameOver, myCards, opponentCards, stackValues) => {
-                console.log('game:players.update', isGameOver, myCards, opponentCards, stackValues)
+            socket.on(prefix + 'game:players.update', (isGameOver, canAddCards, myCards, opponentCards, stackCardsJSON) => {
+                const stackCards = deserialize(CardModel, stackCardsJSON)
+                console.log('game:players.update', isGameOver, canAddCards, myCards, opponentCards, stackCards)
                 this.setState({
                     gameStatus: isGameOver ? GameStatus.Finished : GameStatus.InGame,
                     cards: myCards,
                     opponentCards,
-                    stackValues
+                    stackCards: stackCards as any as CardModel[],
+                    canAddCards
                 })
             })
 
@@ -122,6 +127,7 @@ class Game extends React.Component <GameProps, GameState> {
         console.log('click on stack', stackIndex, this.state.selectedCardsIndex)
         if(this.state.selectedCardsIndex || this.state.selectedCardsIndex === 0){
             this.props.socket.emit(prefix + 'game:add-card', this.state.selectedCardsIndex, stackIndex)
+            this.setState({selectedCardsIndex: null})
         }
         else {
             console.log('select a card before click on stack')
@@ -129,10 +135,10 @@ class Game extends React.Component <GameProps, GameState> {
     }
 
     renderStacks(){
-        console.log('stacks to render', this.state.stackValues);
+        console.log('stacks to render', this.state.stackCards);
         
-        return this.state.stackValues.map((v, i) => (
-            <Stack key={i} value={v} onClick={() => this.handleStackClick(i)}/>
+        return this.state.stackCards.map((c, i) => (
+            <Stack key={i} card={c} onClick={() => this.handleStackClick(i)}/>
         ))
     }
 
@@ -160,17 +166,19 @@ class Game extends React.Component <GameProps, GameState> {
                             />
                         </div>
                         
-                        <div className="stacks">
-                            {this.renderStacks()}
-                        </div>
+                        <div className="common-part">
+                            <div className="stacks">
+                                {this.renderStacks()}
+                            </div>
 
-                        <Button 
-                            className={'stress-btn'}
-                            variant='raised'
-                            onClick={this.handleStress}
-                        >
-                            STRESS !!!
-                        </Button>
+                            <Button 
+                                className={'stress-btn'}
+                                variant='raised'
+                                onClick={this.handleStress}
+                            >
+                                STRESS !!!
+                            </Button>
+                        </div>
 
                         <div className="me">
                             <Player
@@ -180,6 +188,11 @@ class Game extends React.Component <GameProps, GameState> {
                                 selectedCardIndex={this.state.selectedCardsIndex}
                             />
                         </div>
+                        {!this.state.canAddCards && 
+                            <div className="cant-add-cards">
+                                You cannot add cards on any stack. Please wait during new scrambling your deck! <Timer duration={DELAY_AFTER_RESET/1000} />
+                            </div>
+                        }
                     </div>
                     }
                     {this.state.gameStatus === GameStatus.Preparing && 
