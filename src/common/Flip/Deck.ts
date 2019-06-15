@@ -7,7 +7,8 @@ export class Deck {
     
     constructor(
         arrayDeck?: Card[],
-        public nbPacks = DEFAULT_NB_PACKS
+        public nbPacks = DEFAULT_NB_PACKS,
+        shuffle = true
     ) {
         this.arrayDeck = []
 
@@ -15,7 +16,7 @@ export class Deck {
             this.arrayDeck = arrayDeck
         }
         else {
-            this.initDeck();
+            this.initDeck(shuffle);
         }
     }
 
