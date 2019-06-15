@@ -19,6 +19,23 @@
                     justify-content: center;
                 }
             }
+
+            .common-parts {
+                display: flex;
+                flex-direction: row;
+                width: 100%;
+                justify-content: center;
+                margin: 40px 0;
+
+                .stacks {
+                    display: flex;
+                    flex-direction: row;
+                }
+            }
+
+            .common-parts > * {
+                margin: 0 30px;
+            }
         }
     }
 
