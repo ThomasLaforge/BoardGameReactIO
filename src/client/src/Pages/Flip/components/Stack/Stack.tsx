@@ -1,7 +1,10 @@
 import React, { Component } from 'react'
 
+import { Card as CardModel } from 'boardgamereactio-common/Flip/Card';
+import Card from '../Card/Card';
+
 interface StackProps {
-    value: number | null
+    card: CardModel | null
     onClick: Function
 }
 interface StackState {
@@ -18,7 +21,13 @@ export class Stack extends Component<StackProps, StackState> {
   render() {
     return (
       <div className='stack' onClick={() => this.props.onClick()}>
-        {this.props.value || '-'}
+        {this.props.card 
+          ? <Card 
+              value={this.props.card.value} 
+              color={this.props.card.color}
+            />
+          : '-'
+        }
       </div>
     )
   }

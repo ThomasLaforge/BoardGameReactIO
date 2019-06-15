@@ -12,3 +12,5 @@ export enum CardColor {
     Heart = 2,
     Diamond = 3
 }
+
+export const DELAY_AFTER_RESET = 3000

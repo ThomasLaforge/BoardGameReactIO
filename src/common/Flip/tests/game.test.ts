@@ -15,6 +15,7 @@ describe('flip game', () => {
         game.players.forEach(p => {
             console.log('decks', p.username, p.deck)
         })
+        console.log('stacks on create', game.stacks)
         expect(game.players.length).toEqual(2);
     })
 })

@@ -6,8 +6,8 @@ import './style.scss'
 interface CardProps {
     value: number
     color: CardColor
-    onClick: Function
-    selected: boolean
+    onClick?: Function
+    selected?: boolean
 }
 interface CardState {
 }

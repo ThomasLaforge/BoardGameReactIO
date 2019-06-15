@@ -1,11 +1,15 @@
 import { CardColor } from "./defs";
+import { serializable } from "serializr";
 
 export class Card {
+    
+    @serializable public value: number
+    @serializable public color: CardColor
 
-    constructor(
-        public value: number,
-        public color: CardColor
-    ){}
+    constructor(value: number, color: CardColor){
+        this.value = value
+        this.color = color
+    }
 
     isStackable(card: Card) : boolean {
         if(

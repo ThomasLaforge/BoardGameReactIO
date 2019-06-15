@@ -5,7 +5,7 @@ describe('flip stackable', () => {
     test('same value', () => {
         let card1 = new Card(1, 0)
         let card1Bis = new Card(1, 4)
-        expect(card1.hasSameValue(card1Bis)).toBe(true);
+        expect(card1.isStackable(card1Bis)).toBe(false);
     })
 
     test('stackable bottom', () => {
