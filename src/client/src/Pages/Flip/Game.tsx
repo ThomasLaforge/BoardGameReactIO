@@ -166,7 +166,7 @@ class Game extends React.Component <GameProps, GameState> {
                             />
                         </div>
                         
-                        <div className="common-part">
+                        <div className="common-parts">
                             <div className="stacks">
                                 {this.renderStacks()}
                             </div>
