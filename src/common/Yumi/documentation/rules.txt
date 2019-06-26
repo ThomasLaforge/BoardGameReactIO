@@ -1,0 +1,10 @@
+Yumi (orthographe non connue) est un jeu de cartes, nécessitant un jeu de 52 cartes avec deux jokers
+Il faut se défausser le plus rapidement possible de ses cartes pour arriver le plus rapidement à une valeur totale inférieur ou égale à 7.
+Lorsqu'un joueur doit jouer il peut défauser une ou plusieurs cartes de sa main, ou si sa valeur totale de sa main le permet, arrêter le tour en annonçant "Yumi".
+Si le joueur possède la main avec le moins point, il marque 0 point et les autres joueurs marque la valeur de leur main.
+Sinon le joueur marque 30 points et les autres joueurs 0.
+
+La partie s'arrête lorsqu'un ou des joueurs dépasse les 100 points. Le classement est alors réalisé par ordre de points. Le plus petit score l'emporte.
+
+Si durant la partie un joueur arrive à 100 points, son score est remis à zéro et chaque nouveau point marqué est doublé.
+Au début de la partie, un joueur choisit un nombre entre [1 et 99], si durant la partie arrive à 100 points, son score est remis à zéro et chaque nouveau point marqué est doublé.
