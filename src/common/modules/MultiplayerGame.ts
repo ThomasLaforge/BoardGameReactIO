@@ -1,6 +1,7 @@
 import { Game } from "./Game";
 import { DEFAULT_IS_PRIVATE_GAME, DEFAULT_NB_PLAYER } from "../LimiteLimite/LimiteLimite";
 import { DEFAULT_NB_PLAYER as DEFAULT_NB_PLAYER_TC } from "../TarotCongolais/TarotCongolais";
+import { NB_PLAYER as NB_PLAYER_FLIP } from "../Flip/defs";
 import { SocketPlayer } from "./SocketPlayer";
 
 export class MultiplayerGame extends Game {
@@ -22,6 +23,8 @@ export class MultiplayerGame extends Game {
             switch (gameType) {
                 case 'tarotcongolais':
                     nbPlayer = DEFAULT_NB_PLAYER_TC; break;
+                case 'flip':
+                    nbPlayer = NB_PLAYER_FLIP; break;
                 default:
                     nbPlayer = DEFAULT_NB_PLAYER; break;
             }

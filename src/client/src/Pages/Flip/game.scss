@@ -1,0 +1,42 @@
+@import '../../styles/mixins';
+
+.flip-game {
+
+    .game-content {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+
+        .infos-zone {
+            @include infoBox();
+        }
+
+        .ingame {
+            .player {
+                .cards {
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: center;
+                }
+            }
+
+            .common-parts {
+                display: flex;
+                flex-direction: row;
+                width: 100%;
+                justify-content: center;
+                margin: 40px 0;
+
+                .stacks {
+                    display: flex;
+                    flex-direction: row;
+                }
+            }
+
+            .common-parts > * {
+                margin: 0 30px;
+            }
+        }
+    }
+
+}
