@@ -29,7 +29,7 @@ export class Game {
         
     }
 
-    startNewTurn(){
+    giveCards(){
         this.deck = new Deck()
         this.players.forEach( (p, i) => {
             const cards = this.deck.drawCards(NB_INITIAL_CARDS)
@@ -37,11 +37,17 @@ export class Game {
         })
     }
 
+    startNewTurn(){
+        this.giveCards()
+        this.
+    }
+
     canStartGame(){
         return this.players.filter(p => !!p.objectif).length === this.getNbPlayer()
     }
     
-    callYumi(player: Player){
+    isYumiPossible(player: Player){
+        return player.isYumiPossible()
     }
 
     putCards(player: Player, cardsIndex: number[]){

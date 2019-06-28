@@ -1,5 +1,5 @@
 import { Card } from "./Card";
-import { LIMIT_SCORE } from "./defs";
+import { LIMIT_SCORE, YUMI_MIN_VALUE } from "./defs";
 import { Hand } from "./Hand";
 
 export class Player {
@@ -26,6 +26,10 @@ export class Player {
 
     getHandValue(){
         return this.hand.getValue()
+    }
+
+    isYumiPossible(){
+        return this.hand.canYumi()
     }
 
     hasLost(){
