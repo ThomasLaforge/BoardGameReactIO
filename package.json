@@ -7,7 +7,7 @@
     "express": "^4.16.4",
     "lodash": "^4.17.15",
     "mobx": "^5.9.0",
-    "node-fetch": "^2.3.0",
+    "node-fetch": "^2.6.1",
     "serializr": "^1.4.1",
     "socket.io": "^2.2.0"
   },
