@@ -17,5 +17,6 @@ RUN npm run link
 RUN npm run build
 
 RUN cp -r /src/client/build/* /build/src/client/
+EXPOSE 3027
 
 CMD npm start
