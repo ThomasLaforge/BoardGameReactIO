@@ -1,7 +1,7 @@
 {
   "name": "boardgame-react-io",
   "version": "0.0.1",
-  "description": "��#\u0000 \u0000L\u0000i\u0000m\u0000i\u0000t\u0000e\u0000L\u0000i\u0000m\u0000i\u0000t\u0000e\u0000\r\u0000 \u0000",
+  "description": "Framework for creating board games with React and Node.js + Socket.io",
   "main": "index.js",
   "dependencies": {
     "express": "^4.16.4",
